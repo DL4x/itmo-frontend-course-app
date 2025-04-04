@@ -24,6 +24,12 @@
         gap: 32px;
         flex: 1;
     }
+
+		@media (max-width: 600px) {
+				.content {
+						flex-direction: column;
+				}
+    }
 </style>
 
 <div class="content">
