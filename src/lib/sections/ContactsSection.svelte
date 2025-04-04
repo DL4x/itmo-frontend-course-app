@@ -12,19 +12,31 @@
 
 <style>
     .content {
-        display: flex;
+        display: grid;
         gap: 32px;
+        grid-template-columns: repeat(3, 1fr);
     }
 
     .contact-box {
         display: flex;
-        flex: 1;
         flex-direction: column;
         justify-content: space-between;
         height: 336px;
         padding: 32px;
         border-radius: 8px;
         background-color: #98A3AE1F;
+    }
+
+    @media (max-width: 1024px) {
+        .content {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .content {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 
