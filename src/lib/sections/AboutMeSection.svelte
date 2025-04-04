@@ -1,0 +1,27 @@
+<script lang="ts">
+	const { name }: { name: string } = $props();
+</script>
+
+<style>
+    h1 {
+        line-height: 3.625rem;
+    }
+
+    .image {
+        width: 100%; /* Make the image width responsive */
+        height: auto; /* Let the height adjust automatically to maintain aspect ratio */
+        aspect-ratio: 1140/400;
+        max-width: 1140px;
+        border-radius: 8px;
+        overflow: hidden;
+        object-fit: cover;
+    }
+</style>
+
+<section id="about_me_section">
+	<h1>
+		Hello!<br />
+		My name is {name}
+	</h1>
+	<enhanced:img class="image" src="/src/images/fancy_image.webp" alt="Abstract beautiful geometric shapes" />
+</section>
