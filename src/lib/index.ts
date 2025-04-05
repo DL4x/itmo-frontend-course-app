@@ -23,7 +23,7 @@ export class Author extends IDObject {
 		requireNotEmpty(name, 'name');
 	}
 
-	static list(names): Author[] {
+	static list(names: any[]): Author[] {
 		return names.map(name => new Author(name[1].toString(), name[0]));
 	}
 }

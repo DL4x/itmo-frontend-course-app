@@ -1,14 +1,11 @@
 import type { PageLoad } from './$types';
 import { Author } from '$lib';
+import { fetchUsers } from '$lib/strapi/fetcher';
 
 export const load: PageLoad = async () => {
-	const response = await fetch('https://railway-strapi-production-7054.up.railway.app/api/persons?populate=*');
-
-	const { data } = await response.json();
-
-	const a = data.map(person => [person.person_name, person.id]);
+	const users = await fetchUsers();
 
 	return {
-		authors: Author.list(a)
+		authors: Author.list(users)
 	};
 };
