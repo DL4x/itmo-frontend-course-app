@@ -1,6 +1,6 @@
-<script lang="ts" generics="T extends IDObject, K extends IDObject">
-	import type { IDObject } from '$lib/index';
+<script generics="T extends IDObject, K extends IDObject" lang="ts">
 	import type { Component } from 'svelte';
+	import type { IDObject } from '$lib/index';
 
 	interface Props {
 		first: T[];
@@ -11,6 +11,19 @@
 
 	const { first, second, FirstComponent, SecondComponent }: Props = $props();
 </script>
+
+<div class="content">
+	<div class="content-column">
+		{#each first as elem (elem.id)}
+			<FirstComponent {...elem} />
+		{/each}
+	</div>
+	<div class="content-column">
+		{#each second as elem (elem.id)}
+			<SecondComponent {...elem} />
+		{/each}
+	</div>
+</div>
 
 <style>
     .content {
@@ -25,22 +38,9 @@
         flex: 1;
     }
 
-		@media (max-width: 600px) {
-				.content {
-						flex-direction: column;
-				}
+    @media (max-width: 600px) {
+        .content {
+            flex-direction: column;
+        }
     }
 </style>
-
-<div class="content">
-	<div class="content-column">
-		{#each first as elem (elem.id)}
-			<FirstComponent {...elem} />
-		{/each}
-	</div>
-	<div class="content-column">
-		{#each second as elem (elem.id)}
-			<SecondComponent {...elem} />
-		{/each}
-	</div>
-</div>

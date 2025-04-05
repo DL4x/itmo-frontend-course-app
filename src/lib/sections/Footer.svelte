@@ -1,10 +1,44 @@
+<footer id="footer">
+	<div class="icons">
+		<enhanced:img
+			alt="Instagram logo"
+			class="image"
+			height="24"
+			src="/src/images/instagram.svg"
+			width="24"
+		/>
+		<enhanced:img
+			alt="Github logo"
+			class="image"
+			height="24"
+			src="/src/images/github.svg"
+			width="24"
+		/>
+		<enhanced:img
+			alt="Twitter logo"
+			class="image"
+			height="24"
+			src="/src/images/twitter.svg"
+			width="24"
+		/>
+		<enhanced:img
+			alt="Linkedin logo"
+			class="image"
+			height="24"
+			src="/src/images/linkedin.svg"
+			width="24"
+		/>
+	</div>
+	<span class="copyright">© 2025</span>
+</footer>
+
 <style>
     footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 60px 0;
-				flex-direction: row;
+        flex-direction: row;
     }
 
     .icons {
@@ -18,13 +52,3 @@
         line-height: 1.125rem;
     }
 </style>
-
-<footer id="footer">
-	<div class="icons">
-		<enhanced:img class="image" src="/src/images/instagram.svg" alt="Instagram logo" width="24" height="24" />
-		<enhanced:img class="image" src="/src/images/github.svg" alt="Github logo" width="24" height="24" />
-		<enhanced:img class="image" src="/src/images/twitter.svg" alt="Twitter logo" width="24" height="24" />
-		<enhanced:img class="image" src="/src/images/linkedin.svg" alt="Linkedin logo" width="24" height="24" />
-	</div>
-	<span class="copyright">© 2025</span>
-</footer>

@@ -12,24 +12,14 @@
 	// const secondHalf = $derived(skills.slice((skills.length - 1) / 2));
 </script>
 
-<style>
-    /*.content {*/
-    /*    display: flex;*/
-    /*    gap: 32px;*/
-    /*}*/
-
-    /*.content-column {*/
-    /*    display: flex;*/
-    /*    flex-direction: column;*/
-    /*    gap: 32px;*/
-    /*    flex: 1;*/
-    /*}*/
-</style>
-
 <section id="personality_section">
 	<h1>Skills</h1>
-	<TwoColumnLayout first={skills} second={skills} FirstComponent={SkillEntry}
-									 SecondComponent={SkillEntry} />
+	<TwoColumnLayout
+		FirstComponent={SkillEntry}
+		SecondComponent={SkillEntry}
+		first={skills}
+		second={skills}
+	/>
 	<!--	<div class="content">-->
 	<!--		<div class="content-column">-->
 	<!--			{#each firstHalf as skill (skill.id)}-->
@@ -43,3 +33,17 @@
 	<!--		</div>-->
 	<!--	</div>-->
 </section>
+
+<style>
+    /*.content {*/
+    /*    display: flex;*/
+    /*    gap: 32px;*/
+    /*}*/
+
+    /*.content-column {*/
+    /*    display: flex;*/
+    /*    flex-direction: column;*/
+    /*    gap: 32px;*/
+    /*    flex: 1;*/
+    /*}*/
+</style>

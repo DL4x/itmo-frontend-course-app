@@ -7,8 +7,45 @@
 		phone?: Contact;
 		email?: Contact;
 	}
-	const {address, phone, email}: Props = $props();
+
+	const { address, phone, email }: Props = $props();
 </script>
+
+<section id="contacts_section">
+	<h1>Contacts</h1>
+	<div class="content">
+		<div class="contact-box">
+			<enhanced:img
+				alt="Logo of map pin"
+				class="image"
+				height="40"
+				src="/src/images/pin.svg"
+				width="40"
+			/>
+			<ContactEntry contact={address} name="Address" />
+		</div>
+		<div class="contact-box">
+			<enhanced:img
+				alt="Logo of ringing phone"
+				class="image"
+				height="40"
+				src="/src/images/phone.svg"
+				width="40"
+			/>
+			<ContactEntry contact={phone} name="Phone" />
+		</div>
+		<div class="contact-box">
+			<enhanced:img
+				alt="Logo of email"
+				class="image"
+				height="40"
+				src="/src/images/email.svg"
+				width="40"
+			/>
+			<ContactEntry contact={email} name="Email" />
+		</div>
+	</div>
+</section>
 
 <style>
     .content {
@@ -24,7 +61,7 @@
         height: 336px;
         padding: 32px;
         border-radius: 8px;
-        background-color: #98A3AE1F;
+        background-color: #98a3ae1f;
     }
 
     @media (max-width: 1024px) {
@@ -39,21 +76,3 @@
         }
     }
 </style>
-
-<section id="contacts_section">
-	<h1>Contacts</h1>
-	<div class="content">
-		<div class="contact-box">
-			<enhanced:img class="image" src="/src/images/pin.svg" alt="Logo of map pin" width="40" height="40" />
-			<ContactEntry name="Address" contact={address}/>
-		</div>
-		<div class="contact-box">
-			<enhanced:img class="image" src="/src/images/phone.svg" alt="Logo of ringing phone" width="40" height="40" />
-			<ContactEntry name="Phone" contact={phone}/>
-		</div>
-		<div class="contact-box">
-			<enhanced:img class="image" src="/src/images/email.svg" alt="Logo of email" width="40" height="40" />
-			<ContactEntry name="Email" contact={email}/>
-		</div>
-	</div>
-</section>

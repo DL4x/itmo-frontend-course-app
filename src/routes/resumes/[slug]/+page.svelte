@@ -11,6 +11,24 @@
 	const { data }: PageProps = $props();
 </script>
 
+<svelte:head>
+	<title>Resume</title>
+</svelte:head>
+
+<div class="Content">
+	<NavHeader />
+	<AboutMeSection name={data.author.name} />
+	<EducationSection educations={data.author.educations} />
+	<WorkExperienceSection />
+	<SkillsSection skills={data.author.skills} />
+	<ContactsSection
+		address={data.author.address}
+		email={data.author.email}
+		phone={data.author.phone}
+	/>
+	<Footer />
+</div>
+
 <style>
     .Content {
         width: 1140px;
@@ -34,27 +52,30 @@
     }
 
     .Content {
-        font-family: "JetBrains Mono", monospace;
+        font-family: 'JetBrains Mono', monospace;
         display: flex;
         flex-flow: column;
         align-items: center;
         margin: 0 auto;
     }
-		:global {
-				.Content h1 {
+
+    :global {
+        .Content h1 {
             margin-block: 0;
             font-weight: 500;
             font-size: 3rem;
             line-height: 3rem;
-            color: #363E45;
-				}
+            color: #363e45;
+        }
+
         .Content h2 {
             margin-block: 0;
             font-weight: 500;
             font-size: 1.25rem;
             line-height: 1.5rem;
-            color: #363E45;
+            color: #363e45;
         }
+
         .Content h3 {
             margin-block: 0;
             font-weight: 400;
@@ -63,24 +84,10 @@
         }
 
         .Content > * {
-						width: 100%;
+            width: 100%;
             display: flex;
             flex-direction: column;
             gap: 40px;
         }
-		}
+    }
 </style>
-
-<svelte:head>
-	<title>Resume</title>
-</svelte:head>
-
-<div class="Content">
-	<NavHeader />
-	<AboutMeSection name={data.author.name} />
-	<EducationSection educations={data.author.educations}/>
-	<WorkExperienceSection />
-	<SkillsSection skills={data.author.skills}/>
-	<ContactsSection address={data.author.address} phone={data.author.phone} email={data.author.email}/>
-	<Footer />
-</div>

@@ -1,23 +1,19 @@
-export class EmptyParameterError extends Error {
-	constructor(parameterName: string = 'Parameter') {
-		super(`${parameterName} must be not empty`);
+export class AssertionFailedError extends Error {
+	constructor(message?: string) {
+		super(message);
 	}
 }
 
-export function requireNotEmpty(value: string, parameterName: string) {
-	if (value.length == 0) {
-		throw new EmptyParameterError(parameterName);
+export function assert(condition: boolean, message?: string): asserts condition {
+	if (!condition) {
+		throw new AssertionFailedError(message);
 	}
 }
 
-export class NonIntegerParameterError extends Error {
-	constructor(parameterName: string) {
-		super(`${parameterName} must be an integer`);
-	}
+export function assertNotEmpty(value: string, objectName: string) {
+	assert(value.length != 0, `${objectName} must be not empty`);
 }
 
-export function requireInteger(value: number, parameterName: string) {
-	if (!Number.isInteger(value)) {
-		throw new NonIntegerParameterError(parameterName);
-	}
+export function assertIsInt(value: number, objectName: string) {
+	assert(Number.isInteger(value), `${objectName} must be an integer`);
 }

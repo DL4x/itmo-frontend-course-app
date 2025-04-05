@@ -4,7 +4,6 @@
 	const { data }: PageProps = $props();
 </script>
 
-
 <svelte:head>
 	<title>ITMO Frontend Course</title>
 </svelte:head>
@@ -16,13 +15,12 @@
 	</header>
 
 	<section class="card-grid">
-		{#each data.authors as author (author.id)}
-			<a class="card" href="/resumes/{author.id}">
+		{#each data.authors as author (author.documentId)}
+			<a class="card" href="/resumes/{author.documentId}">
 				<div class="avatar">
 					<span>{author.name[0]}</span>
 				</div>
 				<h2>{author.name}</h2>
-
 			</a>
 		{/each}
 	</section>
@@ -38,8 +36,8 @@
 
     :global(body) {
         margin: 0;
-        font-family: "JetBrains Mono", monospace;
-        color: #363E45;
+        font-family: 'JetBrains Mono', monospace;
+        color: #363e45;
         background-color: #f4f4f4;
     }
 
@@ -52,7 +50,7 @@
     header {
         text-align: center;
         margin-bottom: 3rem;
-        font-family: "JetBrains Mono", monospace;
+        font-family: 'JetBrains Mono', monospace;
     }
 
     header h1 {
@@ -82,7 +80,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: transform 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
     .card:hover {
@@ -95,7 +94,6 @@
         font-size: 1.3rem;
         color: #333;
     }
-
 
     .avatar {
         width: 64px;

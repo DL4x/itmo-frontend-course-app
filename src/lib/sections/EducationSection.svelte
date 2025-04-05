@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { Education } from '$lib';
 	import EducationEntry from '$lib/entries/EducationEntry.svelte';
 	import TwoColumnLayout from '$lib/TwoColumnLayout.svelte';
+	import type { Education } from '$lib';
 
 	interface Props {
 		educations: Education[];
@@ -10,11 +10,15 @@
 	const { educations }: Props = $props();
 </script>
 
-<style>
-</style>
-
 <section id="education_section">
 	<h1>Education</h1>
-	<TwoColumnLayout first={educations} second={educations} FirstComponent={EducationEntry}
-									 SecondComponent={EducationEntry} />
+	<TwoColumnLayout
+		FirstComponent={EducationEntry}
+		SecondComponent={EducationEntry}
+		first={educations}
+		second={educations}
+	/>
 </section>
+
+<style>
+</style>
