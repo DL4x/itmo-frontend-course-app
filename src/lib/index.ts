@@ -7,7 +7,6 @@ export class IDObject {
 		requireNotEmpty(id, 'id');
 	}
 }
-
 export class Author extends IDObject {
 	constructor(
 		id: string,
@@ -23,9 +22,9 @@ export class Author extends IDObject {
 		requireNotEmpty(name, 'name');
 	}
 
-	static list(names): Author[] {
-		return names.map(name => new Author(name[1].toString(), name[0]));
-	}
+	// static list(names): Author[] {
+	// 	return names.map(name => new Author(name[1].toString(), name[0]));
+	// }
 }
 
 export class TimeRange {
