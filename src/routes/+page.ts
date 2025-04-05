@@ -8,8 +8,6 @@ export const load: PageLoad = async () => {
 
 	const a = data.map(person => [person.person_name, person.id])
 
-	console.log(a);
-
 	return {
 		authors: Author.list(a)
 	};

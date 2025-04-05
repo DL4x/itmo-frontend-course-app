@@ -18,6 +18,7 @@
         gap: 120px;
         flex-direction: column;
         margin: auto;
+				padding: 10px;
     }
 
     @media screen and (max-width: 1140px) {

@@ -6,7 +6,6 @@
     }
     a {
         text-decoration: none;
-        /*height: 48px;*/
         padding: 16px 20px;
         border-radius: 8px;
 
@@ -19,23 +18,32 @@
         background-color: white;
     }
 
-		header {
+    header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-    /*    height: 48px;*/
+        /*    height: 48px;*/
         padding: 24px 0;
-				flex-direction: row;
+        flex-direction: row;
     }
 
-		nav {
+    nav {
         display: flex;
         gap: 8px;
+        margin-right: 40px;
+        flex-flow: row;
+        flex-wrap: wrap;
+    }
+    .picture {
+        background: transparent;
+        border: none;
     }
 </style>
 
 <header id="nav_header">
-	<enhanced:img class="image" src="/src/images/logo.svg" alt="Some strange logo" width="40" height="40" />
+	<a href="/" class="picture">
+		<enhanced:img class="image" src="/src/images/logo.svg" alt="Some strange logo" width="40" height="40" />
+	</a>
 	<nav>
 		<a href="#about_me_section">About me</a>
 		<a href="#education_section">Education</a>
