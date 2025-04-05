@@ -15,6 +15,7 @@
         flex-direction: column;
         gap: 8px;
     }
+
     a {
         color: inherit;
         text-decoration: none;

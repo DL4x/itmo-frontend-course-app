@@ -7,7 +7,8 @@
 		phone?: Contact;
 		email?: Contact;
 	}
-	const {address, phone, email}: Props = $props();
+
+	const { address, phone, email }: Props = $props();
 </script>
 
 <style>
@@ -45,15 +46,16 @@
 	<div class="content">
 		<div class="contact-box">
 			<enhanced:img class="image" src="/src/images/pin.svg" alt="Logo of map pin" width="40" height="40" />
-			<ContactEntry name="Address" contact={address}/>
+			<ContactEntry name="Address" contact={address} />
 		</div>
 		<div class="contact-box">
-			<enhanced:img class="image" src="/src/images/phone.svg" alt="Logo of ringing phone" width="40" height="40" />
-			<ContactEntry name="Phone" contact={phone}/>
+			<enhanced:img class="image" src="/src/images/phone.svg" alt="Logo of ringing phone" width="40"
+						  height="40" />
+			<ContactEntry name="Phone" contact={phone} />
 		</div>
 		<div class="contact-box">
 			<enhanced:img class="image" src="/src/images/email.svg" alt="Logo of email" width="40" height="40" />
-			<ContactEntry name="Email" contact={email}/>
+			<ContactEntry name="Email" contact={email} />
 		</div>
 	</div>
 </section>

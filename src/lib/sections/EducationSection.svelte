@@ -16,5 +16,5 @@
 <section id="education_section">
 	<h1>Education</h1>
 	<TwoColumnLayout first={educations} second={educations} FirstComponent={EducationEntry}
-									 SecondComponent={EducationEntry} />
+					 SecondComponent={EducationEntry} />
 </section>

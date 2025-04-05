@@ -4,6 +4,7 @@
             display: none;
         }
     }
+
     a {
         text-decoration: none;
         padding: 16px 20px;
@@ -34,6 +35,7 @@
         flex-flow: row;
         flex-wrap: wrap;
     }
+
     .picture {
         background: transparent;
         border: none;

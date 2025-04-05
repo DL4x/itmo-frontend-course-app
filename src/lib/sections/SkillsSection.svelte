@@ -29,7 +29,7 @@
 <section id="personality_section">
 	<h1>Skills</h1>
 	<TwoColumnLayout first={skills} second={skills} FirstComponent={SkillEntry}
-									 SecondComponent={SkillEntry} />
+					 SecondComponent={SkillEntry} />
 	<!--	<div class="content">-->
 	<!--		<div class="content-column">-->
 	<!--			{#each firstHalf as skill (skill.id)}-->
