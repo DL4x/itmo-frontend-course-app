@@ -2,6 +2,18 @@
 	const { name }: { name: string } = $props();
 </script>
 
+<section id="about_me_section">
+	<h1>
+		Hello!<br />
+		My name is {name}
+	</h1>
+	<enhanced:img
+		alt="Abstract beautiful geometric shapes"
+		class="image"
+		src="/src/images/fancy_image.webp"
+	/>
+</section>
+
 <style>
     h1 {
         line-height: 3.625rem;
@@ -17,11 +29,3 @@
         object-fit: cover;
     }
 </style>
-
-<section id="about_me_section">
-	<h1>
-		Hello!<br />
-		My name is {name}
-	</h1>
-	<enhanced:img class="image" src="/src/images/fancy_image.webp" alt="Abstract beautiful geometric shapes" />
-</section>

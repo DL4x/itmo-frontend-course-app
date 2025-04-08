@@ -1,9 +1,17 @@
 <script lang="ts">
-	import type { Education } from '$lib';
 	import DateRange from '$lib/DateRange.svelte';
+	import type { Education } from '$lib';
 
 	const { title, subtitle, timeRange }: Education = $props();
 </script>
+
+<div class="content">
+	<div class="titles">
+		<h2>{title}</h2>
+		<h3>{subtitle}</h3>
+	</div>
+	<DateRange {...timeRange} />
+</div>
 
 <style>
     .content > .titles {
@@ -18,11 +26,3 @@
         gap: 16px;
     }
 </style>
-
-<div class="content">
-	<div class="titles">
-		<h2>{title}</h2>
-		<h3>{subtitle}</h3>
-	</div>
-	<DateRange {...timeRange}/>
-</div>

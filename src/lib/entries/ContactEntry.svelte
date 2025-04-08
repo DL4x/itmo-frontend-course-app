@@ -9,18 +9,6 @@
 	const { name, contact }: Props = $props();
 </script>
 
-<style>
-    .content {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-    a {
-        color: inherit;
-        text-decoration: none;
-    }
-</style>
-
 <div class="content">
 	<h2>{name}</h2>
 	<h3>
@@ -33,3 +21,16 @@
 		{/if}
 	</h3>
 </div>
+
+<style>
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+</style>
