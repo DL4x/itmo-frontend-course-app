@@ -1,15 +1,19 @@
 import {
 	assertValidAuthor,
+	assertValidComment,
 	assertValidContact,
-	assertValidEducation,
+	assertValidEducation, assertValidPresentation,
 	assertValidSkill,
 	assertValidTimeRange,
 	type Author,
+	type AuthorComment,
+	type Presentation,
 	type Education,
 	type Skill,
-	type TimeRange
+	type TimeRange, type VotedPerson, assertValidVotedPerson
 } from '$lib/index';
 import { assert } from '$lib/errors';
+import Strapi from 'strapi-sdk-js';
 
 type TypeString =
 	| 'undefined'
@@ -86,7 +90,8 @@ function toHRef(phone: string): string {
 	return phone.startsWith('7') ? `tel:+${phone}` : `tel:${phone}`;
 }
 
-function parseAuthor(json: object): Author {
+function parseAuthor(json: unknown): Author {
+	assert(typeof json === 'object' && json !== null, 'json must be object');
 	assertField('documentId' in json && typeof json.documentId === 'string', 'documentId', 'string');
 	assertField(
 		'person_name' in json && typeof json.person_name === 'string',
@@ -130,36 +135,281 @@ function parseAuthor(json: object): Author {
 	return result;
 }
 
-// export async function getMyPersonsAndIdes(): Promise<Author[]> {
-// 	const client = await fetch(
-// 		'https://railway-strapi-production-7054.up.railway.app/api/persons?populate=*'
-// 	);
-// 	const jsonData = await client.json();
-//
-// 	const persons: Author[] = [];
-// 	for (const person of jsonData.data) {
-// 		persons.push(parseAuthor(person));
-// 	}
-// 	return persons;
-// }
+async function parseComment(json: unknown): Promise<AuthorComment> {
+	assert(typeof json === 'object' && json !== null, 'json must be object');
+
+	assertField('id' in json && typeof json.id === 'number', 'id', 'number');
+	assertField(
+		'comment_description' in json && typeof json.comment_description === 'string',
+		'comment_description',
+		'string'
+	);
+	assertField(
+		'person' in json && typeof json.person === 'object' && json.person !== null,
+		'person',
+		'object'
+	);
+	assertField('documentId' in json && typeof json.documentId === 'string', 'documentId', 'string');
+	assertField(
+		'documentId' in json.person && typeof json.person.documentId === 'string',
+		'documentId',
+		'string'
+	);
+
+	const result = {
+		id: json.id,
+		documentId: json.documentId,
+		comment_description: json.comment_description,
+		author: await getAuthorByDocumentId(json.person.documentId)
+	};
+	assertValidComment(result);
+	return result;
+}
+
+async function parseVotedPerson(json: unknown): Promise<VotedPerson> {
+	assert(typeof json === 'object' && json !== null, 'json must be object');
+	assertField('id' in json && typeof json.id === 'number', 'id', 'number');
+	assertField(
+		'person' in json && typeof json.person === 'object' && json.person !== null,
+		'person',
+		'object'
+	);
+	assertField(
+		'documentId' in json.person && typeof json.person.documentId === 'string',
+		'documentId',
+		'string'
+	);
+	assertField(
+		'person_score' in json && typeof json.person_score === 'number',
+		'person_score',
+		'number'
+	);
+
+	const result = {
+		id: json.id,
+		person_score: json.person_score,
+		author: await getAuthorByDocumentId(json.person.documentId)
+	};
+
+	assertValidVotedPerson(result);
+
+	return result;
+}
+
+async function parsePresentation(json: unknown): Promise<Presentation> {
+	assert(typeof json === 'object' && json !== null, 'json must be object');
+
+	assertField('id' in json && typeof json.id === 'number', 'id', 'number');
+	assertField('documentId' in json && typeof json.documentId === 'string', 'documentId', 'string');
+
+	assertField(
+		'presentation_name' in json && typeof json.presentation_name === 'string',
+		'presentation_name',
+		'string'
+	);
+	assertField(
+		'presentation_description' in json && typeof json.presentation_description === 'string',
+		'presentation_description',
+		'string'
+	);
+	assertField(
+		'presentation_url' in json && typeof json.presentation_url === 'string',
+		'presentation_url',
+		'string'
+	);
+	assertField(
+		'presentation_owners' in json && Array.isArray(json.presentation_owners),
+		'presentation_owners',
+		'Array'
+	);
+	assertField('comments' in json && Array.isArray(json.comments), 'comments', 'Array');
+	assertField('voted_persons' in json && Array.isArray(json.voted_persons), 'comments', 'Array');
+
+	const voted_persons = await Promise.all(json.voted_persons.map(parseVotedPerson));
+
+	const result = {
+		id: json.id,
+		presentation_name: json.presentation_name,
+		presentation_description: json.presentation_description,
+		presentation_url: json.presentation_url,
+		documentId: json.documentId,
+		voted_persons: voted_persons,
+		presentation_owners: await Promise.all(
+			json.presentation_owners.map((author: object) => {
+				assertField(
+					'documentId' in author && typeof author.documentId === 'string',
+					'documentId',
+					'string'
+				);
+				return getAuthorByDocumentId(author.documentId);
+			})
+		),
+		comments: await Promise.all(
+			json.comments.map((author: object) => {
+				assertField(
+					'documentId' in author && typeof author.documentId === 'string',
+					'documentId',
+					'string'
+				);
+				return getCommentByDocumentId(author.documentId);
+			})
+		)
+	};
+	assertValidPresentation(result);
+	return result;
+}
+
+const strapi = new Strapi({
+	url: 'https://railway-strapi-production-7054.up.railway.app',
+	prefix: '/api',
+	store: {
+		key: 'strapi_jwt',
+		useLocalStorage: false
+	}
+});
 
 export async function getAuthorByDocumentId(documentId: string): Promise<Author> {
-	const response = await fetch(
-		`https://railway-strapi-production-7054.up.railway.app/api/persons/${documentId}?populate=*`
-	);
-	const json: object = await response.json();
-	assertField('data' in json && typeof json.data === 'object', 'data', 'object');
-	assert(json.data !== null);
-	return parseAuthor(json.data);
+	const response = await strapi.findOne(`persons`, documentId, { populate : '*'});
+	const json: object = response.data;
+	assert(json !== null);
+	return parseAuthor(json);
 }
 
 export async function getAllAuthors(): Promise<Author[]> {
-	const response = await fetch(
-		'https://railway-strapi-production-7054.up.railway.app/api/persons?populate=*'
-	);
-	const json: object = await response.json();
-	assertField('data' in json && Array.isArray(json.data), 'data', 'Array');
+	const response = await strapi.find('persons?populate=*');
+	const json = response.data;
+	assertField(Array.isArray(response.data), 'data', 'Array');
 
 	console.log('All authors has this JSON:', json);
-	return json.data.map(parseAuthor);
+	return json.map(parseAuthor);
+}
+
+export async function getPresentationByDocumentId(documentId: string): Promise<Presentation> {
+	const response = await strapi.findOne(`presentations`, documentId, {
+		populate: {
+			presentation_owners: { populate: '*' },
+			comments: { populate: '*' },
+			voted_persons: {
+				on: {
+					'voted-person.voted-person': {
+						populate: {
+							person: {
+								populate: '*'
+							}
+						}
+					}
+				}
+			}
+		}
+	});
+	const json: object = response.data;
+	assert(json !== null);
+	return parsePresentation(json);
+}
+
+export async function getAllPresentations(): Promise<Presentation[]> {
+	const response = await strapi.find('presentations?populate=*');
+	const json = response.data;
+	assertField(Array.isArray(response.data), 'data', 'Array');
+
+	console.log('All authors has this JSON:', json);
+	return Promise.all(
+		json.map((value) => {
+			return parsePresentation(value);
+		})
+	);
+}
+
+export async function getCommentByDocumentId(documentId: string): Promise<AuthorComment> {
+	const response = await strapi.findOne(`comments`, documentId, { populate: '*'});
+	const json: object = response.data;
+	assert(json !== null);
+	return parseComment(json);
+}
+
+export async function getAllComments(): Promise<AuthorComment[]> {
+	const response = await strapi.find('comments?populate=*');
+	const json = response.data;
+	assertField(Array.isArray(response.data), 'data', 'Array');
+
+	console.log('All authors has this JSON:', json);
+	return await Promise.all(json.map(parseComment));
+}
+
+async function getAuthorJson(
+	name: string,
+	address: string,
+	phone: string,
+	email: string,
+	educations: Education[] = [],
+	skills: Skill[] = [],
+	presentations: Presentation[] = [],
+	comments: AuthorComment[] = []
+): Promise<object> {
+	const data = {
+		person_name: name,
+		person_address: address,
+		person_phone: phone,
+		person_email: email,
+		educations: [{}],
+		skills: [{}],
+		created_presentations: [{}],
+		comments: [{}]
+	};
+
+	data.educations = educations.map((education) => {
+		return {
+			education_name: education.title,
+			educate_start: education.timeRange.start,
+			educate_end: education.timeRange.end,
+			educate_level: education.subtitle
+		};
+	});
+
+	data.skills = skills.map((skill) => {
+		return {
+			skill_name: skill.name,
+			skill_percent: skill.value
+		};
+	});
+
+	data.comments = comments.map((comment) => {
+		return {
+			comment_description: comment.comment_description,
+			person: data
+		};
+	});
+
+	data.created_presentations = presentations.map((presentation) => {
+		return {
+			presentation_name: presentation.presentation_name,
+			presentation_description: presentation.presentation_description,
+			voted_persons: {}
+		};
+	});
+
+	return data;
+}
+
+export async function addAuthor(
+	name: string,
+	address: string,
+	phone: string,
+	email: string,
+	educations: Education[] = [],
+	skills: Skill[] = [],
+	presentations: Presentation[] = [],
+	comments: AuthorComment[] = []
+) {
+	const allAuthors = await getAllAuthors();
+	for (const author of allAuthors) {
+		assert(author.email?.value !== email, `Current author already exists`);
+	}
+
+	const response = await strapi.create(
+		'persons',
+		getAuthorJson(name, address, phone, email, educations, skills, presentations, comments)
+	);
+
+	console.log(response);
 }

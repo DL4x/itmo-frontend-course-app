@@ -31,5 +31,8 @@
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.20.0",
 		"vite": "^6.0.0"
+	},
+	"dependencies": {
+		"strapi-sdk-js": "^3.0.0"
 	}
 }

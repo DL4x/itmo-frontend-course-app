@@ -59,6 +59,23 @@ export function assertValidAuthor(author: Author) {
 	assertNotEmpty(author.name, 'name');
 }
 
+export function assertValidComment(comment: AuthorComment) {
+	assertValidIDObject(comment);
+	assertNotEmpty(comment.comment_description, 'comment_description');
+}
+
+export function assertValidPresentation(presentation: Presentation) {
+	assertValidIDObject(presentation);
+	assertNotEmpty(presentation.presentation_name, 'presentation_name');
+	assertNotEmpty(presentation.presentation_url, 'presentation_url');
+}
+
+export function assertValidVotedPerson(votedPerson: VotedPerson) {
+	assertValidIDObject(votedPerson);
+	assertValidAuthor(votedPerson.author);
+	assertIsInt(votedPerson.person_score, 'person_score');
+}
+
 /**
  * I don't know why, but Strapi identifies authors in repo not with `id`, but with `documentId` field.
  *
@@ -73,4 +90,25 @@ export interface Author {
 	address?: Contact;
 	phone?: Contact;
 	email?: Contact;
+}
+
+export interface AuthorComment extends IDObject {
+	documentId: string;
+	comment_description: string;
+	author: Author;
+}
+
+export interface Presentation extends IDObject {
+	documentId: string;
+	presentation_name: string;
+	presentation_description: string;
+	presentation_url: string;
+	presentation_owners: Author[];
+	comments: AuthorComment[];
+	voted_persons: VotedPerson[];
+}
+
+export interface VotedPerson extends IDObject {
+	author: Author;
+	person_score: number;
 }
