@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
+	import '/src/app.css';
+	import { Heading } from 'flowbite-svelte';
 
 	const { data }: PageProps = $props();
 </script>
@@ -8,6 +10,6 @@
 	<title>Lectures</title>
 </svelte:head>
 
-<h1>I am page of lecture with id = {data.lectureId}</h1>
+<Heading tag="h1">I am page of lecture with id = {data.lectureId}</Heading>
 
-<h1>Course id = {data.courseId}</h1>
+<Heading tag="h1">Course id = {data.lectureId}</Heading>

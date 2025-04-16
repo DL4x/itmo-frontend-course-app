@@ -1,5 +1,6 @@
 <script>
 	import { Button, ButtonGroup } from 'flowbite-svelte';
+	import '/src/app.css';
 </script>
 
 <svelte:head>

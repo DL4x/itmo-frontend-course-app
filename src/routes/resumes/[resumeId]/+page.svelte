@@ -7,6 +7,7 @@
 	import SkillsSection from '$lib/sections/SkillsSection.svelte';
 	import ContactsSection from '$lib/sections/ContactsSection.svelte';
 	import Footer from '$lib/sections/Footer.svelte';
+	import '/src/app.css';
 
 	const { data }: PageProps = $props();
 </script>
@@ -15,7 +16,7 @@
 	<title>Resume</title>
 </svelte:head>
 
-<div class="Content">
+<div class="Content bg-primary-100">
 	<NavHeader />
 	<AboutMeSection name={data.author.name} />
 	<EducationSection educations={data.author.educations} />

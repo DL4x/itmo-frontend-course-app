@@ -17,4 +17,11 @@
     --color-primary-900: #a5371b;
 }
 
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-weight: 500;
+    font-style: normal;
+    src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+}
+
 @source "../node_modules/flowbite-svelte/dist";
