@@ -42,7 +42,7 @@ function parseSkill(json: object): Skill {
 		'skill_percent',
 		'number'
 	);
-	const result = { id: json.id, name: json.skill_name, value: json.skill_percent };
+	const result = { id: json.id.toString(), name: json.skill_name, value: json.skill_percent };
 	assertValidSkill(result);
 	return result;
 }
@@ -76,7 +76,7 @@ function parseEducation(json: object): Education {
 		'string'
 	);
 	const result = {
-		id: json.id,
+		id: json.id.toString(),
 		title: json.education_name,
 		subtitle: json.education_level,
 		timeRange: parseTimeRange(json)
@@ -123,7 +123,7 @@ function parseAuthor(json: unknown): Author {
 	const email = { value: json.person_email, href: `mailto:${json.person_email}` };
 	assertValidContact(email);
 	const result = {
-		documentId: json.documentId,
+		id: json.documentId,
 		name: json.person_name,
 		educations: json.educations.map(parseEducation),
 		skills: json.skills.map(parseSkill),
@@ -157,7 +157,7 @@ async function parseComment(json: unknown): Promise<AuthorComment> {
 	);
 
 	const result = {
-		id: json.id,
+		id: json.id.toString(),
 		documentId: json.documentId,
 		comment_description: json.comment_description,
 		author: await getAuthorByDocumentId(json.person.documentId)
@@ -186,7 +186,7 @@ async function parseVotedPerson(json: unknown): Promise<VotedPerson> {
 	);
 
 	const result = {
-		id: json.id,
+		id: json.id.toString(),
 		person_score: json.person_score,
 		author: await getAuthorByDocumentId(json.person.documentId)
 	};
@@ -228,7 +228,7 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
 	const voted_persons = await Promise.all(json.voted_persons.map(parseVotedPerson));
 
 	const result = {
-		id: json.id,
+		id: json.id.toString(),
 		presentation_name: json.presentation_name,
 		presentation_description: json.presentation_description,
 		presentation_url: json.presentation_url,
@@ -351,42 +351,28 @@ async function getAuthorJson(
 		person_address: address,
 		person_phone: phone,
 		person_email: email,
-		educations: [{}],
-		skills: [{}],
-		created_presentations: [{}],
-		comments: [{}]
-	};
-
-	data.educations = educations.map((education) => {
-		return {
+		educations: educations.map(education => ({
 			education_name: education.title,
 			educate_start: education.timeRange.start,
 			educate_end: education.timeRange.end,
 			educate_level: education.subtitle
-		};
-	});
-
-	data.skills = skills.map((skill) => {
-		return {
+		})),
+		skills: skills.map(skill => ({
 			skill_name: skill.name,
 			skill_percent: skill.value
-		};
-	});
-
-	data.comments = comments.map((comment) => {
-		return {
-			comment_description: comment.comment_description,
-			person: data
-		};
-	});
-
-	data.created_presentations = presentations.map((presentation) => {
-		return {
+		})),
+		created_presentations: presentations.map(presentation => ({
 			presentation_name: presentation.presentation_name,
 			presentation_description: presentation.presentation_description,
 			voted_persons: {}
-		};
-	});
+		})),
+		comments: [{}]
+	};
+
+	data.comments = comments.map(comment => ({
+		comment_description: comment.comment_description,
+		person: data
+	}));
 
 	return data;
 }

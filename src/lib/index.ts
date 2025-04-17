@@ -12,11 +12,11 @@ export interface TimeRange {
 }
 
 export function assertValidIDObject({ id }: IDObject) {
-	assertIsInt(id, 'id');
+	assertNotEmpty(id, 'id');
 }
 
 export interface IDObject {
-	id: number;
+	id: string;
 }
 
 export function assertValidSkill(skill: Skill) {
@@ -76,14 +76,7 @@ export function assertValidVotedPerson(votedPerson: VotedPerson) {
 	assertIsInt(votedPerson.person_score, 'person_score');
 }
 
-/**
- * I don't know why, but Strapi identifies authors in repo not with `id`, but with `documentId` field.
- *
- * I can send request single author from strapi only if I know documentId.
- * So I decided to delete `id` field and store `documentId` instead
- */
-export interface Author {
-	documentId: string;
+export interface Author extends IDObject{
 	name: string;
 	educations: Education[];
 	skills: Skill[];
@@ -93,13 +86,11 @@ export interface Author {
 }
 
 export interface AuthorComment extends IDObject {
-	documentId: string;
 	comment_description: string;
 	author: Author;
 }
 
 export interface Presentation extends IDObject {
-	documentId: string;
 	presentation_name: string;
 	presentation_description: string;
 	presentation_url: string;
