@@ -208,12 +208,12 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
 
 	assertField('id' in json && typeof json.id === 'number', 'id', 'number');
 	assertField('documentId' in json && typeof json.documentId === 'string', 'documentId', 'string');
-
 	assertField(
 		'presentation_name' in json && typeof json.presentation_name === 'string',
 		'presentation_name',
 		'string'
 	);
+
 	assertField(
 		'presentation_description' in json && typeof json.presentation_description === 'string',
 		'presentation_description',
@@ -231,6 +231,8 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
 	);
 	assertField('comments' in json && Array.isArray(json.comments), 'comments', 'Array');
 	assertField('voted_persons' in json && Array.isArray(json.voted_persons), 'comments', 'Array');
+	assertField('course' in json && typeof json.course === 'object' && json.course !== null, 'course', 'object');
+	assertField('documentId' in json.course && typeof json.course.documentId === 'string', 'documentId', 'string');
 
 	const voted_persons = await Promise.all(json.voted_persons.map(parseVotedPerson));
 
@@ -260,7 +262,8 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
 				);
 				return getCommentByDocumentId(author.documentId);
 			})
-		)
+		),
+		course: await getCourseByDocumentId(json.course.documentId)
 	};
 	assertValidPresentation(result);
 	return result;
@@ -315,12 +318,22 @@ const strapi = new Strapi({
 	}
 });
 
+/**
+ * @param documentId the {@linkcode string} that Strapi generates by default
+ *
+ * @return {@linkcode Author} by documentId
+ */
+
 export async function getAuthorByDocumentId(documentId: string): Promise<Author> {
 	const response = await strapi.findOne(`persons`, documentId, { populate: '*' });
 	const json: object = response.data;
 	assert(json !== null);
 	return parseAuthor(json);
 }
+
+/**
+ * @return All {@linkcode Author}s from Strapi
+ */
 
 export async function getAllAuthors(): Promise<Author[]> {
 	const response = await strapi.find('persons?populate=*');
@@ -331,6 +344,11 @@ export async function getAllAuthors(): Promise<Author[]> {
 	return json.map(parseAuthor);
 }
 
+/**
+ * @param documentId the {@linkcode string} that Strapi generates by default
+ *
+ * @return {@linkcode Presentation} by documentId
+ */
 export async function getPresentationByDocumentId(documentId: string): Promise<Presentation> {
 	const response = await strapi.findOne(`presentations`, documentId, {
 		populate: {
@@ -354,6 +372,9 @@ export async function getPresentationByDocumentId(documentId: string): Promise<P
 	return parsePresentation(json);
 }
 
+/**
+ * @return All {@linkcode Presentation} from Strapi
+ */
 export async function getAllPresentations(): Promise<Presentation[]> {
 	const response = await strapi.find('presentations?populate=*');
 	const json = response.data;
@@ -367,6 +388,11 @@ export async function getAllPresentations(): Promise<Presentation[]> {
 	);
 }
 
+/**
+ * @param documentId the {@linkcode string} that Strapi generates by default
+ *
+ * @return {@linkcode AuthorComment} by documentId
+ */
 export async function getCommentByDocumentId(documentId: string): Promise<AuthorComment> {
 	const response = await strapi.findOne(`comments`, documentId, { populate: '*' });
 	const json: object = response.data;
@@ -374,6 +400,9 @@ export async function getCommentByDocumentId(documentId: string): Promise<Author
 	return parseComment(json);
 }
 
+/**
+ * @return All {@linkcode AuthorComment} from Strapi
+ */
 export async function getAllComments(): Promise<AuthorComment[]> {
 	const response = await strapi.find('comments?populate=*');
 	const json = response.data;
@@ -383,6 +412,9 @@ export async function getAllComments(): Promise<AuthorComment[]> {
 	return await Promise.all(json.map(parseComment));
 }
 
+/**
+ * @return All {@linkcode Course} from Strapi
+ */
 export async function getAllCourses(): Promise<Course[]> {
 	const response = await strapi.find('courses?populate=*');
 	const json = response.data;
@@ -392,6 +424,11 @@ export async function getAllCourses(): Promise<Course[]> {
 	return await Promise.all(json.map(parseCourse));
 }
 
+/**
+ * @param documentId the {@linkcode string} that Strapi generates by default
+ *
+ * @return {@linkcode Course} by documentId
+ */
 export async function getCourseByDocumentId(documentId: string): Promise<Course> {
 	const response = await strapi.findOne('courses', documentId, { populate: '*' });
 	const json: object = response.data;
@@ -399,6 +436,24 @@ export async function getCourseByDocumentId(documentId: string): Promise<Course>
 	return parseCourse(json);
 }
 
+/**
+ * @param documentId course's ID of {@linkcode string} type that Strapi generates by default
+ *
+ * @return {@linkcode Presentation}[] by documentId
+ */
+export async function getPresentationsByCourseDocumentId(documentId: string): Promise<Presentation[]> {
+	const response = await strapi.findOne('courses', documentId, { populate: '*' });
+	const json: object = response.data;
+	assert(json !== null);
+	return (await parseCourse(json)).presentations;
+}
+
+/**
+ *
+ * This function is designed to bring out the general code and make it more beautiful.
+ *
+ * @return json-object of {@linkcode Author} for add to Strapi
+ */
 async function getAuthorJson(
 	name: string,
 	email: string,
@@ -422,11 +477,23 @@ async function getAuthorJson(
 	return data;
 }
 
+/**
+ * You can only submit a name and email address for the function to work correctly.
+ *
+ * @param name {@linkcode Author} name
+ * @param email {@linkcode Author} email
+ * @param phone {@linkcode Author} phone
+ * @param address {@linkcode Author} address
+ * @param educations {@linkcode Author} educations or undefined
+ * @param skills {@linkcode Author} skills or undefined
+ * @param presentations {@linkcode Author} presentations or undefined
+ * @param comments {@linkcode Author} comments or undefined
+ */
 export async function addAuthor(
 	name: string,
-	address: string,
-	phone: string,
 	email: string,
+	phone: string = "",
+	address: string = "",
 	educations: Education[] = [],
 	skills: Skill[] = [],
 	presentations: Presentation[] = [],
@@ -436,15 +503,18 @@ export async function addAuthor(
 	for (const author of allAuthors) {
 		assert(author.email?.value !== email, `Current author already exists`);
 	}
-
-	const response = await strapi.create(
+	await strapi.create(
 		'persons',
 		await getAuthorJson(name, email, address, phone, educations, skills, presentations, comments)
 	);
-
-	console.log(response);
 }
 
+/**
+ * Adds a comment and a link to the author in Strapi
+ *
+ * @param commentDescription {@linkcode AuthorComment} description
+ * @param authorDocumentId {@linkcode AuthorComment} documentId
+ */
 export async function addComment(commentDescription: string, authorDocumentId: string) {
 	const currentAuthor = await getAuthorByDocumentId(authorDocumentId);
 	const response = await strapi.create('comments', {
