@@ -24,4 +24,11 @@
     src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
 }
 
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f7f5f5;
+    color: #1a1a1a;
+}
+
 @source "../node_modules/flowbite-svelte/dist";
