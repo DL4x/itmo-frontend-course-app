@@ -1,3 +1,5 @@
+import { assertNotEmpty } from '$lib/errors';
+
 export interface TimeRange {
 	start: number;
 	end: number;
@@ -33,6 +35,15 @@ export interface Contact {
  * @property {string} subtitle description of Education
  * @property {TimeRange} timeRange two integers that show start and end of Education
  */
+
+export function createEmailContact(email: string): Contact {
+	assertNotEmpty(email, 'email');
+	return {
+		value: email,
+		href: `mailto:${email}`,
+	};
+}
+
 export interface Education extends IDObject {
 	title: string;
 	subtitle: string;

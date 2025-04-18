@@ -16,7 +16,7 @@
 	<title>Resume</title>
 </svelte:head>
 
-<div class="Content bg-primary-100">
+<div class="resume-content">
 	<NavHeader />
 	<AboutMeSection name={data.author.name} />
 	<EducationSection educations={data.author.educations} />
@@ -31,7 +31,7 @@
 </div>
 
 <style>
-    .Content {
+    .resume-content {
         width: 1140px;
         display: flex;
         gap: 120px;
@@ -40,7 +40,7 @@
     }
 
     @media screen and (max-width: 1140px) {
-        .Content {
+        .resume-content {
             width: auto;
         }
     }
@@ -52,7 +52,7 @@
         src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
     }
 
-    .Content {
+    .resume-content {
         font-family: 'JetBrains Mono', monospace;
         display: flex;
         flex-flow: column;
@@ -61,7 +61,7 @@
     }
 
     :global {
-        .Content h1 {
+        .resume-content h1 {
             margin-block: 0;
             font-weight: 500;
             font-size: 3rem;
@@ -69,7 +69,7 @@
             color: #363e45;
         }
 
-        .Content h2 {
+        .resume-content h2 {
             margin-block: 0;
             font-weight: 500;
             font-size: 1.25rem;
@@ -77,14 +77,14 @@
             color: #363e45;
         }
 
-        .Content h3 {
+        .resume-content h3 {
             margin-block: 0;
             font-weight: 400;
             font-size: 1rem;
             line-height: 1.5rem;
         }
 
-        .Content > * {
+        .resume-content > * {
             width: 100%;
             display: flex;
             flex-direction: column;
