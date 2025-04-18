@@ -1,18 +1,18 @@
 import {
-	assertValidAuthor,
-	assertValidComment,
-	assertValidContact,
-	assertValidEducation, assertValidPresentation,
-	assertValidSkill,
-	assertValidTimeRange,
 	type Author,
 	type AuthorComment,
 	type Presentation,
 	type Education,
 	type Skill,
-	type TimeRange, type VotedPerson, assertValidVotedPerson
+	type TimeRange, type VotedPerson
 } from '$lib/index';
-import { assert } from '$lib/errors';
+import {
+	assert,
+	assertValidAuthor,
+	assertValidComment, assertValidContact, assertValidEducation,
+	assertValidPresentation, assertValidSkill, assertValidTimeRange,
+	assertValidVotedPerson
+} from '$lib/errors';
 import Strapi from 'strapi-sdk-js';
 
 type TypeString =
