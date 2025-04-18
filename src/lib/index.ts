@@ -32,24 +32,30 @@ export interface Author extends IDObject{
 	skills: Skill[];
 	address?: Contact;
 	phone?: Contact;
-	email?: Contact;
+	email: Contact;
 }
 
 export interface AuthorComment extends IDObject {
-	comment_description: string;
+	commentDescription: string;
 	author: Author;
 }
 
 export interface Presentation extends IDObject {
-	presentation_name: string;
-	presentation_description: string;
-	presentation_url: string;
-	presentation_owners: Author[];
+	presentationName: string;
+	presentationDescription: string;
+	presentationUrl: string;
+	presentationOwners: Author[];
 	comments: AuthorComment[];
-	voted_persons: VotedPerson[];
+	votedPersons: VotedPerson[];
 }
 
 export interface VotedPerson extends IDObject {
 	author: Author;
-	person_score: number;
+	personScore: number;
+}
+
+export interface Course extends IDObject {
+	courseName: string;
+	coursePreviewUrl: string;
+	presentations: Presentation[];
 }
