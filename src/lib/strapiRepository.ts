@@ -331,6 +331,18 @@ export async function getAuthorByDocumentId(documentId: string): Promise<Author>
 	return parseAuthor(json);
 }
 
+export async function getAuthorByEmail(email: string): Promise<Author> {
+	const response = await strapi.find(`persons`, {
+		filters: {
+			person_email: email
+		},
+		populate: '*'
+	});
+	const json: unknown = response.data.at(0);
+	assert(json !== null);
+	return parseAuthor(json);
+}
+
 /**
  * @return All {@linkcode Author}s from Strapi
  */
