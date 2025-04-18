@@ -2,24 +2,21 @@
 	import { Navbar, NavBrand, NavHamburger, NavLi, NavUl } from 'flowbite-svelte';
 	import '/src/app.css';
 	import { page } from '$app/state';
+	import VerticalLine from '$lib/VerticalLine.svelte';
 
 	let { children } = $props();
 </script>
 
-<Navbar class="m-auto lg:w-5xl">
+<Navbar class="m-auto lg:w-5xl" navContainerClass="md:justify-start gap-8">
 	<NavBrand href="/">
-		<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Svelte_Logo.svg/640px-Svelte_Logo.svg.png" class="me-3 h-6 sm:h-9" alt="Svelte framkework logo"/>
-		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">ITMO Frontend Courses</span>
+		<enhanced:img class="w-20 h-20" src="/src/images/ufo.png" alt="Main logo" />
 	</NavBrand>
-	<div class="flex md:order-2">
-<!--		<DarkMode />-->
-		<NavHamburger />
-	</div>
+	<VerticalLine height="40px"/>
+	<NavHamburger />
 	<NavUl class="order-1" activeUrl={page.url.pathname}>
-		<NavLi href="/">Home</NavLi>
-		<NavLi href="/courses">Courses</NavLi>
-		<NavLi href="/resumes">Resumes</NavLi>
+		<NavLi href="/">Main</NavLi>
+		<NavLi href="/" activeClass="">About us</NavLi>
+		<NavLi href="/" activeClass="">Support</NavLi>
 	</NavUl>
-
 </Navbar>
 {@render children()}

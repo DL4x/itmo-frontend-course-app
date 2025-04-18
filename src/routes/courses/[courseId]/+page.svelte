@@ -8,4 +8,9 @@
 <svelte:head>
 	<title>Courses</title>
 </svelte:head>
-<Heading tag="h1">I am page of course with id = {data.courseId}</Heading>
+<Heading tag="h1">I am page of course with {data.presentations.length} presentations</Heading>
+<!--<div class="flex flex-row flex-wrap gap-4 justify-center">-->
+<!--	{#each data.presentations as presentation (presentation.id)}-->
+<!--		<PresentationPreviewCard {presentation}/>-->
+<!--	{/each}-->
+<!--</div>-->
