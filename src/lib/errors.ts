@@ -1,7 +1,7 @@
 import type {
 	Author,
 	AuthorComment,
-	Contact,
+	Contact, Course,
 	Education,
 	IDObject,
 	Presentation,
@@ -63,17 +63,22 @@ export function assertValidAuthor(author: Author) {
 
 export function assertValidComment(comment: AuthorComment) {
 	assertValidIDObject(comment);
-	assertNotEmpty(comment.comment_description, 'comment_description');
+	assertNotEmpty(comment.commentDescription, 'comment_description');
 }
 
 export function assertValidPresentation(presentation: Presentation) {
 	assertValidIDObject(presentation);
-	assertNotEmpty(presentation.presentation_name, 'presentation_name');
-	assertNotEmpty(presentation.presentation_url, 'presentation_url');
+	assertNotEmpty(presentation.presentationName, 'presentation_name');
+	assertNotEmpty(presentation.presentationUrl, 'presentation_url');
 }
 
 export function assertValidVotedPerson(votedPerson: VotedPerson) {
 	assertValidIDObject(votedPerson);
 	assertValidAuthor(votedPerson.author);
-	assertIsInt(votedPerson.person_score, 'person_score');
+	assertIsInt(votedPerson.personScore, 'person_score');
+}
+
+export function assertValidCourse(course: Course) {
+	assertValidIDObject(course);
+	assertNotEmpty(course.courseName, 'course_name');
 }
