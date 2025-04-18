@@ -97,7 +97,7 @@ export interface Presentation extends IDObject {
 	presentationOwners: Author[];
 	comments: AuthorComment[];
 	votedPersons: VotedPerson[];
-	course: Course;
+	course?: Course;
 }
 
 /**

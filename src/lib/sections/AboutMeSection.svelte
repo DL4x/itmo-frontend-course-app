@@ -20,8 +20,8 @@
     }
 
     .image {
-        width: 100%; /* Make the image width responsive */
-        height: auto; /* Let the height adjust automatically to maintain aspect ratio */
+        width: 100%;
+        height: auto;
         aspect-ratio: 1140/400;
         max-width: 1140px;
         border-radius: 8px;

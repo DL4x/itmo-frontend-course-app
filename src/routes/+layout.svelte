@@ -1,5 +1,5 @@
 <script>
-	import { Navbar, NavBrand, NavHamburger, NavLi, NavUl } from 'flowbite-svelte';
+	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Button } from 'flowbite-svelte';
 	import '/src/app.css';
 	import { page } from '$app/state';
 	import VerticalLine from '$lib/VerticalLine.svelte';
@@ -15,8 +15,11 @@
 	<NavHamburger />
 	<NavUl class="order-1" activeUrl={page.url.pathname}>
 		<NavLi href="/">Main</NavLi>
-		<NavLi href="/" activeClass="">About us</NavLi>
-		<NavLi href="/" activeClass="">Support</NavLi>
+		<NavLi href="/" activeClass=""><a href="/">About us</a></NavLi>
+		<NavLi href="/" activeClass=""><a href="/">Support</a></NavLi>
 	</NavUl>
+	<div class="ml-auto pl-2.5 order-3 flex gap-2">
+		<Button href="/auth">Sign In</Button>
+	</div>
 </Navbar>
 {@render children()}

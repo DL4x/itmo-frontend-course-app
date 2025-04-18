@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DateRange from '$lib/DateRange.svelte';
+	import DateRange from '$lib/sections/DateRange.svelte';
 	import type { Education } from '$lib';
 
 	const { title, subtitle, timeRange }: Education = $props();
