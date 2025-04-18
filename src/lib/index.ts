@@ -1,3 +1,5 @@
+import { assertNotEmpty } from '$lib/errors';
+
 export interface TimeRange {
 	start: number;
 	end: number;
@@ -18,6 +20,14 @@ export interface Skill extends IDObject {
 export interface Contact {
 	value: string;
 	href: string;
+}
+
+export function createEmailContact(email: string): Contact {
+	assertNotEmpty(email, 'email');
+	return {
+		value: email,
+		href: `mailto:${email}`,
+	};
 }
 
 export interface Education extends IDObject {
