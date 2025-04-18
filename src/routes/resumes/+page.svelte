@@ -17,8 +17,8 @@
 	</header>
 
 	<section class="flex flex-row flex-wrap gap-4 justify-center">
-		{#each data.authors as author (author.documentId)}
-			<Card class="w-xs flex flex-col gap-4 items-center shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all" href="/resumes/{author.documentId}">
+		{#each data.authors as author (author.id)}
+			<Card href="/resumes/{author.id}" class="w-xs flex flex-col gap-4 items-center shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
 				<div class="avatar">
 					<span>{author.name[0]}</span>
 				</div>
@@ -29,7 +29,6 @@
 </main>
 
 <style>
-
     main {
         font-family: 'JetBrains Mono', monospace;
         max-width: 1200px;
