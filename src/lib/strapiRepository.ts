@@ -225,14 +225,34 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
 		'string'
 	);
 	assertField(
+		'presentation_preview' in json &&
+			typeof json.presentation_preview === 'object' &&
+			json.presentation_preview != null,
+		'presentation_preview',
+		'object'
+	);
+	assertField(
+		'url' in json.presentation_preview && typeof json.presentation_preview.url === 'string',
+		'url',
+		'string'
+	);
+	assertField(
 		'presentation_owners' in json && Array.isArray(json.presentation_owners),
 		'presentation_owners',
 		'Array'
 	);
 	assertField('comments' in json && Array.isArray(json.comments), 'comments', 'Array');
 	assertField('voted_persons' in json && Array.isArray(json.voted_persons), 'comments', 'Array');
-	assertField('course' in json && typeof json.course === 'object' && json.course !== null, 'course', 'object');
-	assertField('documentId' in json.course && typeof json.course.documentId === 'string', 'documentId', 'string');
+	assertField(
+		'course' in json && typeof json.course === 'object' && json.course !== null,
+		'course',
+		'object'
+	);
+	assertField(
+		'documentId' in json.course && typeof json.course.documentId === 'string',
+		'documentId',
+		'string'
+	);
 
 	const voted_persons = await Promise.all(json.voted_persons.map(parseVotedPerson));
 
@@ -242,6 +262,7 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
 		presentationDescription: json.presentation_description,
 		presentationUrl: json.presentation_url,
 		documentId: json.documentId,
+		presentationPreviewUrl: json.presentation_preview.url,
 		votedPersons: voted_persons,
 		presentationOwners: await Promise.all(
 			json.presentation_owners.map((author: object) => {
@@ -281,6 +302,11 @@ async function parseCourse(json: unknown): Promise<Course> {
 		'string'
 	);
 	assertField(
+		'course_description' in json && typeof json.course_description === 'string',
+		'course_description',
+		'string'
+	);
+	assertField(
 		'presentations' in json && Array.isArray(json.presentations),
 		'presentations',
 		'Array'
@@ -296,12 +322,13 @@ async function parseCourse(json: unknown): Promise<Course> {
 		'url' in json.course_preview && typeof json.course_preview.url === 'string',
 		'url',
 		'string'
-	)
+	);
 
 	const result = {
 		id: json.id.toString(),
 		documentId: json.documentId,
 		courseName: json.course_name,
+		courseDescription: json.course_description,
 		coursePreviewUrl: json.course_preview.url,
 		presentations: await Promise.all(json.presentations.map(parsePresentation))
 	};
@@ -309,8 +336,10 @@ async function parseCourse(json: unknown): Promise<Course> {
 	return result;
 }
 
+const path = 'https://railway-strapi-production-7054.up.railway.app';
+
 const strapi = new Strapi({
-	url: 'https://railway-strapi-production-7054.up.railway.app',
+	url: path,
 	prefix: '/api',
 	store: {
 		key: 'strapi_jwt',
@@ -416,7 +445,12 @@ export async function getAllComments(): Promise<AuthorComment[]> {
  * @return All {@linkcode Course} from Strapi
  */
 export async function getAllCourses(): Promise<Course[]> {
-	const response = await strapi.find('courses?populate=*');
+	const response = await strapi.find('courses', {
+		populate: {
+			presentations: { populate: '*' },
+			course_preview: { populate: '*' },
+		}
+	});
 	const json = response.data;
 	assertField(Array.isArray(response.data), 'data', 'Array');
 
@@ -441,7 +475,9 @@ export async function getCourseByDocumentId(documentId: string): Promise<Course>
  *
  * @return {@linkcode Presentation}[] by documentId
  */
-export async function getPresentationsByCourseDocumentId(documentId: string): Promise<Presentation[]> {
+export async function getPresentationsByCourseDocumentId(
+	documentId: string
+): Promise<Presentation[]> {
 	const response = await strapi.findOne('courses', documentId, { populate: '*' });
 	const json: object = response.data;
 	assert(json !== null);
@@ -464,7 +500,7 @@ async function getAuthorJson(
 	presentations: Presentation[] = [],
 	comments: AuthorComment[] = []
 ): Promise<object> {
-	const data = {
+	return {
 		person_name: name,
 		person_address: address,
 		person_phone: phone,
@@ -474,7 +510,6 @@ async function getAuthorJson(
 		created_presentations: presentations,
 		comments: comments
 	};
-	return data;
 }
 
 /**
@@ -492,8 +527,8 @@ async function getAuthorJson(
 export async function addAuthor(
 	name: string,
 	email: string,
-	phone: string = "",
-	address: string = "",
+	phone: string = '',
+	address: string = '',
 	educations: Education[] = [],
 	skills: Skill[] = [],
 	presentations: Presentation[] = [],
@@ -527,4 +562,15 @@ export async function addComment(commentDescription: string, authorDocumentId: s
 		)
 	});
 	console.log(response);
+}
+
+/**
+ * For those who will draw pictures so as not to worry about the path.
+ *
+ * @param imageUrl image url. This url must be in the "key" format, and it should not contain http:// or anything like that.
+ *
+ * @return full path to image in Strapi
+ */
+export function getFullImagePath(imageUrl: string): string {
+	return path + '/uploads/' + imageUrl;
 }
