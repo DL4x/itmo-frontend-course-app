@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-
 @plugin 'flowbite/plugin';
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -22,6 +21,17 @@
     font-weight: 500;
     font-style: normal;
     src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f7f5f5;
+    color: #1a1a1a;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 @source "../node_modules/flowbite-svelte/dist";
