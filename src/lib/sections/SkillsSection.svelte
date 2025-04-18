@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Skill } from '$lib';
 	import SkillEntry from '$lib/entries/SkillEntry.svelte';
-	import TwoColumnLayout from '$lib/TwoColumnLayout.svelte';
+	import TwoColumnLayout from '$lib/sections/TwoColumnLayout.svelte';
 
 	interface Props {
 		skills: Skill[];

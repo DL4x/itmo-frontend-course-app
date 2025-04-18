@@ -1,6 +1,6 @@
 <script lang="ts">
 	import EducationEntry from '$lib/entries/EducationEntry.svelte';
-	import TwoColumnLayout from '$lib/TwoColumnLayout.svelte';
+	import TwoColumnLayout from '$lib/sections/TwoColumnLayout.svelte';
 	import type { Education } from '$lib';
 
 	interface Props {
