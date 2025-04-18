@@ -35,7 +35,9 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"@supabase/supabase-js": "^2.49.4",
 		"@tailwindcss/vite": "^4.1.4",
+		"flowbite-svelte-icons": "^2.1.1",
 		"strapi-sdk-js": "^3.0.0",
 		"tailwindcss": "^4.1.4"
 	}
