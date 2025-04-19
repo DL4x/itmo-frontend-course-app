@@ -283,8 +283,7 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
 				);
 				return getCommentByDocumentId(author.documentId);
 			})
-		),
-		course: await getCourseByDocumentId(json.course.documentId)
+		)
 	};
 	assertValidPresentation(result);
 	return result;
@@ -394,7 +393,9 @@ export async function getPresentationByDocumentId(documentId: string): Promise<P
 	const response = await strapi.findOne(`presentations`, documentId, {
 		populate: {
 			presentation_owners: { populate: '*' },
+			course: {populate: '*'},
 			comments: { populate: '*' },
+			presentation_preview: { populate: '*' },
 			voted_persons: {
 				on: {
 					'voted-person.voted-person': {
@@ -459,7 +460,25 @@ export async function getAllComments(): Promise<AuthorComment[]> {
 export async function getAllCourses(): Promise<Course[]> {
 	const response = await strapi.find('courses', {
 		populate: {
-			presentations: { populate: '*' },
+			presentations: {
+				populate: {
+					presentation_owners: { populate: '*' },
+					course: {populate: '*'},
+					comments: { populate: '*' },
+					presentation_preview: { populate: '*' },
+					voted_persons: {
+						on: {
+							'voted-person.voted-person': {
+								populate: {
+									person: {
+										populate: '*'
+									}
+								}
+							}
+						}
+					}
+				}
+			},
 			course_preview: { populate: '*' },
 		}
 	});

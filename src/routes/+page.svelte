@@ -98,56 +98,26 @@
 </section>
 
 <section class="course-list-container" id="main-page-courses">
+    <h2>Курсы</h2>
 
-	<h2>Курсы</h2>
-
-	<div class="flex gap-15">
-		<!-- Html/Css Card -->
-		<Card 
-		  img="/src/images/starting_page/paste_picture.webp"
-		  class="bg-white border-1 border-[#B1B5C3] rounded-xl transition-transform hover:-translate-y-1 hover:shadow-md overflow-hidden"
-		>
-		  <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-			Html/Css
-		  </h5>
-		  <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
-			Здесь вы ознакомитесь с основами
-		  </p>
-		  <Button class="bg-black text-white rounded-full px-6 py-2 w-32 hover:bg-gray-700 transition cursor-pointer">
-			Подробнее
-		  </Button>
-		</Card>
-	  
-		<!-- Javascript Card -->
-		<Card 
-		  img="/src/images/starting_page/paste_picture.webp"
-		  class="bg-white border-1 border-[#B1B5C3] rounded-xl transition-transform hover:-translate-y-1 hover:shadow-md overflow-hidden"
-		>
-		  <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-			Javascript
-		  </h5>
-		  <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
-			Здесь вы узнаете о джаваскрипт
-		  </p>
-		  <Button class="bg-black text-white rounded-full px-6 py-2 w-32 hover:bg-gray-700 transition cursor-pointer">
-			Подробнее
-		  </Button>
-		</Card>
-	  
-		<!-- Advanced module Card -->
-		<Card 
-		  img="/src/images/starting_page/paste_picture.webp"
-		  class="bg-white border-1 border-[#B1B5C3] rounded-xl transition-transform hover:-translate-y-1 hover:shadow-md overflow-hidden"
-		>
-		  <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-			Advanced module
-		  </h5>
-		  <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
-			Здесь хранятся познания всего мира
-		  </p>
-		  <Button class="bg-black text-white rounded-full px-6 py-2 w-32 hover:bg-gray-700 transition cursor-pointer">
-			Подробнее
-		  </Button>
-		</Card>
-	</div>
+    <div class="courses-grid">
+        {#each data.courses as course}
+            <Card 
+			img={course.coursePreviewUrl 
+                ? `https://railway-strapi-production-7054.up.railway.app${course.coursePreviewUrl}`
+                : '/src/images/starting_page/paste_picture.webp'}
+                class="bg-white border-1 border-[#B1B5C3] rounded-xl transition-transform hover:-translate-y-1 hover:shadow-md overflow-hidden"
+            >
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    {course.courseName}
+                </h5>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
+                    Здесь вы ознакомитесь с основами
+                </p>
+                <Button class="bg-black text-white rounded-full px-6 py-2 w-32 hover:bg-gray-700 transition cursor-pointer">
+                    Подробнее
+                </Button>
+            </Card>
+        {/each}
+    </div>
 </section>
