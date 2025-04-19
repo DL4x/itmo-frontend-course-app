@@ -394,7 +394,9 @@ export async function getPresentationByDocumentId(documentId: string): Promise<P
 	const response = await strapi.findOne(`presentations`, documentId, {
 		populate: {
 			presentation_owners: { populate: '*' },
+			course: {populate: '*'},
 			comments: { populate: '*' },
+			presentation_preview: { populate: '*' },
 			voted_persons: {
 				on: {
 					'voted-person.voted-person': {
@@ -462,6 +464,7 @@ export async function getAllCourses(): Promise<Course[]> {
 			presentations: {
 				populate: {
 					presentation_owners: { populate: '*' },
+					course: {populate: '*'},
 					comments: { populate: '*' },
 					presentation_preview: { populate: '*' },
 					voted_persons: {
