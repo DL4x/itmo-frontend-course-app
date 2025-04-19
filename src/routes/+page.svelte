@@ -113,7 +113,7 @@
                 <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
                     Здесь вы ознакомитесь с основами
                 </p>
-                <Button href="/courses/{course.documentId}"
+                <Button href="/courses/{course.id}"
                         class="bg-black text-white rounded-full px-6 py-2 w-32 hover:bg-gray-700 transition cursor-pointer">
                     Подробнее
                 </Button>
