@@ -32,7 +32,6 @@
 </section>
 
 <style>
-
     .info {
         text-align: center;
         display: flex;
@@ -42,16 +41,15 @@
 
     section {
         margin-top: 80px;
+        display: flex;
+        margin-block: 0;
     }
 
     .container {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 10%
-    }
-
-    .text {
-        line-height: 3.625rem;
+        gap: 10%;
+        align-self: center;
     }
 </style>
