@@ -24,8 +24,8 @@
 		return x.toString();
 	}
 </script>
-
-<Card size="none" img={presentationUrl.length === 0 ? undefined : presentationUrl} href="/lectures/{id}"
+<!--href="/lectures/{id}"-->
+<Card size="none" img={presentationUrl.length === 0 ? undefined : presentationUrl} href="/lectures/arq2dsd6x96ajs01a9wd2n2n"
 			class="group grow w-100 max-w-150 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
 	<div class="flex flex-col gap-4">
 		<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
