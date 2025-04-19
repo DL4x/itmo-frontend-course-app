@@ -10,18 +10,12 @@
 	}
 
 	const { skills }: Props = $props();
-    const skillsNew = [
-        {
-            name: "java",
-	        value: 50,
-            id: 2,
-        },
-    ];
 	// const firstHalf = $derived(skills.slice(0, (skills.length - 1) / 2));
 	// const secondHalf = $derived(skills.slice((skills.length - 1) / 2));
 </script>
 
 <section id="skills_personality_union_section">
+    <h1>Skills and Personality</h1>
     <div class="container">
         <div class="skills"><Skills skills={skills} /></div>
         <div class="personality"><Personality skills={skills} /></div>
@@ -29,29 +23,28 @@
 </section>
 
 <style>
+    section {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
     .container {
         display: flex;
-        gap: 3%
+        gap: 3%;
     }
 
     .skills,
     .personality {
         width: 50%;
-        flex-grow: 1;
         padding: 5% 2%;
         border: 3px solid black;
         border-radius: 30px;
+        flex-grow: 1;
+        align-self: center;
     }
-
-    /*.content {*/
-    /*    display: flex;*/
-    /*    gap: 32px;*/
-    /*}*/
-
-    /*.content-column {*/
-    /*    display: flex;*/
-    /*    flex-direction: column;*/
-    /*    gap: 32px;*/
-    /*    flex: 1;*/
-    /*}*/
 </style>

@@ -62,6 +62,12 @@
 		text-align: center;
 	}
 
+	section {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+    }
+
     .content {
         display: grid;
         gap: 32px;
