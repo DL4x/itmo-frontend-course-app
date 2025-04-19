@@ -31,9 +31,9 @@
         gap: 50px;
     }
 
-    h1 {
+    /*h1 {
         text-align: center;
-    }
+    }*/
 
     .container {
         display: flex;
