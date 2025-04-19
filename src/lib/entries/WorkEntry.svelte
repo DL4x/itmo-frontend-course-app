@@ -8,7 +8,6 @@
 <div class="content">
 	<div class="titles">
 		<h2>{title}</h2>
-		<h3>{subtitle}</h3>
 	</div>
 	<DateRange {...timeRange} />
 </div>

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Contact } from '$lib';
-	import ContactEntry from '$lib/entries/ContactEntry.svelte';
 
 	interface Props {
 		address?: Contact;
@@ -9,70 +8,96 @@
 	}
 
 	const { address, phone, email }: Props = $props();
+
+	let contacts = {
+		address: address,
+		phone: phone,
+		email: email,
+	};
+
+	interface ContactInfo {
+		address: string;
+		email: string;
+		phone: string;
+		vk: string;
+		instagram: string;
+		telegram: string;
+		website: string;
+		github: string;
+		linkedin: string;
+		[key: string]: string;
+	}
+
+	const contactIcons: ContactInfo = {
+		address: "/src/images/pin.svg",
+		email: "/src/images/email.svg",
+		phone: "/src/images/phone.svg",
+		vk: "img/vk.svg",
+		instagram: "img/instagram.svg",
+		telegram: "img/telegram.svg",
+		website: "img/website.svg",
+		github: "img/github.svg",
+		linkedin: "img/linkedin.svg",
+	};
 </script>
 
 <section id="contacts_section">
 	<h1>Contacts</h1>
 	<div class="content">
 		<div class="contact-box">
-			<enhanced:img
-				alt="Logo of map pin"
-				class="image"
-				height="40"
-				src="/src/images/pin.svg"
-				width="40"
-			/>
-			<ContactEntry contact={address} name="Address" />
-		</div>
-		<div class="contact-box">
-			<enhanced:img
-				alt="Logo of ringing phone"
-				class="image"
-				height="40"
-				src="/src/images/phone.svg"
-				width="40"
-			/>
-			<ContactEntry contact={phone} name="Phone" />
-		</div>
-		<div class="contact-box">
-			<enhanced:img
-				alt="Logo of email"
-				class="image"
-				height="40"
-				src="/src/images/email.svg"
-				width="40"
-			/>
-			<ContactEntry contact={email} name="Email" />
+			{#each Object.entries(contacts) as [name, contact]}
+				{#if name && contact}
+					<div class="contact-item">
+						<img src={contactIcons[name]} alt={name} class="contact-icon" />
+						<a href={contact.href} class="contact-link">{contact.value}</a>
+					</div>
+				{/if}
+			{/each}
 		</div>
 	</div>
 </section>
 
 <style>
+	h1 {
+		text-align: center;
+	}
+
     .content {
         display: grid;
         gap: 32px;
         grid-template-columns: repeat(3, 1fr);
+		display: flex;
+		justify-content: center;
     }
 
     .contact-box {
+		width: 50%;
+		min-width: 400px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: center;
+		gap: 32px;
+		align-items: center;
         height: 336px;
         padding: 32px;
         border-radius: 8px;
         background-color: #98a3ae1f;
+
     }
 
-    @media (max-width: 1024px) {
-        .content {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
+	.contact-item {
+		min-width: 300px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 32px;
+		border: 2px solid black;
+		border-radius: 30px;
+		padding: 15px 40px;
+	}
 
-    @media (max-width: 768px) {
-        .content {
-            grid-template-columns: 1fr;
-        }
-    }
+	a {
+		text-align: center;
+		font-size: larger;
+	}
 </style>

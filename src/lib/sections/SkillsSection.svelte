@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Skill } from '$lib';
-	import SkillEntry from '$lib/entries/SkillEntry.svelte';
-	import TwoColumnLayout from '$lib/sections/TwoColumnLayout.svelte';
+
+	import SkillEntry from '$lib/entries/PersonalityEntry.svelte';
 
 	interface Props {
 		skills: Skill[];
@@ -14,12 +14,12 @@
 
 <section id="personality_section">
 	<h1>Skills</h1>
-	<TwoColumnLayout
+	<!-- <TwoColumnLayout
 		FirstComponent={SkillEntry}
 		SecondComponent={SkillEntry}
 		first={skills}
 		second={skills}
-	/>
+	/> -->
 	<!--	<div class="content">-->
 	<!--		<div class="content-column">-->
 	<!--			{#each firstHalf as skill (skill.id)}-->
