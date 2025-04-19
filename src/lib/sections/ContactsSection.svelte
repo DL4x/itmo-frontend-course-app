@@ -1,68 +1,73 @@
 <script lang="ts">
-	import type { Contact } from '$lib';
+    import type { Contact } from '$lib';
 
-	interface Props {
-		address?: Contact;
-		phone?: Contact;
-		email?: Contact;
-	}
+    interface Props {
+        address?: Contact;
+        phone?: Contact;
+        email?: Contact;
+    }
 
-	const { address, phone, email }: Props = $props();
+    const { address, phone, email }: Props = $props();
 
-	let contacts = {
-		address: address,
-		phone: phone,
-		email: email,
-	};
+    let contacts = {
+        address: address,
+        phone: phone,
+        email: email
+    };
 
-	interface ContactInfo {
-		address: string;
-		email: string;
-		phone: string;
-		vk: string;
-		instagram: string;
-		telegram: string;
-		website: string;
-		github: string;
-		linkedin: string;
-		[key: string]: string;
-	}
+    interface ContactInfo {
+        address: string;
+        email: string;
+        phone: string;
+        vk: string;
+        instagram: string;
+        telegram: string;
+        website: string;
+        github: string;
+        linkedin: string;
 
-	const contactIcons: ContactInfo = {
-		address: "/src/images/pin.svg",
-		email: "/src/images/email.svg",
-		phone: "/src/images/phone.svg",
-		vk: "img/vk.svg",
-		instagram: "img/instagram.svg",
-		telegram: "img/telegram.svg",
-		website: "img/website.svg",
-		github: "img/github.svg",
-		linkedin: "img/linkedin.svg",
-	};
+        [key: string]: string;
+    }
+
+    const contactIcons: ContactInfo = {
+        address: '/src/images/pin.svg',
+        email: '/src/images/email.svg',
+        phone: '/src/images/phone.svg',
+        vk: 'img/vk.svg',
+        instagram: 'img/instagram.svg',
+        telegram: 'img/telegram.svg',
+        website: 'img/website.svg',
+        github: 'img/github.svg',
+        linkedin: 'img/linkedin.svg'
+    };
 </script>
 
 <section id="contacts_section">
-	<h1>Contacts</h1>
-	<div class="content">
-		<div class="contact-box">
-			{#each Object.entries(contacts) as [name, contact]}
-				{#if name && contact}
-					<div class="contact-item">
-						<img src={contactIcons[name]} alt={name} class="contact-icon" />
-						<a href={contact.href} class="contact-link">{contact.value}</a>
-					</div>
-				{/if}
-			{/each}
-		</div>
-	</div>
+    <h1>Contacts</h1>
+    <div class="content">
+        <div class="contact-box">
+            {#each Object.entries(contacts) as [name, contact] (contact?.href)}
+                {#if name && contact}
+                    <div class="contact-item">
+                        <img
+                            src={contactIcons[name]}
+                            alt={name}
+                            class="contact-icon"
+                        />
+                        <a href={contact.href} class="contact-link">{contact.value}</a>
+                    </div>
+                {/if}
+            {/each}
+        </div>
+    </div>
 </section>
 
 <style>
-	h1 {
-		text-align: center;
-	}
+    h1 {
+        text-align: center;
+    }
 
-	section {
+    section {
         display: flex;
         flex-direction: column;
         gap: 50px;
@@ -72,18 +77,18 @@
         display: grid;
         gap: 32px;
         grid-template-columns: repeat(3, 1fr);
-		display: flex;
-		justify-content: center;
+        display: flex;
+        justify-content: center;
     }
 
     .contact-box {
-		width: 50%;
-		min-width: 400px;
+        width: 50%;
+        min-width: 400px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-		gap: 32px;
-		align-items: center;
+        gap: 32px;
+        align-items: center;
         height: 336px;
         padding: 32px;
         border-radius: 8px;
@@ -91,19 +96,19 @@
 
     }
 
-	.contact-item {
-		min-width: 300px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 32px;
-		border: 2px solid black;
-		border-radius: 30px;
-		padding: 15px 40px;
-	}
+    .contact-item {
+        min-width: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        border: 2px solid black;
+        border-radius: 30px;
+        padding: 15px 40px;
+    }
 
-	a {
-		text-align: center;
-		font-size: larger;
-	}
+    a {
+        text-align: center;
+        font-size: larger;
+    }
 </style>

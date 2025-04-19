@@ -11,7 +11,7 @@
 </svelte:head>
 
 <main class="flex flex-col gap-12 max-w-7xl m-auto p-4">
-	<Heading tag="h1">Наслаждайтесь лекциями от наших великолепных спикеров :-) :-) :-)</Heading>
+	<Heading tag="h1">Наслаждайтесь лекциями от наших великолепных спикеров</Heading>
 	<div class="flex flex-row flex-wrap gap-4 justify-around items-stretch">
 		{#each data.presentations as presentation (presentation.id)}
 			<PresentationPreviewCard {...presentation}/>
