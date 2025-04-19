@@ -19,7 +19,7 @@
 	</NavBrand>
 	<NavUl activeUrl={page.url.pathname}>
 		<NavLi href="/">Главная</NavLi>
-		<NavLi href="/" activeClass="">О нас</NavLi>
+		<NavLi href="/resumes">О нас</NavLi>
 		<NavLi href="/" activeClass="">Поддержка</NavLi>
 	</NavUl>
 </Navbar>
