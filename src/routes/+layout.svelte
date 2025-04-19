@@ -15,7 +15,7 @@
 
 	<NavBrand class="flex flex-row gap-4 md:ml-auto md:order-last">
 		<NavHamburger />
-		<Button>Войти</Button>
+		<Button href="/auth">Войти</Button>
 	</NavBrand>
 	<NavUl activeUrl={page.url.pathname}>
 		<NavLi href="/">Главная</NavLi>

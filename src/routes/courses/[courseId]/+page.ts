@@ -52,7 +52,7 @@ function mapToPresentationCardData(value: Presentation, index: number): Presenta
         lectureNumber: index + 1,
         name: value.presentationName,
         description: value.presentationDescription,
-        presentationUrlId: value.presentationUrl,
+        presentationUrl: value.presentationUrl,
         authors: value.presentationOwners,
         commentsCount: value.comments.length,
         id: value.id

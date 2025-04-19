@@ -1,5 +1,4 @@
 <script lang="ts">
-	//import { Button, ButtonGroup } from 'flowbite-svelte';
 	import type { PageProps } from './$types';
 	import { Card, Button } from 'flowbite-svelte';
 	import '/src/app.css';
@@ -101,7 +100,7 @@
     <h2>Курсы</h2>
 
     <div class="courses-grid">
-        {#each data.courses as course}
+        {#each data.courses as course (course.id)}
             <Card 
 			img={course.coursePreviewUrl 
                 ? `https://railway-strapi-production-7054.up.railway.app${course.coursePreviewUrl}`
@@ -114,7 +113,7 @@
                 <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
                     Здесь вы ознакомитесь с основами
                 </p>
-                <Button class="bg-black text-white rounded-full px-6 py-2 w-32 hover:bg-gray-700 transition cursor-pointer">
+                <Button href="/courses/{course.id}" class="bg-black text-white rounded-full px-6 py-2 w-32 hover:bg-gray-700 transition cursor-pointer">
                     Подробнее
                 </Button>
             </Card>
