@@ -1,9 +1,11 @@
 <script lang="ts">
-interface Props {
-	height: string;
-}
+import type { SvelteHTMLElements } from 'svelte/elements';
 
-const { height }: Props = $props();
+// interface Props extends  {
+// 	height: string;
+// }
+
+const {lineHeight, ...rest}: SvelteHTMLElements['div'] & {lineHeight: string;} = $props();
 </script>
 
 <style>
@@ -14,4 +16,4 @@ const { height }: Props = $props();
     }
 </style>
 
-<div style:height={height}></div>
+<div style:height={lineHeight} {...rest}></div>
