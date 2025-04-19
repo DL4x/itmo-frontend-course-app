@@ -13,7 +13,7 @@
 </script>
 
 <section id="education_section">
-	<h1>Education</h1>
+	<h1 class="header">Education</h1>
     <div class="content">
         <div class="content-column">
             {#each firstHalf as education (education.id)}
@@ -29,13 +29,18 @@
 </section>
 
 <style>
+    section {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+    }
+
     h1 {
         text-align: center;
     }
 
     .content {
         display: flex;
-        /* gap: 3% */
     }
 
     .content-column {

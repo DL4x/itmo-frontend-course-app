@@ -6,9 +6,9 @@
 	const {
 		lectureNumber,
 		id,
-		presentationName,
-		presentationDescription,
-		presentationUrl,
+		name,
+		description,
+		presentationUrlId,
 		authors,
 		averageUserScore,
 		commentsCount
@@ -25,14 +25,14 @@
 	}
 </script>
 
-<Card size="none" img={presentationUrl.length === 0 ? undefined : presentationUrl} href="/lectures/{id}"
+<Card size="none" img={presentationUrlId.length === 0 ? undefined : presentationUrlId} href="/lectures/{id}"
 			class="group grow w-100 max-w-150 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
 	<div class="flex flex-col gap-4">
 		<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-			Лекция №{lectureNumber.toString()}: {presentationName}
+			Лекция №{lectureNumber.toString()}: {name}
 		</h5>
 		<p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">
-			{presentationDescription}
+			{description}
 		</p>
 		{#if commentsCount !== 0 && averageUserScore !== undefined}
 			<div class="flex flex-row gap-4 justify-between items-center">
