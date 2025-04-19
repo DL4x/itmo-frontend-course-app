@@ -459,7 +459,24 @@ export async function getAllComments(): Promise<AuthorComment[]> {
 export async function getAllCourses(): Promise<Course[]> {
 	const response = await strapi.find('courses', {
 		populate: {
-			presentations: { populate: '*' },
+			presentations: {
+				populate: {
+					presentation_owners: { populate: '*' },
+					comments: { populate: '*' },
+					presentation_preview: { populate: '*' },
+					voted_persons: {
+						on: {
+							'voted-person.voted-person': {
+								populate: {
+									person: {
+										populate: '*'
+									}
+								}
+							}
+						}
+					}
+				}
+			},
 			course_preview: { populate: '*' },
 		}
 	});
