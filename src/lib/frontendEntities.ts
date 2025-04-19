@@ -4,7 +4,7 @@ export interface PresentationCardData extends IDObject {
 	lectureNumber: number;
 	name: string;
 	description: string;
-	presentationUrlId: string;
+	presentationUrl: string;
 	authors: Author[];
 	commentsCount: number;
 	/**
