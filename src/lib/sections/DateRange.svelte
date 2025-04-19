@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { TimeRange } from '$lib/index';
+	import type { TimeRange } from '$lib';
 
 	const { start, end }: TimeRange = $props();
 </script>

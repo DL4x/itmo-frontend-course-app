@@ -83,6 +83,7 @@ export interface AuthorComment extends IDObject {
  * @property {string} presentationName name of Presentation
  * @property {string} presentationDescription small description of presentation
  * @property {string} presentationUrl url of presentation. This url must be in the "key" format, and it should not contain http:// or anything like that.
+ * @property {string} presentationPreviewUrl url of image. This url must be in the "key" format, and it should not contain http:// or anything like that.
  * @property {Author[]} presentationOwners authors of presentation
  * @property {AuthorComment[]} comments comments of Presentation
  * @property {VotedPerson[]} votedPersons objects which contains voted person and his score
@@ -92,10 +93,11 @@ export interface Presentation extends IDObject {
 	presentationName: string;
 	presentationDescription: string;
 	presentationUrl: string;
+	presentationPreviewUrl: string;
 	presentationOwners: Author[];
 	comments: AuthorComment[];
 	votedPersons: VotedPerson[];
-	course: Course;
+	course?: Course;
 }
 
 /**
@@ -112,10 +114,12 @@ export interface VotedPerson extends IDObject {
  * @type Course
  * @property {string} courseName name of course
  * @property {string} coursePreviewUrl url of image. This url must be in the "key" format, and it should not contain http:// or anything like that.
+ * @property {string} courseDescription small course description
  * @property {Presentation[]} presentations course presentations
  */
 export interface Course extends IDObject {
 	courseName: string;
 	coursePreviewUrl: string;
+	courseDescription: string;
 	presentations: Presentation[];
 }

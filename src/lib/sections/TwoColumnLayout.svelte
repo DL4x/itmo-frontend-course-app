@@ -1,6 +1,6 @@
 <script generics="T extends IDObject, K extends IDObject" lang="ts">
 	import type { Component } from 'svelte';
-	import type { IDObject } from '$lib/index';
+	import type { IDObject } from '$lib';
 
 	interface Props {
 		first: T[];
