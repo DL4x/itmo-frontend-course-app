@@ -1,10 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
-	import NavHeader from '$lib/sections/NavHeader.svelte';
-	import AboutMeSection from '$lib/sections/AboutMeSection.svelte';
-	import EducationSection from '$lib/sections/EducationSection.svelte';
 	import WorkExperienceSection from '$lib/sections/WorkExperienceSection.svelte';
-	import SkillsSection from '$lib/sections/SkillsSection.svelte';
 	import ContactsSection from '$lib/sections/ContactsSection.svelte';
 	import Footer from '$lib/sections/Footer.svelte';
 	import '/src/app.css';
@@ -44,13 +40,13 @@
         flex-direction: column;
         margin: auto;
         background-color: white;
-    }  
+    }
 
-    @media screen and (max-width: 1140px) {
+    /*@media screen and (max-width: 1140px) {
         .resume-content {
             width: auto;
         }
-    }
+    }*/
 
     @font-face {
         font-family: 'JetBrains Mono';
@@ -59,14 +55,14 @@
         src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
     }
 
-    .resume-content {
+    /*.resume-content {
         font-family: 'JetBrains Mono', monospace;
-        /* font-family: "DM Sans", sans-serif; */
+        !* font-family: "DM Sans", sans-serif; *!
         display: flex;
         flex-flow: column;
         align-items: center;
         margin: 0 auto;
-    }
+    }*/
 
     :global {
         .resume-content h1 {

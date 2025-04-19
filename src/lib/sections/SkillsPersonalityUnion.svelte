@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { Skill } from '$lib';
-	import SkillEntry from '$lib/entries/PersonalityEntry.svelte';
 	// import TwoColumnLayout from '$lib/TwoColumnLayout.svelte';
-    import Skills from '$lib/sections/Skills.svelte';
+	import Skills from '$lib/sections/Skills.svelte';
 	import Personality from '$lib/sections/Personality.svelte';
 
 	interface Props {
@@ -10,22 +9,26 @@
 	}
 
 	const { skills }: Props = $props();
-    const skillsNew = [
-        {
-            name: "java",
-	        value: 50,
-            id: 2,
-        },
-    ];
+	// const skillsNew = [
+	//     {
+	//         name: "java",
+	//       value: 50,
+	//         id: 2,
+	//     },
+	// ];
 	// const firstHalf = $derived(skills.slice(0, (skills.length - 1) / 2));
 	// const secondHalf = $derived(skills.slice((skills.length - 1) / 2));
 </script>
 
 <section id="skills_personality_union_section">
-    <div class="container">
-        <div class="skills"><Skills skills={skills} /></div>
-        <div class="personality"><Personality skills={skills} /></div>
-    </div>
+	<div class="container">
+		<div class="skills">
+			<Skills skills={skills} />
+		</div>
+		<div class="personality">
+			<Personality skills={skills} />
+		</div>
+	</div>
 </section>
 
 <style>
