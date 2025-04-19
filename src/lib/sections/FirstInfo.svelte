@@ -1,17 +1,13 @@
 <script lang="ts">
-    import { Blockquote } from 'flowbite-svelte';
-
 	const { name }: { name: string } = $props();
-    let min = 1;
-    let max = 5;
 </script>
 
 <section id="about_me_section">
     <div class="container">
-        <img
+        <enhanced:img
             alt="Abstract beautiful geometric shapes"
             class="image"
-            src={`/src/images/profileImages/${Math.floor(Math.random() * (max - min)) + min}.png`}
+            src="/src/images/profileImages/1.png"
             width="400px"
         />
         <div class="info">

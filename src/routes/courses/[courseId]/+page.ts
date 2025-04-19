@@ -45,6 +45,18 @@ function getAllPresentationsOfCourse(courseId: string): PresentationCardData[] {
 		// mockPresentationCardData(4, 365000, 5, "", ...authorNames.slice(1)),
 		mockPresentationCardData(5, 999000000, 3.4354321, PLACEHOLDER_IMG_URL, ...authorNames.slice(2))
 	];
+}*/
+
+function mapToPresentationCardData(value: Presentation, index: number): PresentationCardData {
+    return {
+        lectureNumber: index + 1,
+        name: value.presentationName,
+        description: value.presentationDescription,
+        presentationUrl: value.presentationUrl,
+        authors: value.presentationOwners,
+        commentsCount: value.comments.length,
+        id: value.id
+    };
 }
 
 // function mapToPresentationCardData(value: Presentation, index: number): PresentationCardData {
