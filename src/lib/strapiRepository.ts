@@ -283,8 +283,7 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
 				);
 				return getCommentByDocumentId(author.documentId);
 			})
-		),
-		course: await getCourseByDocumentId(json.course.documentId)
+		)
 	};
 	assertValidPresentation(result);
 	return result;
