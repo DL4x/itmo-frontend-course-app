@@ -534,7 +534,6 @@ export async function getPresentationsByCourseDocumentId(
         }
     });
     const json: object = response.data;
-    console.log(response.data);
     assert(json !== null);
     return (await parseCourse(json)).presentations;
 }
