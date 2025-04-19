@@ -93,7 +93,7 @@ export interface Presentation extends IDObject {
 	presentationName: string;
 	presentationDescription: string;
 	presentationUrl: string;
-	presentationPreviewUrl: string;
+	presentationPreviewUrl?: string;
 	presentationOwners: Author[];
 	comments: AuthorComment[];
 	votedPersons: VotedPerson[];

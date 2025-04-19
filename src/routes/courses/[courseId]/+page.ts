@@ -49,6 +49,7 @@ import { getPresentationsByCourseDocumentId } from '$lib/strapiRepository';
 
 function mapToPresentationCardData(value: Presentation, index: number): PresentationCardData {
     return {
+        documentId: value.documentId,
         lectureNumber: index + 1,
         name: value.presentationName,
         description: value.presentationDescription,
