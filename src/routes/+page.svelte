@@ -10,5 +10,5 @@
 <ButtonGroup>
 	<Button href="/courses/bulboba">Open course page</Button>
 	<Button href="/lectures/arq2dsd6x96ajs01a9wd2n2n">Open lecture page</Button>
-	<Button href="/resumes">Open page with our resume</Button>
+	<Button href="/resumes">Open page with our resumes</Button>
 </ButtonGroup>

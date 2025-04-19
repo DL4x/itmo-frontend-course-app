@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { Skill } from '$lib';
-	import SkillEntry from '$lib/entries/PersonalityEntry.svelte';
 	// import TwoColumnLayout from '$lib/TwoColumnLayout.svelte';
-    import Skills from '$lib/sections/Skills.svelte';
+	import Skills from '$lib/sections/Skills.svelte';
 	import Personality from '$lib/sections/Personality.svelte';
 
 	interface Props {
@@ -15,11 +14,14 @@
 </script>
 
 <section id="skills_personality_union_section">
-    <h1>Skills and Personality</h1>
-    <div class="container">
-        <div class="skills"><Skills skills={skills} /></div>
-        <div class="personality"><Personality skills={skills} /></div>
-    </div>
+	<div class="container">
+		<div class="skills">
+			<Skills skills={skills} />
+		</div>
+		<div class="personality">
+			<Personality skills={skills} />
+		</div>
+	</div>
 </section>
 
 <style>
