@@ -19,9 +19,8 @@
 	</NavBrand>
 	<NavUl activeUrl={page.url.pathname}>
 		<NavLi href="/">Главная</NavLi>
-		<NavLi href="/courses" activeClass="">Курсы</NavLi>
-		<NavLi href="/resumes" activeClass="">О нас</NavLi>
-		<NavLi href="#" activeClass="">Поддержка</NavLi>
+		<NavLi href="/" activeClass="">О нас</NavLi>
+		<NavLi href="/" activeClass="">Поддержка</NavLi>
 	</NavUl>
 </Navbar>
 {@render children()}
