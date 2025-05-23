@@ -1,5 +1,5 @@
 import type { PageLoad } from './$types';
-import { type Author, createEmailContact } from '$lib';
+import { type Author, createEmailContact, type IDObject } from '$lib';
 import type { PresentationCardData } from '$lib/frontendEntities';
 
 function mockAuthor(name: string, id: number): Author {
@@ -42,7 +42,7 @@ function getAllPresentationsOfCourse(courseId: string): PresentationCardData[] {
         mockPresentationCardData(1, 123, undefined, ''),
         mockPresentationCardData(2, 32, 3.5),
         mockPresentationCardData(3, 10, 5, PLACEHOLDER_IMG_URL, ...authorNames),
-        // mockPresentationCardData(4, 365000, 5, "", ...authorNames.slice(1)),
+        mockPresentationCardData(4, 365000, 5, '', ...authorNames.slice(1)),
         mockPresentationCardData(
             5,
             999000000,
@@ -53,38 +53,19 @@ function getAllPresentationsOfCourse(courseId: string): PresentationCardData[] {
     ];
 }
 
-// function mapToPresentationCardData(value: Presentation, index: number): PresentationCardData {
-//     return {
-//         lectureNumber: index + 1,
-//         name: value.presentationName,
-//         description: value.presentationDescription,
-//         presentationUrl: value.presentationUrl,
-//         authors: value.presentationOwners,
-//         commentsCount: value.comments.length,
-//         id: value.id
-//     };
-// }
+interface CoursePageData extends IDObject {
+    title: string;
+    previewUrl: string;
+    description: string;
+    presentations: PresentationCardData[];
+}
 
-// function mapToPresentationCardData(value: Presentation, index: number): PresentationCardData {
-//     return {
-//         lectureNumber: index + 1,
-//         name: value.presentationName,
-//         description: value.presentationDescription,
-//         presentationUrl: value.presentationUrl,
-//         authors: value.presentationOwners,
-//         commentsCount: value.comments.length,
-//         id: value.id
-//     };
-// }
-
-export const load: PageLoad = async ({
-    params
-}): Promise<{ presentations: PresentationCardData[] }> => {
-    // const presentationsFromStrapi = (await getPresentationsByCourseDocumentId(params.courseId)).map(
-    //     mapToPresentationCardData
-    // );
-
+export const load: PageLoad = async ({ params }): Promise<CoursePageData> => {
     return {
+        id: params.courseId,
+        title: 'Course of some shit',
+        description: `Helloooooooooooo${' Helloooooooooooo'.repeat(10)}`,
+        previewUrl: 'https://i.pinimg.com/originals/b9/a3/ff/b9a3fffae9c48308b0c9d33c5859af4b.jpg',
         presentations: getAllPresentationsOfCourse(params.courseId)
     };
 };
