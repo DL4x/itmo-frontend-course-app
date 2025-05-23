@@ -1,11 +1,10 @@
 <script lang="ts">
 	import type { PresentationCardData } from '$lib/frontendEntities';
 	import { Card, Rating } from 'flowbite-svelte';
-	import AuthorSmallCard from '$lib/AuthorSmallCard.svelte';
+	import AuthorsChips from '$lib/AuthorsChips.svelte';
 
 	const {
 		lectureNumber,
-		id,
 		name,
 		description,
 		presentationUrl,
@@ -49,11 +48,7 @@
 			</div>
 		{/if}
 		{#if authors.length !== 0}
-			<div class="flex flex-row flex-wrap gap-4">
-				{#each authors as author (author.id)}
-					<AuthorSmallCard {...author} />
-				{/each}
-			</div>
+			<AuthorsChips {authors}/>
 		{/if}
 	</div>
 </Card>

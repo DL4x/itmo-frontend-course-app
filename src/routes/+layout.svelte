@@ -7,9 +7,56 @@
 	let { children } = $props();
 </script>
 
-<Navbar class="sticky top-0 z-1000 bg-white shadow-sm" navContainerClass="gap-8">
+<style>
+    .nav-container {
+        gap: 2rem;
+    }
+
+    .logo-image {
+        width: 5rem;
+        height: 5rem;
+    }
+
+    .nav-brand-right {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+    }
+
+
+    @media (min-width: 768px) {
+        .nav-brand-right {
+            margin-left: auto;
+            order: 2;
+        }
+        .vertical-line {
+            display: block;
+        }
+
+    }
+
+    @media (max-width: 767px) {
+        .vertical-line {
+            display: none;
+        }
+    }
+
+    .enhanced-img {
+        height: 80px;
+        width: 80px;
+    }
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: white;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+</style>
+
+<Navbar class="navbar bg-white shadow-sm" navContainerClass="gap-8">
 	<NavBrand href="/">
-		<enhanced:img class="w-20 h-20" src="/src/images/ufo.png" alt="Main logo" />
+		<enhanced:img class="enhanced-img" src="/src/images/ufo.png" alt="Main logo" />
 	</NavBrand>
 	<VerticalLine lineHeight="40px" class="not-md:hidden"/>
 
