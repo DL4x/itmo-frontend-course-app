@@ -7,9 +7,9 @@
 	let { children } = $props();
 </script>
 
-<Navbar class="sticky top-0 z-1000 bg-white shadow-sm" navContainerClass="gap-8">
+<Navbar class="sticky top-0 z-1000 bg-[#4A4E69] shadow-sm min-h-[5vh] flex items-center" navContainerClass="gap-8">
 	<NavBrand href="/">
-		<enhanced:img class="w-20 h-20" src="/src/images/ufo.png" alt="Main logo" />
+		<enhanced:img src="/src/images/ufo-flying.png" alt="Main logo" />
 	</NavBrand>
 	<VerticalLine lineHeight="40px" class="not-md:hidden"/>
 
@@ -18,9 +18,9 @@
 		<Button href="/auth">Войти</Button>
 	</NavBrand>
 	<NavUl activeUrl={page.url.pathname}>
-		<NavLi href="/">Главная</NavLi>
-		<NavLi href="/resumes">О нас</NavLi>
-		<NavLi href="/" activeClass="">Поддержка</NavLi>
+		<NavLi href="/" class="text-[#FFEBE0]" activeClass="">Главная</NavLi>
+		<NavLi href="/resumes" class="text-[#FFEBE0]" activeClass="">О нас</NavLi>
+		<NavLi href="/" class="text-[#FFEBE0]" activeClass="">Поддержка</NavLi>
 	</NavUl>
 </Navbar>
 {@render children()}

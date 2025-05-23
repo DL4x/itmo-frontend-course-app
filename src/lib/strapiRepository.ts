@@ -335,7 +335,7 @@ async function parseCourse(json: unknown): Promise<Course> {
     return result;
 }
 
-const path = 'https://railway-strapi-production-7054.up.railway.app';
+const path = 'https://strapi-production-51d5.up.railway.app';
 
 const strapi = new Strapi({
     url: path,
