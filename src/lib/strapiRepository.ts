@@ -3,7 +3,7 @@ import {
     type AuthorComment,
     type Course,
     type Education,
-    type Presentation,
+    type Presentation, type ProgressBar,
     type Skill,
     type TimeRange,
     type VotedPerson
@@ -15,7 +15,7 @@ import {
     assertValidContact,
     assertValidCourse,
     assertValidEducation,
-    assertValidPresentation,
+    assertValidPresentation, assertValidProgressBar,
     assertValidSkill,
     assertValidTimeRange,
     assertValidVotedPerson
@@ -92,36 +92,60 @@ function parseEducation(json: object): Education {
     return result;
 }
 
+async function parseProgressBar(json: object): Promise<ProgressBar> {
+    assertField('id' in json && typeof json.id === 'number', 'id', 'number');
+    assertField(
+      'course' in json && typeof json.course === 'object' && json.course != null,
+      'course',
+      'object'
+    );
+    assertField(
+      'percent' in json && typeof json.percent === 'number',
+      'percent',
+      'number'
+    );
+    assertField('documentId' in json.course && typeof json.course.documentId === 'string', 'documentId', 'string');
+
+
+    const result = {
+        id: json.id.toString(),
+        percent: json.percent,
+        course: await getCourseByDocumentId(json.course.documentId),
+    };
+    assertValidProgressBar(result);
+    return result
+}
+
 function toHRef(phone: string): string {
     phone = phone.replace(/(?!^)\+|\D/g, '');
     return phone.startsWith('7') ? `tel:+${phone}` : `tel:${phone}`;
 }
 
-function parseAuthor(json: unknown): Author {
+async function parseAuthor(json: unknown): Promise<Author> {
     assert(typeof json === 'object' && json !== null, 'json must be object');
     assertField('documentId' in json && typeof json.documentId === 'string', 'documentId', 'string');
     assertField(
-        'person_name' in json && typeof json.person_name === 'string',
-        'person_name',
-        'string'
+      'person_name' in json && typeof json.person_name === 'string',
+      'person_name',
+      'string'
     );
     assertField('companies' in json && Array.isArray(json.companies), 'companies', 'Array');
     assertField('skills' in json && Array.isArray(json.skills), 'skills', 'Array');
     assertField('educations' in json && Array.isArray(json.educations), 'educations', 'Array');
     assertField(
-        'person_address' in json && typeof json.person_address === 'string',
-        'person_address',
-        'string'
+      'person_address' in json && typeof json.person_address === 'string',
+      'person_address',
+      'string'
     );
     assertField(
-        'person_phone' in json && typeof json.person_phone === 'string',
-        'person_phone',
-        'string'
+      'person_phone' in json && typeof json.person_phone === 'string',
+      'person_phone',
+      'string'
     );
     assertField(
-        'person_email' in json && typeof json.person_email === 'string',
-        'person_email',
-        'string'
+      'person_email' in json && typeof json.person_email === 'string',
+      'person_email',
+      'string'
     );
     const address = { value: json.person_address, href: '' };
     assertValidContact(address);
@@ -129,11 +153,28 @@ function parseAuthor(json: unknown): Author {
     assertValidContact(phone);
     const email = { value: json.person_email, href: `mailto:${json.person_email}` };
     assertValidContact(email);
+    assertField(
+      'progress_bars' in json && Array.isArray(json.progress_bars),
+      'progress_bars',
+      'Array'
+    );
+    assertField('favourites' in json && Array.isArray(json.favourites), 'favourites', 'Array');
+
+    
     const result = {
         id: json.documentId,
         name: json.person_name,
         educations: json.educations.map(parseEducation),
         skills: json.skills.map(parseSkill),
+        progressBars: await Promise.all(json.progress_bars.map(parseProgressBar)),
+        favourites: await Promise.all(json.favourites.map((presentation: object) => {
+            assertField(
+              'documentId' in presentation && typeof presentation.documentId === 'string',
+              'documentId',
+              'string'
+            );
+            return getPresentationByDocumentId(presentation.documentId);
+        })),
         address: address,
         phone: phone,
         email: email
@@ -381,7 +422,7 @@ export async function getAllAuthors(): Promise<Author[]> {
     assertField(Array.isArray(response.data), 'data', 'Array');
 
     console.log('All authors has this JSON:', json);
-    return json.map(parseAuthor);
+    return Promise.all(json.map(parseAuthor));
 }
 
 /**
