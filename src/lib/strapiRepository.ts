@@ -282,48 +282,51 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
         'presentation_url',
         'string'
     );
-    // assertField(
-    // 	'presentation_preview' in json &&
-    // 		typeof json.presentation_preview === 'object' &&
-    // 		json.presentation_preview != null,
-    // 	'presentation_preview',
-    // 	'object'
-    // );
-    // assertField(
-    // 	'url' in json.presentation_preview && typeof json.presentation_preview.url === 'string',
-    // 	'url',
-    // 	'string'
-    // );
     assertField(
-        'presentation_owners' in json && Array.isArray(json.presentation_owners),
-        'presentation_owners',
-        'Array'
+    	'presentation_preview' in json &&
+    		typeof json.presentation_preview === 'object' &&
+    		json.presentation_preview != null,
+    	'presentation_preview',
+    	'object'
     );
-    assertField('comments' in json && Array.isArray(json.comments), 'comments', 'Array');
-    assertField('voted_persons' in json && Array.isArray(json.voted_persons), 'comments', 'Array');
+    assertField(
+    	'url' in json.presentation_preview && typeof json.presentation_preview.url === 'string',
+    	'url',
+    	'string'
+    );
+    let presentation_owners = [];
+    if ('presentation_owners' in json && Array.isArray(json.presentation_owners)) {
+        presentation_owners = json.presentation_owners;
+    }
+    let comments = [];
+    if ('comments' in json && Array.isArray(json.comments)) {
+        comments = json.comments;
+    }
+    let voted_persons = [];
+    if ('voted_persons' in json && Array.isArray(json.voted_persons)) {
+        voted_persons = json.voted_persons;
+    }
     assertField(
         'course' in json && typeof json.course === 'object' && json.course !== null,
         'course',
         'object'
     );
+
     assertField(
         'documentId' in json.course && typeof json.course.documentId === 'string',
         'documentId',
         'string'
     );
-
-    const voted_persons = await Promise.all(json.voted_persons.map(parseVotedPerson));
-
     const result = {
         id: json.id.toString(),
         presentationName: json.presentation_name,
         presentationDescription: json.presentation_description,
         presentationUrl: json.presentation_url,
         documentId: json.documentId,
-        presentationPreviewUrl: undefined, // json.presentation_preview.url,
-        votedPersons: voted_persons,
+        presentationPreviewUrl: `https://strapi-production-51d5.up.railway.app${json.presentation_preview.url}`,
+        votedPersons: await Promise.all(voted_persons.map(parseVotedPerson)),
         presentationOwners: await Promise.all(
-            json.presentation_owners.map((author: object) => {
+            presentation_owners.map((author: object) => {
                 assertField(
                     'documentId' in author && typeof author.documentId === 'string',
                     'documentId',
@@ -333,7 +336,7 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
             })
         ),
         comments: await Promise.all(
-            json.comments.map((author: object) => {
+            comments.map((author: object) => {
                 assertField(
                     'documentId' in author && typeof author.documentId === 'string',
                     'documentId',
@@ -391,7 +394,15 @@ async function parseCourse(json: unknown): Promise<Course> {
         courseName: json.course_name,
         courseDescription: json.course_description,
         coursePreviewUrl: json.course_preview.url,
-        presentations: await Promise.all(json.presentations.map(parsePresentation))
+        presentations: await Promise.all(json.presentations.map((pres) => {
+            assertField(
+                'documentId' in pres && typeof pres.documentId === 'string',
+                'documentId',
+                'string'
+            );
+            return getPresentationByDocumentId(pres.documentId);
+            }
+        ))
     };
     assertValidCourse(result);
     return result;
@@ -457,7 +468,7 @@ export async function getPresentationByDocumentId(documentId: string): Promise<P
             presentation_owners: { populate: '*' },
             course: { populate: '*' },
             comments: { populate: '*' },
-            // presentation_preview: { populate: '*' },
+            presentation_preview: { populate: '*' },
             voted_persons: {
                 on: {
                     'voted-person.voted-person': {
@@ -650,17 +661,9 @@ export async function addAuthor(
     presentations: Presentation[] = [],
     comments: AuthorComment[] = []
 ) {
-    await strapi.create('persons',
-        getAuthorJson(
-            name,
-            email,
-            address,
-            phone,
-            educations,
-            skills,
-            presentations,
-            comments
-        )
+    await strapi.create(
+        'persons',
+        getAuthorJson(name, email, address, phone, educations, skills, presentations, comments)
     );
 }
 

@@ -21,10 +21,10 @@ export function mapToPresentationCardData(
         lectureNumber: index + 1,
         name: value.presentationName,
         description: value.presentationDescription,
-        presentationUrl: value.presentationUrl,
+        presentationUrl: value.presentationPreviewUrl ?? "",
         authors: value.presentationOwners,
         commentsCount: value.comments.length,
-        id: value.id
+        id: value.documentId
     };
 }
 
@@ -37,7 +37,7 @@ export interface CoursePageData extends IDObject {
 
 export function mapToCoursePageData(course: Course): CoursePageData {
     return {
-        id: course.id,
+        id: course.documentId,
         title: course.courseName,
         description: course.courseDescription,
         previewUrl: 'https://i.pinimg.com/originals/b9/a3/ff/b9a3fffae9c48308b0c9d33c5859af4b.jpg',

@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { PageProps } from './$types';
     import { Button, Card } from 'flowbite-svelte';
-    import { crossfade, fly } from 'svelte/transition';
+    import { fly } from 'svelte/transition';
     import '/src/app.css';
     import Lottie from '$lib/Lottie.svelte';
     import { quintOut } from 'svelte/easing';
@@ -17,10 +17,10 @@
         showCourses = !showCourses;
     }
 
-    const [send, receive] = crossfade({
-        duration: 800,
-        easing: quintOut
-    });
+    // const [send, receive] = crossfade({
+    //     duration: 800,
+    //     easing: quintOut
+    // });
 
     const { data }: PageProps = $props();
 </script>
@@ -82,7 +82,7 @@
                         Здесь вы ознакомитесь с основами
                     </p>
                     <Button
-                        href="/courses/{course.id}"
+                        href="/courses/{course.documentId}"
                         class="bg-black text-white rounded-full px-6 py-2 w-32 transition cursor-pointer"
                     >
                         Подробнее
