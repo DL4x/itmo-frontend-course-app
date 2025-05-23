@@ -4,6 +4,7 @@
 	import AuthorsChips from '$lib/AuthorsChips.svelte';
 
 	const {
+		id,
 		lectureNumber,
 		name,
 		description,
@@ -24,7 +25,7 @@
 	}
 </script>
 <!--href="/lectures/{id}"-->
-<Card size="none" img={presentationUrl.length === 0 ? undefined : presentationUrl} href="/lectures/arq2dsd6x96ajs01a9wd2n2n"
+<Card size="none" img={presentationUrl.length === 0 ? undefined : presentationUrl} href="/lectures/{id}"
 			class="text-primary-100 bg-my-gray hover:bg-my-gray-hovered group grow w-100 max-w-150 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
 	<div class="flex flex-col gap-4">
 		<h5 class="mb-2 text-2xl font-bold tracking-tight">

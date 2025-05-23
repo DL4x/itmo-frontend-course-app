@@ -24,7 +24,7 @@ export function mapToPresentationCardData(
         presentationUrl: value.presentationPreviewUrl ?? "",
         authors: value.presentationOwners,
         commentsCount: value.comments.length,
-        id: value.id
+        id: value.documentId
     };
 }
 
