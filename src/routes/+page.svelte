@@ -1,42 +1,10 @@
 <script lang="ts">
     import type { PageProps } from './$types';
-    import { Card, Button } from 'flowbite-svelte';
-    import { fly, crossfade } from 'svelte/transition';
+    import { Button, Card } from 'flowbite-svelte';
+    import { crossfade, fly } from 'svelte/transition';
     import '/src/app.css';
     import Lottie from '$lib/Lottie.svelte';
-    import {
-        linear,
-        quadIn,
-        quadOut,
-        quadInOut,
-        cubicIn,
-        cubicOut,
-        cubicInOut,
-        quartIn,
-        quartOut,
-        quartInOut,
-        quintIn,
-        quintOut,
-        quintInOut,
-        sineIn,
-        sineOut,
-        sineInOut,
-        expoIn,
-        expoOut,
-        expoInOut,
-        circIn,
-        circOut,
-        circInOut,
-        backIn,
-        backOut,
-        backInOut,
-        elasticIn,
-        elasticOut,
-        elasticInOut,
-        bounceIn,
-        bounceOut,
-        bounceInOut
-    } from 'svelte/easing';
+    import { quintOut } from 'svelte/easing';
     import { onMount } from 'svelte';
 
     let ready = $state(false);

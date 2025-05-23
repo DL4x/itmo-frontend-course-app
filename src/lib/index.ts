@@ -50,6 +50,11 @@ export interface Education extends IDObject {
 	timeRange: TimeRange;
 }
 
+export interface ProgressBar extends IDObject{
+	percent: number;
+	course: Course;
+}
+
 /**
  * @type Author Be careful using this interface. Preferably, always try to get data from Strapi by documentId.
  * @property {string} name author name
@@ -63,6 +68,8 @@ export interface Author extends IDObject{
 	name: string;
 	educations: Education[];
 	skills: Skill[];
+	progressBars: ProgressBar[];
+	favourites: Presentation[];
 	address?: Contact;
 	phone?: Contact;
 	email: Contact;
@@ -90,6 +97,7 @@ export interface AuthorComment extends IDObject {
  * @property {Course} course the course in which this presentation was presented
  */
 export interface Presentation extends IDObject {
+    documentId: string;
 	presentationName: string;
 	presentationDescription: string;
 	presentationUrl: string;
@@ -118,6 +126,7 @@ export interface VotedPerson extends IDObject {
  * @property {Presentation[]} presentations course presentations
  */
 export interface Course extends IDObject {
+    documentId: string;
 	courseName: string;
 	coursePreviewUrl: string;
 	courseDescription: string;

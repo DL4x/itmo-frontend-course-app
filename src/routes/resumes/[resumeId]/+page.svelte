@@ -47,13 +47,8 @@
         margin: auto;
         /* background-color: white; */
         margin-top: 30px;
+        /* background-color: rgb(247,245,245); */
     }
-
-    /*@media screen and (max-width: 1140px) {
-        .resume-content {
-            width: auto;
-        }
-    }*/
 
     @font-face {
         font-family: 'JetBrains Mono';
