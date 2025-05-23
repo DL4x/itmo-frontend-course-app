@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageProps } from './$types';
+	// import type { PageProps } from './$types';
 	import WorkExperienceSection from '$lib/sections/WorkExperienceSection.svelte';
 	import ContactsSection from '$lib/sections/ContactsSection.svelte';
 	import Footer from '$lib/sections/Footer.svelte';
@@ -7,18 +7,20 @@
 	import FirstInfo from '$lib/sections/FirstInfo.svelte';
 	import SkillsPersonalityUnion from '$lib/sections/SkillsPersonalityUnion.svelte';
 	import Education from '$lib/sections/Education.svelte';
+    import Grid from '$lib/sections/Grid.svelte';
 
-	const { data }: PageProps = $props();
+	// const { data }: PageProps = $props();
 </script>
 
 <svelte:head>
 	<title>Resume</title>
 </svelte:head>
 
-<div class="Content bg-primary-100">
+<div class="Content">
     <!-- <div class="resume-content"> -->
         <!-- <NavHeader /> -->
-        <FirstInfo name={data.author.name} />
+        <Grid />
+        <!-- <FirstInfo name={data.author.name} />
         <Education educations={data.author.educations} />
         <WorkExperienceSection educations={data.author.educations} />
         <SkillsPersonalityUnion skills={data.author.skills} />
@@ -27,7 +29,7 @@
             email={data.author.email}
             phone={data.author.phone}
         />
-        <Footer />
+        <Footer /> -->
     <!-- </div> -->
 </div>
 
@@ -37,12 +39,14 @@
 
     .Content {
         font-family: 'JetBrains Mono', monospace;
-        width: 1140px;
+        /* width: 1140px; */
+        width: 90%;
         display: flex;
         gap: 120px;
         flex-direction: column;
         margin: auto;
-        background-color: white;
+        /* background-color: white; */
+        margin-top: 30px;
     }
 
     /*@media screen and (max-width: 1140px) {
