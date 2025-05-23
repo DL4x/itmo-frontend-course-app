@@ -1,4 +1,4 @@
-import type { Author, IDObject, Presentation } from '$lib/index';
+import type { Author, Course, IDObject, Presentation } from '$lib/index';
 
 export interface PresentationCardData extends IDObject {
     lectureNumber: number;
@@ -13,12 +13,34 @@ export interface PresentationCardData extends IDObject {
     averageUserScore?: number;
 }
 
-export const mapToPresentationCardData = (value: Presentation, index: number): PresentationCardData => ({
-    lectureNumber: index + 1,
-    name: value.presentationName,
-    description: value.presentationDescription,
-    presentationUrl: value.presentationUrl,
-    authors: value.presentationOwners,
-    commentsCount: value.comments.length,
-    id: value.id
-});
+export function mapToPresentationCardData(
+    value: Presentation,
+    index: number
+): PresentationCardData {
+    return {
+        lectureNumber: index + 1,
+        name: value.presentationName,
+        description: value.presentationDescription,
+        presentationUrl: value.presentationUrl,
+        authors: value.presentationOwners,
+        commentsCount: value.comments.length,
+        id: value.id
+    };
+}
+
+export interface CoursePageData extends IDObject {
+    title: string;
+    previewUrl: string;
+    description: string;
+    presentations: PresentationCardData[];
+}
+
+export function mapToCoursePageData(course: Course): CoursePageData {
+    return {
+        id: course.id,
+        title: course.courseName,
+        description: course.courseDescription,
+        previewUrl: 'https://i.pinimg.com/originals/b9/a3/ff/b9a3fffae9c48308b0c9d33c5859af4b.jpg',
+        presentations: course.presentations.map(mapToPresentationCardData)
+    };
+}
