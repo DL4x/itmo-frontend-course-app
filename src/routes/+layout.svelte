@@ -3,6 +3,7 @@
     import '/src/app.css';
     import { page } from '$app/state';
     import VerticalLine from '$lib/VerticalLine.svelte';
+    import { userStore } from '../store';
 
     let { children } = $props();
 </script>
@@ -16,14 +17,18 @@
     </NavBrand>
     <VerticalLine lineHeight="40px" class="not-md:hidden" />
 
+	<NavUl activeUrl={page.url.pathname}>
+		<NavLi href="/" class="text-[#FFEBE0]">Главная</NavLi>
+		<NavLi href="/resumes" class="text-[#FFEBE0]" activeClass="">О нас</NavLi>
+		<NavLi href="/" class="text-[#FFEBE0]" activeClass="">Поддержка</NavLi>
+	</NavUl>
     <NavBrand class="flex flex-row gap-4 md:ml-auto md:order-last">
         <NavHamburger />
-        <Button href="/auth">Войти</Button>
+        {#if $userStore}
+            <p style="color: #ffebe0">{$userStore.name}</p>
+        {:else}
+            <Button href="/auth" class="bg-[#FE8A70]">Войти</Button>
+        {/if}
     </NavBrand>
-    <NavUl activeUrl={page.url.pathname}>
-        <NavLi href="/" class="text-[#FFEBE0]" activeClass="">Главная</NavLi>
-        <NavLi href="/resumes" class="text-[#FFEBE0]" activeClass="">О нас</NavLi>
-        <NavLi href="/" class="text-[#FFEBE0]" activeClass="">Поддержка</NavLi>
-    </NavUl>
 </Navbar>
 {@render children()}

@@ -78,8 +78,7 @@
         height: 336px;
         padding: 32px;
         border-radius: 8px;
-        background-color: #98a3ae1f;
-
+        background-color: rgb(247,245,245);
     }
 
     .contact-item {
