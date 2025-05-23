@@ -2,7 +2,7 @@
 	import { supabase } from '$lib/supabase';
 	import { goto } from '$app/navigation';
 	import { Heading } from 'flowbite-svelte';
-	import { getAuthorByEmail } from '$lib/strapiRepository';
+    import { addAuthor, getAuthorByEmail } from '$lib/strapiRepository';
 	import { userStore } from '../store'
 
 	let email = '';
@@ -26,7 +26,7 @@
 					throw new Error('Пожалуйста, введите ваше имя');
 				}
 
-				const { data: authData, error: signUpError } = await supabase.auth.signUp({
+				const { error: signUpError } = await supabase.auth.signUp({
 					email,
 					password,
 					options: {
@@ -35,27 +35,20 @@
 						}
 					}
 				});
-
 				if (signUpError) throw signUpError;
 
-				const { error: profileError } = await supabase
-					.from('profiles')
-					.insert([{
-						id: authData.user?.id,
-						username,
-						email
-					}]);
-				if (profileError) throw profileError;
+                await addAuthor(username, email);
+
 				const user = await fetchUser();
 				userStore.set(user);
 				goto('/');
-
 			} else {
 				const { error: signInError } = await supabase.auth.signInWithPassword({
 					email,
 					password
 				});
 				if (signInError) throw signInError;
+
 				const user = await fetchUser();
 				userStore.set(user);
 				goto('/');
@@ -123,7 +116,7 @@
         max-width: 400px;
         margin: 2rem auto;
         padding: 2rem;
-        background: #ffffff;
+        background: #ffebe0;
         border-radius: 12px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -150,7 +143,7 @@
 
     input:focus {
         outline: none;
-        border-color: rgb(235, 79, 39);
+        border-color: #FE8A70;
         box-shadow: 0 0 0 3px rgba(235, 79, 39, 0.2);
     }
 
@@ -166,24 +159,28 @@
         transition: all 0.3s ease;
     }
 
+    .auth-input {
+        background: #fff9f5;
+    }
+
     Button:first-of-type {
-        background-color: rgb(235, 79, 39);
+        background-color: #FE8A70;
         color: white;
     }
 
     Button:first-of-type:hover {
-        background-color: #e46b32;
+        background-color: #FE8A70;
     }
 
     Button:last-of-type {
         background-color: transparent;
-        color: rgb(235, 79, 39);
+        color: #FE8A70;
         border: 1px solid #e2e8f0;
     }
 
     Button:last-of-type:hover {
         background-color: #f8fafc;
-        border-color: rgb(235, 79, 39);
+        border-color: #FE8A70;
     }
 
     Button[disabled] {
@@ -192,7 +189,7 @@
     }
 
     .error {
-        color: #ef4444;
+        color: #FE8A70;
         text-align: center;
         margin-top: 1rem;
         padding: 0.5rem;
