@@ -14,6 +14,8 @@
     --color-primary-700: #eb4f27;
     --color-primary-800: #cc4522;
     --color-primary-900: #a5371b;
+    --color-my-gray: #474b66;
+    --color-my-gray-hovered: #5c5c80;
 }
 
 @font-face {
@@ -28,7 +30,7 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #22223B;
     /*color: #1a1a1a;*/
-    color: #FFEBE0;
+    color: var(--color-primary-200);
 
 }
 

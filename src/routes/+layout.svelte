@@ -8,7 +8,7 @@
 </script>
 
 <Navbar
-    class="sticky top-0 z-1000 bg-[#4A4E69] shadow-sm min-h-[5vh] flex items-center"
+    class="sticky top-0 z-1000 bg-my-gray shadow-sm min-h-[5vh] flex items-center"
     navContainerClass="gap-8"
 >
     <NavBrand href="/">
