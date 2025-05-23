@@ -97,6 +97,7 @@ export interface AuthorComment extends IDObject {
  * @property {Course} course the course in which this presentation was presented
  */
 export interface Presentation extends IDObject {
+    documentId: string;
 	presentationName: string;
 	presentationDescription: string;
 	presentationUrl: string;
@@ -125,6 +126,7 @@ export interface VotedPerson extends IDObject {
  * @property {Presentation[]} presentations course presentations
  */
 export interface Course extends IDObject {
+    documentId: string;
 	courseName: string;
 	coursePreviewUrl: string;
 	courseDescription: string;

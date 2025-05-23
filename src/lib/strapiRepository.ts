@@ -606,7 +606,7 @@ export async function getPresentationsByCourseDocumentId(
  *
  * @return json-object of {@linkcode Author} for add to Strapi
  */
-async function getAuthorJson(
+function getAuthorJson(
     name: string,
     email: string,
     address?: string,
@@ -615,7 +615,7 @@ async function getAuthorJson(
     skills: Skill[] = [],
     presentations: Presentation[] = [],
     comments: AuthorComment[] = []
-): Promise<object> {
+) {
     return {
         person_name: name,
         person_address: address,
@@ -650,13 +650,8 @@ export async function addAuthor(
     presentations: Presentation[] = [],
     comments: AuthorComment[] = []
 ) {
-    const allAuthors = await getAllAuthors();
-    for (const author of allAuthors) {
-        assert(author.email?.value !== email, `Current author already exists`);
-    }
-    await strapi.create(
-        'persons',
-        await getAuthorJson(
+    await strapi.create('persons',
+        getAuthorJson(
             name,
             email,
             address,
@@ -674,17 +669,17 @@ export async function addAuthor(
  *
  * @param commentDescription {@linkcode AuthorComment} description
  * @param authorDocumentId {@linkcode AuthorComment} documentId
+ * @param presentationDocumentId
  */
-export async function addComment(commentDescription: string, authorDocumentId: string) {
-    const currentAuthor = await getAuthorByDocumentId(authorDocumentId);
+export async function addComment(
+    commentDescription: string,
+    authorDocumentId: string,
+    presentationDocumentId: string
+) {
     const response = await strapi.create('comments', {
         comment_description: commentDescription,
-        person: getAuthorJson(
-            currentAuthor.name,
-            currentAuthor.email.value,
-            currentAuthor.address?.value,
-            currentAuthor.phone?.value
-        )
+        person: authorDocumentId,
+        presentation: presentationDocumentId
     });
     console.log(response);
 }
