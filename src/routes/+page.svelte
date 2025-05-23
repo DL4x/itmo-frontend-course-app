@@ -1,7 +1,58 @@
 <script lang="ts">
     import type { PageProps } from './$types';
     import { Card, Button } from 'flowbite-svelte';
+    import { fly, crossfade } from 'svelte/transition';
     import '/src/app.css';
+    import Lottie from '$lib/Lottie.svelte';
+    import {
+        linear,
+        quadIn,
+        quadOut,
+        quadInOut,
+        cubicIn,
+        cubicOut,
+        cubicInOut,
+        quartIn,
+        quartOut,
+        quartInOut,
+        quintIn,
+        quintOut,
+        quintInOut,
+        sineIn,
+        sineOut,
+        sineInOut,
+        expoIn,
+        expoOut,
+        expoInOut,
+        circIn,
+        circOut,
+        circInOut,
+        backIn,
+        backOut,
+        backInOut,
+        elasticIn,
+        elasticOut,
+        elasticInOut,
+        bounceIn,
+        bounceOut,
+        bounceInOut
+    } from 'svelte/easing';
+    import { onMount } from 'svelte';
+
+    let ready = $state(false);
+    onMount(() => (ready = true));
+
+    let isHovered = $state(false);
+    let showCourses = $state(false);
+
+    function toggleView() {
+        showCourses = !showCourses;
+    }
+
+    const [send, receive] = crossfade({
+        duration: 800,
+        easing: quintOut
+    });
 
     const { data }: PageProps = $props();
 </script>
@@ -10,14 +61,78 @@
     <title>ITMO Frontend Course</title>
 </svelte:head>
 
+{#if !showCourses}
+    <section
+        class="greeting-page-container"
+        transition:fly={{ x: -1000, duration: 800, easing: quintOut }}
+    >
+        {#if ready}
+            <div class="left" in:fly={{ x: -100, duration: 800 }}>
+                <h1>Рады вас<br />видеть!</h1>
+                <p>
+                    Вы посетили сайт образовательных курсов по направлению фронтенда университета
+                    ИТМО. Данный ресурс был создан выпускниками этих курсов.
+                </p>
+                <a
+                    class="courses-btn"
+                    onclick={toggleView}
+                    onmouseenter={() => (isHovered = true)}
+                    onmouseleave={() => (isHovered = false)}
+                >
+                    <p class="courses-btn-text">
+                        {isHovered ? 'Погнали' : 'Список курсов'}
+                    </p>
+                </a>
+            </div>
+
+            <div class="right" in:fly={{ x: 100, duration: 800 }}>
+                <Lottie
+                    path="/src/images/starting_page/cosmonaut.json"
+                    width="75%"
+                    height="75%"
+                    mirrored={true}
+                />
+            </div>
+        {/if}
+    </section>
+{:else}
+    <section class="course-list-container" in:fly={{ x: 1000, duration: 800, easing: quintOut }}>
+        <div class="courses-grid">
+            {#each data.courses as course (course.id)}
+                <Card
+                    img={course.coursePreviewUrl
+                        ? `https://strapi-production-51d5.up.railway.app${course.coursePreviewUrl}`
+                        : '/src/images/starting_page/paste_picture.webp'}
+                    class="bg-white border-1 border-[#B1B5C3] rounded-xl transition-transform hover:-translate-y-1 hover:shadow-md overflow-hidden"
+                >
+                    <h5
+                        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+                    >
+                        {course.courseName}
+                    </h5>
+                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
+                        Здесь вы ознакомитесь с основами
+                    </p>
+                    <Button
+                        href="/courses/{course.id}"
+                        class="bg-black text-white rounded-full px-6 py-2 w-32 transition cursor-pointer"
+                    >
+                        Подробнее
+                    </Button>
+                </Card>
+            {/each}
+        </div>
+    </section>
+{/if}
+
 <style>
     .greeting-page-container {
         display: flex;
-        justify-content: center;
         align-items: center;
-        gap: 20%;
-        padding: 0 10%;
-        height: 100vh;
+        gap: 1vw;
+        padding: 5%;
+        padding-left: 10%;
+        height: 95vh;
         box-sizing: border-box;
     }
 
@@ -29,12 +144,19 @@
         gap: 52px;
     }
 
+    .right {
+        display: flex;
+        flex: 2;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
     h1 {
         font-weight: 700;
         font-size: 7rem;
         line-height: 100%;
         letter-spacing: -0.02em;
-        color: #141416;
+        color: #ffebe0;
     }
 
     h2 {
@@ -49,75 +171,49 @@
         font-weight: 400;
         font-size: 1.2rem;
         line-height: 150%;
-        color: #000000;
+        color: #c9ada7;
     }
 
-    .button {
-        background-color: #141416;
-        color: white;
-        padding: 16px 24px;
-        gap: 12px;
-        border-radius: 90px;
-        font-weight: bold;
-        cursor: pointer;
-        text-decoration: none;
+    .courses-btn {
+        width: 334px;
+        height: 48px;
         display: flex;
         justify-content: center;
-        align-items: center;
+
+        background: #fe8a70;
+        box-shadow:
+            0px 6px 4px rgba(38, 33, 33, 0.25),
+            inset 0px -6px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
     }
 
-    .alien-img {
-        padding-bottom: 100px;
+    .courses-btn-text {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 16px;
+        margin-top: 3%;
+        color: #f2e9e4;
+        transition: background-color 0.3s ease;
     }
 
-    .button:hover {
-        background-color: #333;
+    .courses-btn:hover {
+        background-color: #4140407a;
+    }
+
+    .courses-btn:hover .courses-btn-text {
+        transform: translateY(-1px);
+        color: #e6570a;
     }
 
     .course-list-container {
         display: flex;
-        justify-content: center;
         align-items: center;
-        flex-direction: column;
-        gap: 100px;
-        margin-bottom: 100px;
+        justify-content: center;
+        gap: 1vw;
+        height: 95vh;
+        box-sizing: border-box;
     }
 </style>
-
-<section class="greeting-page-container">
-    <div class="left">
-        <h1>Рады вас<br>видеть!</h1>
-        <p>
-            Вы посетили сайт образовательных курсов по направлению фронтенда университета ИТМО.
-            Данный ресурс был создан выпускниками этих курсов.
-        </p>
-        <a class="button" href="#main-page-courses">Список курсов</a>
-    </div>
-    <enhanced:img src="/src/images/starting_page/alien.png" alt="Main logo" />
-</section>
-
-<section class="course-list-container" id="main-page-courses">
-    <h2>Курсы</h2>
-
-    <div class="courses-grid">
-        {#each data.courses as course (course.id)}
-            <Card
-                img={course.coursePreviewUrl
-                ? `https://railway-strapi-production-7054.up.railway.app${course.coursePreviewUrl}`
-                : '/src/images/starting_page/paste_picture.webp'}
-                class="bg-white border-1 border-[#B1B5C3] rounded-xl transition-transform hover:-translate-y-1 hover:shadow-md overflow-hidden"
-            >
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    {course.courseName}
-                </h5>
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
-                    Здесь вы ознакомитесь с основами
-                </p>
-                <Button href="/courses/{course.id}"
-                        class="bg-black text-white rounded-full px-6 py-2 w-32 hover:bg-gray-700 transition cursor-pointer">
-                    Подробнее
-                </Button>
-            </Card>
-        {/each}
-    </div>
-</section>
