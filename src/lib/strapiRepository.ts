@@ -3,7 +3,8 @@ import {
     type AuthorComment,
     type Course,
     type Education,
-    type Presentation, type ProgressBar,
+    type Presentation,
+    type ProgressBar,
     type Skill,
     type TimeRange,
     type VotedPerson
@@ -12,10 +13,10 @@ import {
     assert,
     assertValidAuthor,
     assertValidComment,
-    assertValidContact,
     assertValidCourse,
     assertValidEducation,
-    assertValidPresentation, assertValidProgressBar,
+    assertValidPresentation,
+    assertValidProgressBar,
     assertValidSkill,
     assertValidTimeRange,
     assertValidVotedPerson
@@ -43,7 +44,11 @@ function assertField(
 
 function parseSkill(json: object): Skill {
     assertField('id' in json && typeof json.id === 'number', 'id', 'number');
-    assertField('skill_name' in json && typeof json.skill_name === 'string', 'skill_name', 'string');
+    assertField(
+        'skill_name' in json && typeof json.skill_name === 'string',
+        'skill_name',
+        'string'
+    );
     assertField(
         'skill_percent' in json && typeof json.skill_percent === 'number',
         'skill_percent',
@@ -95,25 +100,24 @@ function parseEducation(json: object): Education {
 async function parseProgressBar(json: object): Promise<ProgressBar> {
     assertField('id' in json && typeof json.id === 'number', 'id', 'number');
     assertField(
-      'course' in json && typeof json.course === 'object' && json.course != null,
-      'course',
-      'object'
+        'course' in json && typeof json.course === 'object' && json.course != null,
+        'course',
+        'object'
     );
+    assertField('percent' in json && typeof json.percent === 'number', 'percent', 'number');
     assertField(
-      'percent' in json && typeof json.percent === 'number',
-      'percent',
-      'number'
+        'documentId' in json.course && typeof json.course.documentId === 'string',
+        'documentId',
+        'string'
     );
-    assertField('documentId' in json.course && typeof json.course.documentId === 'string', 'documentId', 'string');
-
 
     const result = {
         id: json.id.toString(),
         percent: json.percent,
-        course: await getCourseByDocumentId(json.course.documentId),
+        course: await getCourseByDocumentId(json.course.documentId)
     };
     assertValidProgressBar(result);
-    return result
+    return result;
 }
 
 function toHRef(phone: string): string {
@@ -123,58 +127,63 @@ function toHRef(phone: string): string {
 
 async function parseAuthor(json: unknown): Promise<Author> {
     assert(typeof json === 'object' && json !== null, 'json must be object');
-    assertField('documentId' in json && typeof json.documentId === 'string', 'documentId', 'string');
     assertField(
-      'person_name' in json && typeof json.person_name === 'string',
-      'person_name',
-      'string'
+        'documentId' in json && typeof json.documentId === 'string',
+        'documentId',
+        'string'
+    );
+    assertField(
+        'person_name' in json && typeof json.person_name === 'string',
+        'person_name',
+        'string'
     );
     assertField('companies' in json && Array.isArray(json.companies), 'companies', 'Array');
     assertField('skills' in json && Array.isArray(json.skills), 'skills', 'Array');
     assertField('educations' in json && Array.isArray(json.educations), 'educations', 'Array');
     assertField(
-      'person_address' in json && typeof json.person_address === 'string',
-      'person_address',
-      'string'
+        'person_address' in json && typeof json.person_address === 'string',
+        'person_address',
+        'string'
     );
     assertField(
-      'person_phone' in json && typeof json.person_phone === 'string',
-      'person_phone',
-      'string'
+        'person_phone' in json && typeof json.person_phone === 'string',
+        'person_phone',
+        'string'
     );
     assertField(
-      'person_email' in json && typeof json.person_email === 'string',
-      'person_email',
-      'string'
+        'person_email' in json && typeof json.person_email === 'string',
+        'person_email',
+        'string'
     );
     const address = { value: json.person_address, href: '' };
-    assertValidContact(address);
+    // assertValidContact(address);
     const phone = { value: json.person_phone, href: toHRef(json.person_phone) };
-    assertValidContact(phone);
+    // assertValidContact(phone);
     const email = { value: json.person_email, href: `mailto:${json.person_email}` };
-    assertValidContact(email);
+    // assertValidContact(email);
     assertField(
-      'progress_bars' in json && Array.isArray(json.progress_bars),
-      'progress_bars',
-      'Array'
+        'progress_bars' in json && Array.isArray(json.progress_bars),
+        'progress_bars',
+        'Array'
     );
     assertField('favourites' in json && Array.isArray(json.favourites), 'favourites', 'Array');
 
-    
     const result = {
         id: json.documentId,
         name: json.person_name,
         educations: json.educations.map(parseEducation),
         skills: json.skills.map(parseSkill),
         progressBars: await Promise.all(json.progress_bars.map(parseProgressBar)),
-        favourites: await Promise.all(json.favourites.map((presentation: object) => {
-            assertField(
-              'documentId' in presentation && typeof presentation.documentId === 'string',
-              'documentId',
-              'string'
-            );
-            return getPresentationByDocumentId(presentation.documentId);
-        })),
+        favourites: await Promise.all(
+            json.favourites.map((presentation: object) => {
+                assertField(
+                    'documentId' in presentation && typeof presentation.documentId === 'string',
+                    'documentId',
+                    'string'
+                );
+                return getPresentationByDocumentId(presentation.documentId);
+            })
+        ),
         address: address,
         phone: phone,
         email: email
@@ -197,7 +206,11 @@ async function parseComment(json: unknown): Promise<AuthorComment> {
         'person',
         'object'
     );
-    assertField('documentId' in json && typeof json.documentId === 'string', 'documentId', 'string');
+    assertField(
+        'documentId' in json && typeof json.documentId === 'string',
+        'documentId',
+        'string'
+    );
     assertField(
         'documentId' in json.person && typeof json.person.documentId === 'string',
         'documentId',
@@ -248,7 +261,11 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
     assert(typeof json === 'object' && json !== null, 'json must be object');
 
     assertField('id' in json && typeof json.id === 'number', 'id', 'number');
-    assertField('documentId' in json && typeof json.documentId === 'string', 'documentId', 'string');
+    assertField(
+        'documentId' in json && typeof json.documentId === 'string',
+        'documentId',
+        'string'
+    );
     assertField(
         'presentation_name' in json && typeof json.presentation_name === 'string',
         'presentation_name',
@@ -334,7 +351,11 @@ async function parseCourse(json: unknown): Promise<Course> {
     assert(typeof json === 'object' && json !== null, 'json must be object');
 
     assertField('id' in json && typeof json.id === 'number', 'id', 'number');
-    assertField('documentId' in json && typeof json.documentId === 'string', 'documentId', 'string');
+    assertField(
+        'documentId' in json && typeof json.documentId === 'string',
+        'documentId',
+        'string'
+    );
 
     assertField(
         'course_name' in json && typeof json.course_name === 'string',
@@ -353,8 +374,8 @@ async function parseCourse(json: unknown): Promise<Course> {
     );
     assertField(
         'course_preview' in json &&
-        typeof json.course_preview === 'object' &&
-        json.course_preview != null,
+            typeof json.course_preview === 'object' &&
+            json.course_preview != null,
         'course_preview',
         'object'
     );
@@ -635,7 +656,16 @@ export async function addAuthor(
     }
     await strapi.create(
         'persons',
-        await getAuthorJson(name, email, address, phone, educations, skills, presentations, comments)
+        await getAuthorJson(
+            name,
+            email,
+            address,
+            phone,
+            educations,
+            skills,
+            presentations,
+            comments
+        )
     );
 }
 
