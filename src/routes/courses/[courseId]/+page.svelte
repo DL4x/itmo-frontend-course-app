@@ -46,7 +46,7 @@
 <main class="flex flex-col gap-12 max-w-7xl m-auto p-4">
 	<div class="about">
 		<div class="text-block">
-			<Heading class="text-primary-200" tag="h1">Курс: {data.title}</Heading>
+			<Heading class="text-primary-200 cl-[#FFEBE0]" tag="h1">Курс: {data.title}</Heading>
 			<p>{data.description}</p>
 			<p>
 				{#if allAuthors.size !== 0 && data.presentations.length !== 0}
@@ -58,7 +58,6 @@
 				{/if}
 			</p>
 		</div>
-		<img src={data.previewUrl} alt="preview of course" />
 	</div>
 
 
