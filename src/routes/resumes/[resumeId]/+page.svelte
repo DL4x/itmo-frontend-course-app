@@ -16,7 +16,7 @@
 	<title>Resume</title>
 </svelte:head>
 
-<div class="Content">
+<div class="Content text-black">
     <!-- <div class="resume-content"> -->
         <!-- <NavHeader /> -->
         <Grid />
