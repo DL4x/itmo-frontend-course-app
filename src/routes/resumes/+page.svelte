@@ -11,10 +11,10 @@
 </svelte:head>
 
 <main>
-	<header class="flex flex-col items-center gap-4">
-		<Heading tag="h1">Welcome to ITMO Frontend Course</Heading>
-		<P class="text-lg text-gray-700 dark:text-gray-300">This site is a Work-in-Progress. You can view participants' resumes below.</P>
-	</header>
+    <header class="flex flex-col items-center gap-4">
+        <Heading tag="h1" class="text-[#FFFFFF]">Добро пожаловать на курс Frontend от ITMO</Heading>
+        <P class="text-lg text-gray-700 dark:text-gray-300 text-[#FFFFFF]">Сайт в разработке. Ниже вы можете посмотреть резюме участников.</P>
+    </header>
 
 	<section class="flex flex-row flex-wrap gap-4 justify-center">
 		{#each data.authors as author (author.id)}

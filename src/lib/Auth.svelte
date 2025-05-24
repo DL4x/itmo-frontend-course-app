@@ -161,6 +161,7 @@
 
     .auth-input {
         background: #fff9f5;
+        color: #2d3748;
     }
 
     Button:first-of-type {
