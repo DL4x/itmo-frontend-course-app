@@ -1,13 +1,7 @@
 <script lang="ts">
 	// import type { PageProps } from './$types';
-	import WorkExperienceSection from '$lib/sections/WorkExperienceSection.svelte';
-	import ContactsSection from '$lib/sections/ContactsSection.svelte';
-	import Footer from '$lib/sections/Footer.svelte';
 	import '/src/app.css';
-	import FirstInfo from '$lib/sections/FirstInfo.svelte';
-	import SkillsPersonalityUnion from '$lib/sections/SkillsPersonalityUnion.svelte';
-	import Education from '$lib/sections/Education.svelte';
-    import Grid from '$lib/sections/Grid.svelte';
+	import Grid from '$lib/sections/Grid.svelte';
 
 	// const { data }: PageProps = $props();
 </script>
