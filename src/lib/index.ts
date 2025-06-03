@@ -50,9 +50,14 @@ export interface Education extends IDObject {
 	timeRange: TimeRange;
 }
 
+export interface PresentationStatus extends IDObject {
+	isVisited: boolean;
+	presentationDocumentId: string;
+}
+
 export interface ProgressBar extends IDObject{
-	percent: number;
-	course: Course;
+	presentationChecks: PresentationStatus[];
+	courseDocumentId: string;
 }
 
 /**
@@ -131,4 +136,5 @@ export interface Course extends IDObject {
 	coursePreviewUrl: string;
 	courseDescription: string;
 	presentations: Presentation[];
+	presentationCount: number;
 }
