@@ -4,7 +4,7 @@ import type {
 	Contact, Course,
 	Education,
 	IDObject,
-	Presentation, ProgressBar,
+	Presentation, PresentationStatus, ProgressBar,
 	Skill,
 	TimeRange,
 	VotedPerson
@@ -57,9 +57,14 @@ export function assertValidEducation(education: Education) {
 	assertNotEmpty(education.title, 'title');
 }
 
+export function assertValidPresentationStatus(presentationStatus: PresentationStatus) {
+	assertValidIDObject(presentationStatus);
+	assertNotEmpty(presentationStatus.presentationDocumentId, 'presentation_name');
+}
+
 export function assertValidProgressBar(progressBar: ProgressBar) {
 	assertValidIDObject(progressBar);
-	assertIsInt(progressBar.percent, 'percent');
+	assertNotEmpty(progressBar.courseDocumentId, 'courseDocumentId');
 }
 
 export function assertValidAuthor(author: Author) {
