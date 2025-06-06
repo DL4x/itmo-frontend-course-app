@@ -41,9 +41,9 @@
 <div class="w-[80%] mx-auto px-4 py-8">
     <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
         <div class="flex-1">
-            <Heading tag="h1" class="mb-2 text-3xl font-bold text-[#ffebe0] dark:text-white">
+            <h1 class="lecture-name">
                 {data.presentation.presentationName}
-            </Heading>
+            </h1>
             <p class="text-lg text-[#fcefe8] dark:text-gray-300">
                 {data.presentation.presentationDescription}
             </p>
@@ -66,6 +66,30 @@
                 allowfullscreen
             >
             </iframe>
+        </div>
+
+        <div class="mt-4">
+            <a
+                href={`https://docs.google.com/presentation/d/${data.presentation.presentationUrl}/export/pdf`}
+                download="presentation.pdf"
+                class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            >
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Скачать PDF
+            </a>
+
+            <a
+                href={`https://docs.google.com/presentation/d/${data.presentation.presentationUrl}/export/pptx`}
+                download="presentation.pptx"
+                class="inline-flex items-center px-4 py-2 ml-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+            >
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Скачать PPTX
+            </a>
         </div>
     </div>
 
@@ -118,3 +142,14 @@
         </div>
     </div>
 </div>
+
+
+<style>
+    .lecture-name {
+        color: #FFEBE0;
+        font-size: 2.2rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+    }
+</style>
