@@ -2,14 +2,13 @@
 	import type { PageProps } from './$types';
 	import '/src/app.css';
 	import PresentationPreviewCard from '$lib/PresentationPreviewCard.svelte';
-	import { Heading } from 'flowbite-svelte';
 
 	const { data }: PageProps = $props();
 	const allAuthors = $derived(new Set(data.presentations.flatMap(card => card.authors)));
 </script>
 
 <svelte:head>
-	<title>Courses</title>
+	<title>Курсы</title>
 </svelte:head>
 
 <style>
@@ -41,13 +40,26 @@
             order: -1;
         }
     }
+	.course-heading {
+		color: #FFEBE0;
+		font-size: 2.5rem;
+		font-weight: bold;
+		margin-bottom: 1rem;
+		text-transform: uppercase;
+	}
+	.course-description {
+		color: #FFEBE0;
+		font-size: 2rem;
+		margin-bottom: 1rem;
+
+	}
 </style>
 
 <main class="flex flex-col gap-12 max-w-7xl m-auto p-4">
 	<div class="about">
 		<div class="text-block">
-			<Heading class="text-primary-200 cl-[#FFEBE0]" tag="h1">Курс: {data.title}</Heading>
-			<p>{data.description}</p>
+			<h1 class="course-heading">Курс: Название курса</h1>
+			<h2 class="course-description">{data.description}</h2>
 			<p>
 				{#if allAuthors.size !== 0 && data.presentations.length !== 0}
 					{allAuthors.size} авторов, {data.presentations.length} лекций
