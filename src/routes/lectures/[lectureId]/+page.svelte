@@ -2,7 +2,7 @@
     import type { PageProps } from './$types';
     import { Heading, Rating, Card, Button, Textarea, P } from 'flowbite-svelte';
     import { addComment } from '$lib/strapiRepository';
-    import { userStore } from '../../../store';
+    import { userStore } from '$lib/store';
     import type { AuthorComment } from '$lib';
 
     const { data }: PageProps = $props();
