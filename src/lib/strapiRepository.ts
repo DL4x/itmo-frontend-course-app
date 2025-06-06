@@ -327,13 +327,14 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
         'documentId',
         'string'
     );
+    debugger
     const result = {
         id: json.id.toString(),
         presentationName: json.presentation_name,
         presentationDescription: json.presentation_description,
-        presentationUrl: getFullImagePath(json.presentation_url),
+        presentationUrl: json.presentation_url,
         documentId: json.documentId,
-        presentationPreviewUrl: `https://strapi-production-51d5.up.railway.app${json.presentation_preview.url}`,
+        presentationPreviewUrl: getFullImagePath(json.presentation_preview.url),
         votedPersons: await Promise.all(voted_persons.map(parseVotedPerson)),
         presentationOwners: await Promise.all(
             presentation_owners.map((author: object) => {
