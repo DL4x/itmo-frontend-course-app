@@ -5,6 +5,7 @@
     import Experience from '$lib/mySections/Experience.svelte';
     import Skills from '$lib/mySections/Skills.svelte';
     import Lections from '$lib/mySections/Lections.svelte';
+    import Favourite from '$lib/mySections/Favourite.svelte';
 
 
     let activeBlock: boolean = false;
@@ -87,22 +88,7 @@
     <div class="column column-3">
         <div class="block"><Skills /></div>
         <div class="block"><Lections /></div>
-
-        
-        <div class="block">
-            <h3>{blocks[6].title}</h3>
-            <div class="block-content">
-                {blocks[6].shortContent}
-            </div>
-            <div class="button-container">
-                <button
-                    class="read-more-btn"
-                    on:click={openModal}
-                >
-                    Read more
-                </button>
-            </div>
-        </div>
+        <div class="block"><Favourite /></div>
     </div>
 </div>
 
@@ -137,7 +123,7 @@
         display: grid;
         gap: 10px;
         min-width: 0;
-        height: 750px;
+        height: 900px;
         margin-top: 10px;
     }
 
@@ -150,7 +136,7 @@
     }
 
     .column-3 {
-        grid-template-rows: 30% 40% 30%;
+        grid-template-rows: 30% 40% 40%;
     }
 
     .block-content {
@@ -180,6 +166,8 @@
         flex-direction: column;
 
         border-radius: 25px;
+
+        /* height: 100%; */
     }
 
     .profile-block {

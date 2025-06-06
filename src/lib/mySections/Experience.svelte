@@ -35,7 +35,7 @@
     const hiddenItemsCountExperience = experienceItems.length - visibleExperienceItems.length;
 
     // Функция для сокращения описания
-    function truncateDescription(text: string, maxLength: number = 50): string {
+    function truncateDescription(text: string, maxLength: number = 40): string {
         return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
     }
 
@@ -111,6 +111,8 @@
         min-width: 0;
         display: flex;
         flex-direction: column;
+
+        flex: 1;
     }
 
     .button-container {
@@ -203,13 +205,16 @@
         text-align: center;
         margin-bottom: 15px;
         color: #333;
+
+        font-size: 1.5rem;
+        font-weight: 600;
     }
 
     .experience-content {
         flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
     }
 
     .experience-item {

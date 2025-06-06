@@ -32,57 +32,55 @@
         // event.preventDefault();
         activeModalSkills = false;
     }
+
+
+    import { fade, fly } from 'svelte/transition';
+    import { quintOut } from 'svelte/easing';
+
 </script>
 
+<div class="block" on:click={openModalSkills}>
+    <div class="title">Skills</div>
 
-
-<div class="block skills-block">
-            <div class="title skills-title">Skills</div>
-
-            {#if skillsItems.length > 0}
-                <div class="skills-grid">
-                    {#each visibleSkills as skill}
-                        <div class="skill-tag">
-                            {skill.name}
-                            {#if skill.level}
-                                <span class="skill-level"
-                                    >{'★'.repeat(skill.level)}{'☆'.repeat(5 - skill.level)}</span
-                                >
-                            {/if}
+    {#if skillsItems.length > 0}
+        <div class="grid">
+            {#each visibleSkills as skill}
+                <div class="skill-tag">
+                    <span class="skill-name">{skill.name}</span>
+                    <!-- {#if skill.level}
+                        <div class="skill-level-container">
+                            <span class="skill-level" style="--level: {skill.level}">
+                                {'★'.repeat(skill.level)}{'☆'.repeat(5 - skill.level)}
+                            </span>
                         </div>
-                    {/each}
+                    {/if} -->
                 </div>
-            {:else}
-                <div class="no-skills">
-                    <img
-                        src="https://via.placeholder.com/100"
-                        alt="No skills"
-                        class="no-skills-img"
-                    />
-                    <div class="no-skills-text">Skills not found</div>
-                </div>
-            {/if}
-            <div class="button-container">
-                <button class="read-more-btn" on:click={openModalSkills}> Read more </button>
-            </div>
+            {/each}
         </div>
-
-
+    {:else}
+        <div class="no-skills">
+            <img src="https://via.placeholder.com/100" alt="No skills" class="no-skills-img" />
+            <div class="no-skills-text">Skills not found</div>
+        </div>
+    {/if}
+</div>
 
 {#if activeModalSkills}
-    <div class="modal-backdrop" on:click|self={closeModalSkills}>
-        <div class="modal">
-            <h2>All Skills</h2>
-            <div class="modal-skills-grid">
+    <div class="modal-backdrop" transition:fade={{ duration: 300 }} on:click|self={closeModalSkills}>
+        <div class="modal-window" transition:fly={{ y: 100, duration: 300, easing: quintOut }}>
+            <div class="modal-title">All Skills</div>
+            <div class="modal-grid">
                 {#each skillsItems as skill}
                     <div class="skill-tag">
-                        {skill.name}
-                        {#if skill.level}
-                            <span class="skill-level"
-                                >{'★'.repeat(skill.level)}{'☆'.repeat(5 - skill.level)}</span
-                            >
-                        {/if}
-                    </div>
+                    <span class="skill-name">{skill.name}</span>
+                    <!-- {#if skill.level}
+                        <div class="skill-level-container">
+                            <span class="skill-level" style="--level: {skill.level}">
+                                {'★'.repeat(skill.level)}{'☆'.repeat(5 - skill.level)}
+                            </span>
+                        </div>
+                    {/if} -->
+                </div>
                 {/each}
             </div>
             <div class="modal-button-container">
@@ -92,40 +90,39 @@
     </div>
 {/if}
 
-
-
 <style>
     .block {
         position: relative;
-        /* background: #f0f0f0;
-        border: 1px solid #ccc;
-        padding: 10px; */
         box-sizing: border-box;
         min-width: 0;
         display: flex;
         flex-direction: column;
-    }
 
-    .button-container {
-        position: relative;
-        height: 30px;
-    }
+        flex: 1;
 
-    .read-more-btn {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        padding: 5px 10px;
-        background: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 3px;
         cursor: pointer;
-        font-size: 12px;
     }
 
-    .read-more-btn:hover {
-        background: #45a049;
+    .title,
+    .modal-title {
+        text-align: center;
+        margin-bottom: 15px;
+        color: #333;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .grid,
+    .modal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .modal-grid {
+        padding-right: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
 
     .modal-backdrop {
@@ -139,9 +136,15 @@
         justify-content: center;
         align-items: center;
         z-index: 1000;
+
+        animation: fadeIn 0.3s forwards;
     }
 
-    .modal {
+    @keyframes fadeIn {
+        to { background: rgba(0, 0, 0, 0.5); }
+    }
+
+    .modal-window {
         background: white;
         padding: 20px;
         border-radius: 8px;
@@ -153,13 +156,6 @@
         flex-direction: column;
         min-height: 300px;
         max-height: 600px;
-    }
-
-    .modal-content {
-        overflow: auto;
-        flex: 1;
-        white-space: pre-line; /* Сохраняет переносы строк */
-        overflow-wrap: break-word;
     }
 
     .modal-button-container {
@@ -175,10 +171,14 @@
         border-radius: 3px;
         cursor: pointer;
         font-size: 14px;
+
+        transition: transform 0.2s, background-color 0.2s;
     }
 
     .close-btn:hover {
         background: #d32f2f;
+
+        transform: scale(1.05);
     }
 
     .page.dimmed {
@@ -187,42 +187,46 @@
         user-select: none;
     }
 
-    .skills-block {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .skills-title {
-        text-align: center;
-        margin-bottom: 15px;
-        color: #333;
-    }
-
-    .skills-grid,
-    .modal-skills-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 10px;
-        margin-bottom: 10px;
-    }
-
     .skill-tag {
-        border: 1px solid #4caf50;
-        border-radius: 20px;
-        padding: 8px 12px;
-        text-align: center;
-        font-size: 0.9rem;
-        display: flex;
+        display: inline-flex;
         flex-direction: column;
         align-items: center;
-        gap: 4px;
+        background: white;
+        border-radius: 24px;
+        padding: 10px 18px;
+        box-shadow: 
+            0 2px 4px rgba(0,0,0,0.1),
+            0 4px 12px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #e0e0e0;
+        margin: 5px;
+        position: relative;
+        overflow: hidden;
     }
 
-    .skill-level {
-        color: #ffc107;
-        font-size: 0.8rem;
-        letter-spacing: 2px;
+    .skill-tag:hover {
+        transform: translateY(-3px);
+        box-shadow: 
+            0 4px 8px rgba(0,0,0,0.15),
+            0 8px 24px rgba(0,0,0,0.12);
     }
+
+    .skill-name {
+        font-weight: 600;
+        color: #4a5568;
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+    }
+
+
+
+
+
+
+
+
+
+
 
     .no-skills {
         flex: 1;
@@ -241,9 +245,5 @@
 
     .no-skills-text {
         font-size: 0.9rem;
-    }
-
-    .modal-skills-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
 </style>

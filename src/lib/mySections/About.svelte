@@ -155,6 +155,21 @@
         min-width: 0;
         display: flex;
         flex-direction: column;
+        
+        flex: 1;
+    }
+
+    .contacts-title {
+        text-align: center;
+        margin-bottom: 15px;
+        color: #333;
+
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .contacts-content {
+        flex: 1;
     }
 
     .modal-contacts {
@@ -171,21 +186,20 @@
     }
 
     .button-container {
-        /* position: absolute;
-        right: 0;
-        bottom: 0; */
+
         /* position: relative; */
         height: 30px;
 
-        display: flex;
-        justify-content: flex-end;
+        /* display: flex; */
+        /* justify-content: flex-end; */
 
     }
 
     .read-more-btn {
-        /* position: absolute;
+        position: absolute;
         right: 0;
-        bottom: 0; */
+        bottom: 0;
+
         padding: 5px 10px;
         background: #4caf50;
         color: white;

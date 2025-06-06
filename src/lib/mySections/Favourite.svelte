@@ -50,8 +50,8 @@
     import { quintOut } from 'svelte/easing';
 </script>
 
-<div class="block" on:click={openModalLections}>
-    <div class="title">Lections</div>
+<div class="block">
+    <div class="title">Favourite</div>
     {#if lections.length > 0}
         <div class="lections-container">
             <button class="scroll-button left" on:click={scrollLeft} aria-label="Scroll left">
@@ -63,7 +63,7 @@
                     <!-- Показываем первые 6 в скролле -->
                     <a href={lection.url} class="lection-card" target="_blank" rel="noopener">
                         <div class="lection-placeholder">
-                            <div class="lection-icon">📚</div>
+                            <div class="lection-icon">❤️</div>
                         </div>
                         <span class="lection-title">{lection.title}</span>
                         <div class="lection-hover-effect"></div>
@@ -81,20 +81,20 @@
             <div class="no-lections-text">Lections not found</div>
         </div>
     {/if}
-    <!-- <div class="button-container">
+    <div class="button-container">
         <button class="read-more-btn" on:click={openModalLections}> Read more </button>
-    </div> -->
+    </div>
 </div>
 
 {#if activeModalLections}
     <div class="modal-backdrop" transition:fade={{ duration: 300 }} on:click|self={closeModalLections}>
         <div class="modal-window" transition:fly={{ y: 100, duration: 300, easing: quintOut }}>
-            <div class="modal-title">All Lections</div>
+            <div class="modal-title">All Favourite</div>
             <div class="modal-lections-grid">
                 {#each lections as lection}
                     <a href={lection.url} class="lection-card" target="_blank" rel="noopener">
                         <div class="lection-placeholder">
-                            <div class="lection-icon">📚</div>
+                            <div class="lection-icon">❤️</div>
                         </div>
                         <span class="lection-title">{lection.title}</span>
                         <div class="lection-hover-effect"></div>
@@ -117,8 +117,6 @@
         flex-direction: column;
 
         flex: 1;
-
-        cursor: pointer;
     }
 
     .title,
@@ -317,7 +315,7 @@
     .lection-placeholder {
         width: 100%;
         height: 120px;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background: linear-gradient(135deg, #f5f7fa 0%, #e2c3c8 100%);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -346,7 +344,7 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, #4f46e5, #10b981);
+        background: linear-gradient(90deg, #e5465e, #7b10b9);
         transform: scaleX(0);
         transform-origin: left;
         transition: transform 0.3s ease;
