@@ -30,7 +30,7 @@
 </style>
 
 <a href="/resumes/{id}" class="chip bg-gray flex flex-row gap-2 items-center">
-	<Avatar size="sm" class="bg-primary-200 group-hover:bg-primary-300 transition-colors">{getInitials(name)}</Avatar>
+	<Avatar size="sm" class="bg-primary-400 group-hover:bg-primary-400 transition-colors">{getInitials(name)}</Avatar>
 	<div class="font-medium dark:text-white flex flex-col">
 		<h6 class="text-sm">{name}</h6>
 <!--		<a href={email.href} class="text-sm text-gray-400 dark:text-gray-400">{email.value}</a>-->

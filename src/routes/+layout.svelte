@@ -3,7 +3,7 @@
     import '/src/app.css';
     import { page } from '$app/state';
     import VerticalLine from '$lib/VerticalLine.svelte';
-    import { userStore } from '../store';
+    import { userStore } from '$lib/store';
 
     let { children } = $props();
 </script>

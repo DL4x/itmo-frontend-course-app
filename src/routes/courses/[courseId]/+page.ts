@@ -8,8 +8,8 @@ export const load: PageLoad = async ({ params }): Promise<CoursePageData> => {
     try {
         course = await getCourseByDocumentId(params.courseId);
     } catch (e) {
-        console.error(`Error happened while fetching course data: ${e}`)
-        throw e
+        console.error(`Error happened while fetching course data: ${e}`);
+        throw e;
     }
     return mapToCoursePageData(course);
 };
