@@ -331,7 +331,7 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
         id: json.id.toString(),
         presentationName: json.presentation_name,
         presentationDescription: json.presentation_description,
-        presentationUrl: json.presentation_url,
+        presentationUrl: getFullImagePath(json.presentation_url),
         documentId: json.documentId,
         presentationPreviewUrl: `https://strapi-production-51d5.up.railway.app${json.presentation_preview.url}`,
         votedPersons: await Promise.all(voted_persons.map(parseVotedPerson)),
@@ -404,7 +404,7 @@ async function parseCourse(json: unknown): Promise<Course> {
         documentId: json.documentId,
         courseName: json.course_name,
         courseDescription: json.course_description,
-        coursePreviewUrl: json.course_preview.url,
+        coursePreviewUrl: getFullImagePath(json.course_preview.url),
         presentationCount: json.presentation_count,
         presentations: await Promise.all(json.presentations.map((pres) => {
             assertField(
@@ -736,10 +736,10 @@ export async function addComment(
 /**
  * For those who will draw pictures so as not to worry about the path.
  *
- * @param imageUrl image url. This url must be in the "key" format, and it should not contain http:// or anything like that.
+ * @param strapiImageUrl image url. This url must be in the "key" format, and it should not contain http:// or anything like that.
  *
  * @return full path to image in Strapi
  */
-export function getFullImagePath(imageUrl: string): string {
-    return path + '/uploads/' + imageUrl;
+export function getFullImagePath(strapiImageUrl: string): string {
+    return path + strapiImageUrl;
 }

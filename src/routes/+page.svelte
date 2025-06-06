@@ -68,10 +68,8 @@
         <div class="courses-grid">
             {#each data.courses as course (course.id)}
                 <Card
-                    img={course.coursePreviewUrl
-                        ? `https://strapi-production-51d5.up.railway.app${course.coursePreviewUrl}`
-                        : '/src/images/starting_page/paste_picture.webp'}
-                    class="bg-white border-1 border-[#B1B5C3] rounded-xl transition-transform hover:-translate-y-1 hover:shadow-md overflow-hidden"
+                    img={course.coursePreviewUrl ?? '/src/images/starting_page/paste_picture.webp'}
+                    class="border-1 border-[#B1B5C3] rounded-xl transition-transform hover:-translate-y-1 overflow-hidden"
                 >
                     <h5
                         class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
@@ -124,7 +122,7 @@
         font-size: 7rem;
         line-height: 100%;
         letter-spacing: -0.02em;
-        color: #ffebe0;
+        color: var(--color-primary-50);
     }
 
     h2 {
@@ -148,7 +146,7 @@
         display: flex;
         justify-content: center;
 
-        background: #fe8a70;
+        background: var(--color-primary-700);
         box-shadow:
             0px 6px 4px rgba(38, 33, 33, 0.25),
             inset 0px -6px 4px rgba(0, 0, 0, 0.25);
@@ -163,17 +161,17 @@
         font-size: 20px;
         line-height: 16px;
         margin-top: 3%;
-        color: #f2e9e4;
+        color: var(--color-primary-50);
         transition: background-color 0.3s ease;
     }
 
     .courses-btn:hover {
-        background-color: #4140407a;
+        background-color: var(--color-gray-700);/*oklch(0.372 0.001 17.219 / 0.48);*/
     }
 
     .courses-btn:hover .courses-btn-text {
         transform: translateY(-1px);
-        color: #e6570a;
+        color: var(--color-primary-800);
     }
 
     .course-list-container {
