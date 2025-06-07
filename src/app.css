@@ -20,15 +20,15 @@
 }
 
 @font-face {
-    font-family: 'JetBrains Mono';
+    font-family: 'ALS Gorizont';
     font-weight: 500;
     font-style: normal;
-    src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+    src: url('src/fonts/als-gorizont-variable.ttf') format('truetype');
 }
 
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'ALS Gorizont', sans-serif;
     background-color: var(--color-my-background);
     /*color: #1a1a1a;*/
     /*color: var(--color-primary-200);*/

@@ -36,28 +36,27 @@
     >
         {#if ready}
             <div class="left" in:fly={{ x: -100, duration: 800 }}>
-                <h1>Рады вас<br />видеть!</h1>
+                <h1>Добро пожаловать в мир фронтенд-разработки!</h1>
                 <p>
-                    Вы посетили сайт образовательных курсов по направлению фронтенда университета
-                    ИТМО. Данный ресурс был создан выпускниками этих курсов.
+                    Вы на образовательном портале от выпускников ИТМО - здесь мы делимся знаниями,
+                    которые реально работают в индустрии. Готовы начать путь от основ до продвинутых техник?
                 </p>
-                <a
-                    class="courses-btn"
-                    onclick={toggleView}
-                    onmouseenter={() => (isHovered = true)}
-                    onmouseleave={() => (isHovered = false)}
-                >
-                    <p class="courses-btn-text">
-                        {isHovered ? 'Погнали' : 'Список курсов'}
-                    </p>
+                <a class="courses-btn"
+                   on:click={toggleView}
+                   on:mouseenter={() => (isHovered = true)}
+                   on:mouseleave={() => (isHovered = false)}>
+    <span class="courses-btn-text">
+        {isHovered ? 'Погнали' : 'Список курсов'}
+    </span>
+                    <span class="hover-effect"></span>
                 </a>
             </div>
 
             <div class="right" in:fly={{ x: 100, duration: 800 }}>
                 <Lottie
                     path="/src/images/starting_page/cosmonaut.json"
-                    width="75%"
-                    height="75%"
+                    width="400px"
+                    height="400px"
                     mirrored={true}
                 />
             </div>
@@ -93,7 +92,8 @@
 
 <style>
     .greeting-page-container {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         align-items: center;
         gap: 1vw;
         padding: 5%;
@@ -103,26 +103,27 @@
     }
 
     .left {
-        display: flex;
-        flex: 1;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 52px;
+        grid-column: 1;
+        display: grid;
+        grid-template-rows: auto auto auto;
+        gap: 2rem;
+        max-width: 600px;
     }
 
     .right {
-        display: flex;
-        flex: 2;
-        flex-direction: column;
-        align-items: flex-end;
+        grid-column: 2;
+        display: grid;
+        justify-items: end;
     }
 
     h1 {
         font-weight: 700;
-        font-size: 7rem;
+        font-size: 3rem;
         line-height: 100%;
         letter-spacing: -0.02em;
         color: var(--color-primary-50);
+        margin-right: 2rem;
+        grid-row: 1;
     }
 
     h2 {
@@ -138,48 +139,114 @@
         font-size: 1.2rem;
         line-height: 150%;
         color: #c9ada7;
+        grid-row: 2;
     }
 
     .courses-btn {
-        width: 334px;
-        height: 48px;
-        display: flex;
-        justify-content: center;
-
-        background: var(--color-primary-700);
-        box-shadow:
-            0px 6px 4px rgba(38, 33, 33, 0.25),
-            inset 0px -6px 4px rgba(0, 0, 0, 0.25);
-        border-radius: 4px;
-        transition: background-color 0.3s ease;
+        position: relative;
+        width: 280px;
+        height: 56px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        background: var(--color-primary-500);
+        overflow: hidden;
         cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: none;
+        grid-row: 3;
     }
 
     .courses-btn-text {
-        font-style: normal;
-        font-weight: 700;
-        font-size: 20px;
-        line-height: 16px;
-        margin-top: 3%;
-        color: var(--color-primary-50);
-        transition: background-color 0.3s ease;
+        position: relative;
+        z-index: 2;
+        font-weight: 600;
+        font-size: 18px;
+        letter-spacing: 0.5px;
+        color: white;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
     }
 
+    .hover-effect {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: 0.5s;
+    }
+
+    /* Анимации */
     .courses-btn:hover {
-        background-color: var(--color-gray-700);/*oklch(0.372 0.001 17.219 / 0.48);*/
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        color: var(--color-primary-700);
     }
 
-    .courses-btn:hover .courses-btn-text {
-        transform: translateY(-1px);
-        color: var(--color-primary-800);
+    .courses-btn:hover .hover-effect {
+        left: 100%;
+    }
+
+    .courses-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Иконка стрелки (опционально) */
+    .courses-btn-text::after {
+        content: '→';
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        transform: translateX(-10px);
+    }
+
+    .courses-btn:hover .courses-btn-text::after {
+        opacity: 1;
+        transform: translateX(0);
     }
 
     .course-list-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: grid;
+        place-items: center;
         gap: 1vw;
         height: 95vh;
         box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
+        .greeting-page-container {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto;
+            padding: 5%;
+            height: auto;
+            min-height: 95vh;
+            gap: 3rem;
+        }
+
+        .left {
+            grid-row: 2;
+            grid-column: 1;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .right {
+            grid-row: 1;
+            grid-column: 1;
+            justify-items: center;
+            width: 100%;
+        }
+
+        .lottie-container {
+            max-width: 300px;
+        }
+
+        .courses-btn {
+            justify-self: center;
+        }
     }
 </style>
