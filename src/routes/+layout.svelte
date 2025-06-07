@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button, Navbar, NavBrand, NavHamburger, NavLi, NavUl } from 'flowbite-svelte';
+    import { Button, Navbar, NavBrand, NavLi, NavUl } from 'flowbite-svelte';
     import '/src/app.css';
     import { page } from '$app/state';
     import VerticalLine from '$lib/VerticalLine.svelte';
@@ -29,13 +29,13 @@
         </NavLi>
     </NavUl>
     <NavBrand class="flex flex-row gap-4 md:ml-auto md:order-last">
-        <NavHamburger />
-        {#if $userStore}
-            <p style="color: #ffebe0">{$userStore.name}</p>
-        {:else}
-            <Button href="/auth" class="font-sans font-bold tracking-widest uppercase bg-[#FE8A70]">Войти</Button>
-        {/if}
+        <div>
+            {#if $userStore}
+                <p class="font-sans font-bold tracking-widest uppercase text-[#FFEBE0]">{$userStore.name}</p>
+            {:else}
+                <Button href="/auth" class="font-sans font-bold tracking-widest uppercase bg-[#FE8A70]">Войти</Button>
+            {/if}
+        </div>
     </NavBrand>
 </Navbar>
 {@render children()}
-

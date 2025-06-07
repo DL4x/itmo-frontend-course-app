@@ -76,18 +76,12 @@
             order: -1;
         }
     }
-	.course-heading {
+	.course-title {
 		color: #FFEBE0;
 		font-size: 2.5rem;
 		font-weight: bold;
 		margin-bottom: 1rem;
 		text-transform: uppercase;
-	}
-	.course-description {
-		color: #FFEBE0;
-		font-size: 2rem;
-		margin-bottom: 1rem;
-
 	}
 </style>
 
@@ -108,7 +102,7 @@
 				{/if}
 			</p>
 		</div>
-		<img src={data.previewUrl} alt="course preview">
+		<img src={data.previewUrl} alt="course preview" style="border-radius: 10px; margin-left: 400px">
 	</div>
 
 	<div class="presentations-grid">

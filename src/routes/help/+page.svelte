@@ -63,15 +63,8 @@
 			</form>
 		{/if}
 
-		<div class="orbit-support">
-			<h2>📡 Другие способы связи:</h2>
-			<ul>
-				<li>Email: <a href="mailto:support@frontend-cosmos.com">support@frontend-cosmos.com</a></li>
-				<li>Telegram: <a href="https://t.me/frontend_cosmos">@frontend_cosmos</a></li>
-				<li>Discord: <a href="#">Frontend Galaxy</a></li>
-			</ul>
-		</div>
-	</main>
+
+    </main>
 
 	<footer class="cosmic-footer">
 		<p>© {new Date().getFullYear()} Frontend Cosmos. Все права защищены.</p>
@@ -79,7 +72,9 @@
 </div>
 
 <style>
-
+    .cosmic-background {
+        font-family: 'ALS Gorizont', sans-serif;
+    }
     .stellar-header {
         text-align: center;
         margin-bottom: 3rem;
@@ -93,7 +88,6 @@
     .stellar-header h1 {
         font-size: 3.5rem;
         margin-top: 4rem;
-        font-family: 'JetBrains Mono', monospace;
         background: linear-gradient(90deg, #6ee7ff, #a855f7);
         -webkit-background-clip: text;
         background-clip: text;

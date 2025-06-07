@@ -49,7 +49,6 @@
 		line-height: 1.6;
 	}
     main {
-        font-family: 'JetBrains Mono', monospace;
         max-width: 1200px;
         margin: 0 auto;
         padding: 2rem;
@@ -58,7 +57,6 @@
     header {
         text-align: center;
         margin-bottom: 3rem;
-        font-family: 'JetBrains Mono', monospace;
     }
 
 	/* Сетка карточек */
