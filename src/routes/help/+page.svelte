@@ -1,81 +1,81 @@
-<script>
-    let email = "";
-    let message = "";
-    let isSubmitted = false;
-    let isLoading = false;
+<script lang="ts">
+	let email = $state('');
+	let message = $state('');
+	let isSubmitted = $state(false);
+	let isLoading = $state(false);
 
-    const handleSubmit = async () => {
-        isLoading = true;
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        isLoading = false;
-        isSubmitted = true;
-        email = "";
-        message = "";
-    };
+	const handleSubmit = async (event: SubmitEvent) => {
+		event.preventDefault()
+		isLoading = true;
+		await new Promise(resolve => setTimeout(resolve, 1500));
+		isLoading = false;
+		isSubmitted = true;
+		email = '';
+		message = '';
+	};
 </script>
 
 <svelte:head>
-    <title>Поддержка | Frontend Courses</title>
+	<title>Поддержка | Frontend Courses</title>
 </svelte:head>
 
 <div class="cosmic-background">
-    <header class="stellar-header">
-        <h1>🚀 Центр космической поддержки</h1>
-        <p>Мы на связи, как спутник на орбите!</p>
-    </header>
+	<header class="stellar-header">
+		<h1>🚀 Центр космической поддержки</h1>
+		<p>Мы на связи, как спутник на орбите!</p>
+	</header>
 
-    <main class="nebula-container">
-        {#if isSubmitted}
-            <div class="success-message">
-                <p>📡 Ваш сигнал принят! Скоро ответим!</p>
-                <button on:click={() => isSubmitted = false}></button>
-            </div>
-        {:else}
-            <form class="contact-form" on:submit|preventDefault={handleSubmit}>
-                <div class="form-group">
-                    <label for="email">Ваш космический адрес:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        bind:value={email}
-                        placeholder="user@galaxy.com"
-                        required
-                    />
-                </div>
+	<main class="nebula-container">
+		{#if isSubmitted}
+			<div class="success-message">
+				<p>📡 Ваш сигнал принят! Скоро ответим!</p>
+				<button class="launch-button" onclick={() => isSubmitted = false}>Отправить ещё одно сообщение</button>
+			</div>
+		{:else}
+			<form class="contact-form" onsubmit={handleSubmit}>
+				<div class="form-group">
+					<label for="email">Ваш космический адрес:</label>
+					<input
+						type="email"
+						id="email"
+						bind:value={email}
+						placeholder="user@galaxy.com"
+						required
+					/>
+				</div>
 
-                <div class="form-group">
-                    <label for="message">Текст сообщения:</label>
-                    <textarea
-                        id="message"
-                        bind:value={message}
-                        placeholder="Опишите вашу проблему или вопрос..."
-                        required
-                    />
-                </div>
+				<div class="form-group">
+					<label for="message">Текст сообщения:</label>
+					<textarea
+						id="message"
+						bind:value={message}
+						placeholder="Опишите вашу проблему или вопрос..."
+						required></textarea>
+				</div>
 
-                <button class="launch-button" type="submit" disabled={isLoading}>
-                    {#if isLoading}
-                        ⌛ Отправка...
-                    {:else}
-                        Отправить
-                    {/if}
-                </button>
-            </form>
-        {/if}
+				<button class="launch-button" type="submit" disabled={isLoading}>
+					{#if isLoading}
+						⌛ Отправка...
+					{:else}
+						Отправить
+					{/if}
+				</button>
+			</form>
+		{/if}
 
-        <div class="orbit-support">
-            <h2>📡 Другие способы связи:</h2>
-            <ul>
-                <li>Email: <a href="mailto:support@frontend-cosmos.com">support@frontend-cosmos.com</a></li>
-                <li>Telegram: <a href="https://t.me/frontend_cosmos">@frontend_cosmos</a></li>
-                <li>Discord: <a href="#">Frontend Galaxy</a></li>
-            </ul>
-        </div>
-    </main>
+		<div class="orbit-support">
+			<h2>📡 Другие способы связи:</h2>
+			<ul>
+				<li>Email: <a href="mailto:support@frontend-cosmos.com">support@frontend-cosmos.com</a></li>
+				<li>Telegram: <a href="https://t.me/frontend_cosmos">@frontend_cosmos</a></li>
+				<li>Discord: <a href="#">Frontend Galaxy</a></li>
+			</ul>
+		</div>
+	</main>
 
-    <footer class="cosmic-footer">
-        <p>© {new Date().getFullYear()} Frontend Cosmos. Все права защищены.</p>
-    </footer>
+	<footer class="cosmic-footer">
+		<p>© {new Date().getFullYear()} Frontend Cosmos. Все права защищены.</p>
+	</footer>
 </div>
 
 <style>
@@ -84,6 +84,7 @@
         text-align: center;
         margin-bottom: 3rem;
         animation: pulse 4s infinite;
+
         p {
             font-size: 1.2rem;
         }
@@ -194,7 +195,7 @@
         left: -50%;
         width: 200%;
         height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
         opacity: 0;
         transition: opacity 0.5s;
     }
@@ -204,6 +205,11 @@
     }
 
     .success-message {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 16px;
         text-align: center;
         padding: 2rem;
         background: rgba(40, 160, 80, 0.2);
@@ -244,13 +250,23 @@
     }
 
     @keyframes pulse {
-        0% { opacity: 0.95; }
-        50% { opacity: 1; }
-        100% { opacity: 0.95; }
+        0% {
+            opacity: 0.95;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0.95;
+        }
     }
 
     @keyframes fade {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
     }
 </style>

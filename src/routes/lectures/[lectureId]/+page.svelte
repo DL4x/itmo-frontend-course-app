@@ -7,7 +7,7 @@
 
     const { data }: PageProps = $props();
 
-    let commentText: string = '';
+    let commentText: string = $state('');
     let comments: AuthorComment[] = data.presentation.comments;
 
     function averageRating() {

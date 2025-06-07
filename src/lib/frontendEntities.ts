@@ -1,4 +1,4 @@
-import type { Author, Course, IDObject, Presentation } from '$lib/index';
+import type { Author, Course, IDObject, Presentation, VotedPerson } from '$lib/index';
 import { derived, get } from 'svelte/store';
 import { userStore } from '$lib/store';
 
@@ -23,7 +23,7 @@ function averageScoreOf(votedPersons: VotedPerson[]): number | undefined {
 export function mapToPresentationCardData(
     presentation: Presentation,
     index: number,
-    visited?: Set<string>
+    visited: Set<string>
 ): PresentationCardData {
     // console.log(`average rate of presentation '${presentation.presentationName}' is ${average}`);
     return {
@@ -35,7 +35,7 @@ export function mapToPresentationCardData(
         commentsCount: presentation.comments.length,
         id: presentation.documentId,
         averageUserScore: averageScoreOf(presentation.votedPersons),
-        visited: visited?.has(presentation.documentId),
+        visited: visited?.has(presentation.documentId)
     };
 }
 
@@ -48,16 +48,13 @@ export interface CoursePageData extends IDObject {
 
 export function mapToCoursePageData(course: Course): CoursePageData {
     const user = get(userStore);
-    const visited =
-        user === null
-            ? undefined
-            : new Set<string>(
-                  user.progressBars
-                      .filter((progressBar) => progressBar.courseDocumentId === course.documentId)
-                      .flatMap((progressBar) => progressBar.presentationChecks)
-                      .filter((status) => status.isVisited)
-                      .map((status) => status.presentationDocumentId)
-              );
+    const visited = new Set<string>(
+        (user !== null ? user.progressBars : [])
+            .filter((progressBar) => progressBar.courseDocumentId === course.documentId)
+            .flatMap((progressBar) => progressBar.presentationChecks)
+            .filter((status) => status.isVisited)
+            .map((status) => status.presentationDocumentId)
+    );
     return {
         id: course.documentId,
         title: course.courseName,
