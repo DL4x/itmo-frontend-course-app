@@ -34,40 +34,32 @@
     }
 </script>
 
-
-
 <div class="block skills-block">
-            <div class="title skills-title">Skills</div>
+    <div class="title skills-title">Skills</div>
 
-            {#if skillsItems.length > 0}
-                <div class="skills-grid">
-                    {#each visibleSkills as skill}
-                        <div class="skill-tag">
-                            {skill.name}
-                            {#if skill.level}
-                                <span class="skill-level"
-                                    >{'★'.repeat(skill.level)}{'☆'.repeat(5 - skill.level)}</span
-                                >
-                            {/if}
-                        </div>
-                    {/each}
+    {#if skillsItems.length > 0}
+        <div class="skills-grid">
+            {#each visibleSkills as skill}
+                <div class="skill-tag">
+                    {skill.name}
+                    {#if skill.level}
+                        <span class="skill-level"
+                            >{'★'.repeat(skill.level)}{'☆'.repeat(5 - skill.level)}</span
+                        >
+                    {/if}
                 </div>
-            {:else}
-                <div class="no-skills">
-                    <img
-                        src="https://via.placeholder.com/100"
-                        alt="No skills"
-                        class="no-skills-img"
-                    />
-                    <div class="no-skills-text">Skills not found</div>
-                </div>
-            {/if}
-            <div class="button-container">
-                <button class="read-more-btn" on:click={openModalSkills}> Read more </button>
-            </div>
+            {/each}
         </div>
-
-
+    {:else}
+        <div class="no-skills">
+            <img src="https://via.placeholder.com/100" alt="No skills" class="no-skills-img" />
+            <div class="no-skills-text">Skills not found</div>
+        </div>
+    {/if}
+    <div class="button-container">
+        <button class="read-more-btn" on:click={openModalSkills}> Read more </button>
+    </div>
+</div>
 
 {#if activeModalSkills}
     <div class="modal-backdrop" on:click|self={closeModalSkills}>
@@ -91,8 +83,6 @@
         </div>
     </div>
 {/if}
-
-
 
 <style>
     .block {

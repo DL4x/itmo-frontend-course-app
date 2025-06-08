@@ -6,11 +6,9 @@
     import Skills from '$lib/mySections/Skills.svelte';
     import Lections from '$lib/mySections/Lections.svelte';
 
-
     let activeBlock: boolean = false;
     let fullContent: string = '';
     let currentTitle: string = '';
-
 
     function openModal() {
         activeBlock = true;
@@ -67,7 +65,6 @@
         }
         // ... остальные блоки
     ];
-
 </script>
 
 <div class="page" class:dimmed={activeBlock}>
@@ -88,24 +85,17 @@
         <div class="block"><Skills /></div>
         <div class="block"><Lections /></div>
 
-        
         <div class="block">
             <h3>{blocks[6].title}</h3>
             <div class="block-content">
                 {blocks[6].shortContent}
             </div>
             <div class="button-container">
-                <button
-                    class="read-more-btn"
-                    on:click={openModal}
-                >
-                    Read more
-                </button>
+                <button class="read-more-btn" on:click={openModal}> Read more </button>
             </div>
         </div>
     </div>
 </div>
-
 
 {#if activeBlock}
     <div class="modal-backdrop" on:click|self={closeModal}>
@@ -120,7 +110,6 @@
         </div>
     </div>
 {/if}
-
 
 <style>
     .page {
@@ -165,7 +154,6 @@
         margin-bottom: 10px;
         line-height: 1.4;
     }
-
 
     /* -------------------------------- */
 
@@ -269,11 +257,9 @@
 
     /* ------------------------------------- */
 
-
     @media (max-width: 768px) {
         .page {
             grid-template-columns: 100% !important;
         }
     }
-    
 </style>

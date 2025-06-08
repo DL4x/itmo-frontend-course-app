@@ -13,14 +13,9 @@
     let isHovered = $state(false);
     let showCourses = $state(false);
 
-    function toggleView() {
+    async function toggleView() {
         showCourses = !showCourses;
     }
-
-    // const [send, receive] = crossfade({
-    //     duration: 800,
-    //     easing: quintOut
-    // });
 
     const { data }: PageProps = $props();
 </script>
@@ -39,15 +34,18 @@
                 <h1>Добро пожаловать в мир фронтенд-разработки!</h1>
                 <p>
                     Вы на образовательном портале от выпускников ИТМО - здесь мы делимся знаниями,
-                    которые реально работают в индустрии. Готовы начать путь от основ до продвинутых техник?
+                    которые реально работают в индустрии. Готовы начать путь от основ до продвинутых
+                    техник?
                 </p>
-                <a class="courses-btn"
-                   on:click={toggleView}
-                   on:mouseenter={() => (isHovered = true)}
-                   on:mouseleave={() => (isHovered = false)}>
-    <span class="courses-btn-text">
-        {isHovered ? 'Погнали' : 'Список курсов'}
-    </span>
+                <a
+                    class="courses-btn"
+                    on:click={toggleView}
+                    on:mouseenter={() => (isHovered = true)}
+                    on:mouseleave={() => (isHovered = false)}
+                >
+                    <span class="courses-btn-text">
+                        {isHovered ? 'Погнали' : 'Список курсов'}
+                    </span>
                     <span class="hover-effect"></span>
                 </a>
             </div>
@@ -55,8 +53,8 @@
             <div class="right" in:fly={{ x: 100, duration: 800 }}>
                 <Lottie
                     path="/src/images/starting_page/cosmonaut.json"
-                    width="400px"
-                    height="400px"
+                    width="40rem"
+                    height="40rem"
                     mirrored={true}
                 />
             </div>
@@ -107,7 +105,7 @@
         display: grid;
         grid-template-rows: auto auto auto;
         gap: 2rem;
-        max-width: 600px;
+        max-width: 100rem;
     }
 
     .right {
@@ -176,7 +174,7 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
         transition: 0.5s;
     }
 
@@ -200,7 +198,9 @@
     .courses-btn-text::after {
         content: '→';
         opacity: 0;
-        transition: opacity 0.3s ease, transform 0.3s ease;
+        transition:
+            opacity 0.3s ease,
+            transform 0.3s ease;
         transform: translateX(-10px);
     }
 
@@ -215,6 +215,9 @@
         gap: 1vw;
         height: 95vh;
         box-sizing: border-box;
+    }
+
+    @media (max-width: 1080px) {
     }
 
     @media (max-width: 768px) {

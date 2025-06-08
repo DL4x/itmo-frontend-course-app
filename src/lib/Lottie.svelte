@@ -34,4 +34,7 @@
     });
 </script>
 
-<div bind:this={container} style="width: {width}; height: {height}; transform: {mirrored ? 'scaleX(-1)' : 'none'};"></div>
+<div
+    bind:this={container}
+    style="width: {width}; height: {height}; transform: {mirrored ? 'scaleX(-1)' : 'none'};"
+></div>

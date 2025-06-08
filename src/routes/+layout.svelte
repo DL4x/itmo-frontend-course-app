@@ -1,41 +1,61 @@
 <script lang="ts">
-    import { Button, Navbar, NavBrand, NavLi, NavUl } from 'flowbite-svelte';
-    import '/src/app.css';
+    import {
+        Button,
+        P,
+        Dropdown,
+        DropdownItem,
+        Navbar,
+        NavBrand,
+        NavHamburger,
+        NavLi,
+        NavUl
+    } from 'flowbite-svelte';
     import { page } from '$app/state';
-    import VerticalLine from '$lib/VerticalLine.svelte';
     import { userStore } from '$lib/store';
 
-    let { children } = $props();
+    function signOut() {
+        userStore.set(null);
+    }
 </script>
 
-<Navbar
-    class="sticky top-0 z-1000 bg-my-gray shadow-sm min-h-[5vh] flex items-center"
-    navContainerClass="gap-8"
->
+<Navbar class="sticky bg-my-gray flex items-center">
     <NavBrand href="/">
-        <enhanced:img src="/src/images/ufo-flying.png" alt="Main logo" />
+        <enhanced:img width="50" src="/src/images/planet.png" alt="Main logo" />
     </NavBrand>
-    <VerticalLine lineHeight="40px" class="not-md:hidden" />
 
-    <NavUl activeUrl={page.url.pathname}>
-        <NavLi href="/" class="text-l mx-4 font-bold tracking-widest uppercase text-[#FFEBE0]">
+    <div class="flex items-center md:order-2 ml-auto">
+        {#if $userStore}
+            <P id="user-menu" class="font-bold tracking-widest uppercase text-primary-50">
+                {$userStore.name}
+            </P>
+        {:else}
+            <Button href="/auth" class="font-bold tracking-widest uppercase bg-primary-700">
+                Войти
+            </Button>
+        {/if}
+        <NavHamburger />
+    </div>
+
+    <Dropdown placement="bottom" triggeredBy="#user-menu">
+        <DropdownItem on:click={signOut}>Выйти</DropdownItem>
+    </Dropdown>
+
+    <NavUl
+        activeUrl={page.url.pathname}
+        class="order-1 ml-auto"
+        ulClass="md:flex md:items-center md:gap-8 not-md:mt-4 bg-my-gray border-0"
+        nonActiveClass="not-md:hover:bg-primary-700/35"
+    >
+        <NavLi href="/" class="mx-4 font-bold tracking-widest uppercase text-primary-50">
             Главная
         </NavLi>
-        <NavLi href="/resumes" class="text-l mx-4 font-sans font-bold tracking-widest uppercase text-[#FFEBE0] transition-all">
+        <NavLi href="/resumes" class="mx-4 font-bold tracking-widest uppercase text-primary-50">
             О нас
         </NavLi>
-        <NavLi href="/help" class="text-l mx-4 font-sans font-bold tracking-widest uppercase text-[#FFEBE0] transition-all">
+        <NavLi href="/help" class="mx-4 font-bold tracking-widest uppercase text-primary-50">
             Поддержка
         </NavLi>
     </NavUl>
-    <NavBrand class="flex flex-row gap-4 md:ml-auto md:order-last">
-        <div>
-            {#if $userStore}
-                <p class="font-sans font-bold tracking-widest uppercase text-[#FFEBE0]">{$userStore.name}</p>
-            {:else}
-                <Button href="/auth" class="font-sans font-bold tracking-widest uppercase bg-[#FE8A70]">Войти</Button>
-            {/if}
-        </div>
-    </NavBrand>
 </Navbar>
-{@render children()}
+
+<slot />

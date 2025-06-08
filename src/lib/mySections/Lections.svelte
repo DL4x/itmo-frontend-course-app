@@ -232,7 +232,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        border: 2px dashed #4CAF50;
+        border: 2px dashed #4caf50;
         border-radius: 8px;
         padding: 15px;
         text-decoration: none;
@@ -274,7 +274,7 @@
         justify-content: center;
         cursor: pointer;
         z-index: 1;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         flex-shrink: 0;
     }
 
@@ -314,7 +314,7 @@
             width: 120px;
             height: 150px;
         }
-        
+
         .lection-placeholder {
             width: 90px;
             height: 90px;

@@ -35,7 +35,7 @@ export function mapToPresentationCardData(
         commentsCount: presentation.comments.length,
         id: presentation.documentId,
         averageUserScore: averageScoreOf(presentation.votedPersons),
-        visited: visited?.has(presentation.documentId),
+        visited: visited?.has(presentation.documentId)
     };
 }
 

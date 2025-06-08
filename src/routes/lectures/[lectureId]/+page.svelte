@@ -13,9 +13,11 @@
     function averageRating() {
         const length = data.presentation.votedPersons.length;
         if (length === 0) return 0;
-        return data.presentation.votedPersons
-            .map(person => person.personScore)
-            .reduce((sum, value) => sum + value, 0) / length;
+        return (
+            data.presentation.votedPersons
+                .map((person) => person.personScore)
+                .reduce((sum, value) => sum + value, 0) / length
+        );
     }
 
     async function handleComment() {
@@ -23,11 +25,7 @@
             return;
         }
 
-        await addComment(
-            commentText,
-            $userStore.id,
-            data.presentation.documentId
-        );
+        await addComment(commentText, $userStore.id, data.presentation.documentId);
         commentText = '';
 
         window.location.reload();
@@ -50,7 +48,12 @@
         </div>
         <div class="w-full md:w-auto md:text-right">
             <p class="text-sm text-[#fcefe8] dark:text-gray-400">Average rating</p>
-            <Rating id="lecture-rating" total={5} rating={averageRating()} class="justify-start md:justify-end" />
+            <Rating
+                id="lecture-rating"
+                total={5}
+                rating={averageRating()}
+                class="justify-start md:justify-end"
+            />
             <p class="text-xs text-[#fcefe8] dark:text-gray-400 mt-1">
                 Based on {data.presentation.votedPersons.length} votes
             </p>
@@ -62,7 +65,8 @@
             <iframe
                 title="Lecture presentation"
                 class="w-full h-full"
-                src='https://docs.google.com/presentation/d/{data.presentation.presentationUrl}/embed?start=false&loop=false'
+                src="https://docs.google.com/presentation/d/{data.presentation
+                    .presentationUrl}/embed?start=false&loop=false"
                 allowfullscreen
             >
             </iframe>
@@ -74,8 +78,19 @@
                 download="presentation.pdf"
                 class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
             >
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                <svg
+                    class="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    ></path>
                 </svg>
                 Скачать PDF
             </a>
@@ -85,8 +100,19 @@
                 download="presentation.pptx"
                 class="inline-flex items-center px-4 py-2 ml-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
             >
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                <svg
+                    class="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    ></path>
                 </svg>
                 Скачать PPTX
             </a>
@@ -99,12 +125,12 @@
                 Написать комментарий
             </Heading>
             <form class="w-full">
-            <Textarea
-                bind:value={commentText}
-                placeholder="Расскажите, как вам лекция"
-                rows={2}
-                class="w-full mb-4 text-xs sm:text-sm"
-            />
+                <Textarea
+                    bind:value={commentText}
+                    placeholder="Расскажите, как вам лекция"
+                    rows={2}
+                    class="w-full mb-4 text-xs sm:text-sm"
+                />
                 <Button class="w-full sm:w-auto bg-[#FE8A70]" on:click={handleComment}>
                     Опубликовать
                 </Button>
@@ -113,15 +139,21 @@
     </div>
 
     <div class="w-full">
-        <Heading tag="h3" class="mb-4 text-xl sm:text-2xl text-[#fcefe8] dark:text-white">Комментарии</Heading>
+        <Heading tag="h3" class="mb-4 text-xl sm:text-2xl text-[#fcefe8] dark:text-white"
+            >Комментарии</Heading
+        >
         <div class="space-y-4 w-full">
             {#if comments.length === 0}
-                <Heading tag="h4" class="text-base sm:text-lg text-gray-600 dark:text-gray-300">Комментариев пока нет...</Heading>
+                <Heading tag="h4" class="text-base sm:text-lg text-gray-600 dark:text-gray-300"
+                    >Комментариев пока нет...</Heading
+                >
             {:else}
                 {#each comments as comment (comment.id)}
                     <Card class="w-full max-w-none bg-[#c7c1bc] flex items-start gap-3">
                         <div class="flex flex-col md:flex-row justify-between">
-                            <div class="flex items-center justify-center w-15 h-11 rounded-full bg-[#615151] text-white font-semibold text-xl">
+                            <div
+                                class="flex items-center justify-center w-15 h-11 rounded-full bg-[#615151] text-white font-semibold text-xl"
+                            >
                                 {comment.author.name.charAt(0).toUpperCase()}
                             </div>
                             <Heading
@@ -143,10 +175,9 @@
     </div>
 </div>
 
-
 <style>
     .lecture-name {
-        color: #FFEBE0;
+        color: #ffebe0;
         font-size: 2.2rem;
         font-weight: bold;
         margin-bottom: 1rem;

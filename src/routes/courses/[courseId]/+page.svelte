@@ -1,18 +1,56 @@
 <script lang="ts">
-	import type { PageProps } from './$types';
-	import '/src/app.css';
-	import PresentationPreviewCard from '$lib/PresentationPreviewCard.svelte';
-	import CourseProgressBar from '$lib/CourseProgressBar.svelte';
-	import { favoritePresentationsIDs } from '$lib/frontendEntities';
+    import type { PageProps } from './$types';
+    import '/src/app.css';
+    import PresentationPreviewCard from '$lib/PresentationPreviewCard.svelte';
+    import CourseProgressBar from '$lib/CourseProgressBar.svelte';
+    import { favoritePresentationsIDs } from '$lib/frontendEntities';
 
-	const { data }: PageProps = $props();
+    const { data }: PageProps = $props();
 
-	const allAuthors = $derived(new Set(data.presentations.flatMap(card => card.authors)));
+    const allAuthors = $derived(new Set(data.presentations.flatMap((card) => card.authors)));
 </script>
 
 <svelte:head>
-	<title>Курсы</title>
+    <title>Курсы</title>
 </svelte:head>
+
+<main class="max-w-7xl m-auto p-4">
+    <div class="about">
+        <div class="text-block">
+            <h1 class="course-title">Курс: {data.title}</h1>
+            <CourseProgressBar courseDocumentId={data.id} />
+            <p>{data.description}</p>
+            <p>
+                {#if allAuthors.size !== 0 && data.presentations.length !== 0}
+                    <span class="number">{allAuthors.size}</span> авторов,
+                    <span class="number">{data.presentations.length}</span>
+                    лекций
+                {:else if allAuthors.size !== 0}
+                    <span class="number">{allAuthors.size}</span> авторов
+                {:else if data.presentations.length !== 0}
+                    <span class="number">{data.presentations.length}</span> лекций
+                {/if}
+            </p>
+        </div>
+        <img
+            src={data.previewUrl}
+            alt="course preview"
+            style="border-radius: 10px; margin-left: 400px"
+        />
+    </div>
+
+    <div class="presentations-grid">
+        {#each data.presentations as presentation (presentation.id)}
+            <PresentationPreviewCard
+                {...presentation}
+                visited={presentation.visited}
+                favorite={$favoritePresentationsIDs === null
+                    ? undefined
+                    : $favoritePresentationsIDs.has(presentation.id)}
+            />
+        {/each}
+    </div>
+</main>
 
 <style>
     .about {
@@ -76,42 +114,11 @@
             order: -1;
         }
     }
-	.course-title {
-		color: #FFEBE0;
-		font-size: 2.5rem;
-		font-weight: bold;
-		margin-bottom: 1rem;
-		text-transform: uppercase;
-	}
+    .course-title {
+        color: #ffebe0;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+    }
 </style>
-
-<main class="max-w-7xl m-auto p-4">
-	<div class="about">
-		<div class="text-block">
-			<h1 class="course-title">Курс: {data.title}</h1>
-			<CourseProgressBar courseDocumentId={data.id} />
-			<p>{data.description}</p>
-			<p>
-				{#if allAuthors.size !== 0 && data.presentations.length !== 0}
-					<span class="number">{allAuthors.size}</span> авторов, <span class="number">{data.presentations.length}</span>
-					лекций
-				{:else if allAuthors.size !== 0}
-					<span class="number">{allAuthors.size}</span> авторов
-				{:else if data.presentations.length !== 0}
-					<span class="number">{data.presentations.length}</span> лекций
-				{/if}
-			</p>
-		</div>
-		<img src={data.previewUrl} alt="course preview" style="border-radius: 10px; margin-left: 400px">
-	</div>
-
-	<div class="presentations-grid">
-		{#each data.presentations as presentation (presentation.id)}
-			<PresentationPreviewCard
-				{...presentation}
-				visited={presentation.visited}
-				favorite={$favoritePresentationsIDs === null ? undefined : $favoritePresentationsIDs.has(presentation.id)}
-			/>
-		{/each}
-	</div>
-</main>

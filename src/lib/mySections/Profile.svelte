@@ -2,7 +2,6 @@
     let name = 'Klementev Timofey';
 </script>
 
-
 <div class="block profile-block">
     <div class="profile-content">
         <enhanced:img

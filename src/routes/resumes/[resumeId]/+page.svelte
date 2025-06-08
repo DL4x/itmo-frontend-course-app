@@ -1,20 +1,20 @@
 <script lang="ts">
-	// import type { PageProps } from './$types';
-	import '/src/app.css';
-	import Grid from '$lib/sections/Grid.svelte';
+    // import type { PageProps } from './$types';
+    import '/src/app.css';
+    import Grid from '$lib/sections/Grid.svelte';
 
-	// const { data }: PageProps = $props();
+    // const { data }: PageProps = $props();
 </script>
 
 <svelte:head>
-	<title>Resume</title>
+    <title>Resume</title>
 </svelte:head>
 
 <div class="Content text-black">
     <!-- <div class="resume-content"> -->
-        <!-- <NavHeader /> -->
-        <Grid />
-        <!-- <FirstInfo name={data.author.name} />
+    <!-- <NavHeader /> -->
+    <Grid />
+    <!-- <FirstInfo name={data.author.name} />
         <Education educations={data.author.educations} />
         <WorkExperienceSection educations={data.author.educations} />
         <SkillsPersonalityUnion skills={data.author.skills} />
@@ -28,7 +28,6 @@
 </div>
 
 <style>
-
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap'); /* DM Sans */
 
     .Content {

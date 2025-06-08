@@ -160,8 +160,7 @@
         font-size: 0.9rem;
     }
 
-    .button-container {     
-        
+    .button-container {
         position: relative;
         height: 30px;
     }
