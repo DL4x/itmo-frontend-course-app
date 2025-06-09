@@ -4,19 +4,19 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --color-primary-50: #ffebe0;/*#fff5f2;*/
+    --color-primary-50: #ffebe0; /*#fff5f2;*/
     --color-primary-100: #fff1ee;
     --color-primary-200: #ffe4de;
     --color-primary-300: #ffd5cc;
     --color-primary-400: #ffbcad;
     --color-primary-500: #fe795d;
     --color-primary-600: #ef562f;
-    --color-primary-700: #FE8A70;/**/
-    --color-primary-800: #e6570a;/*#cc4522*/
+    --color-primary-700: #fe8a70; /**/
+    --color-primary-800: #e6570a; /*#cc4522*/
     --color-primary-900: #a5371b;
     --color-my-gray: #474b66;
     --color-my-gray-hovered: #5c5c80;
-    --color-my-background: #22223B
+    --color-my-background: #22223b;
 }
 
 @font-face {
@@ -30,9 +30,7 @@ body {
     margin: 0;
     font-family: 'ALS Gorizont', sans-serif;
     background-color: var(--color-my-background);
-    /*color: #1a1a1a;*/
-    /*color: var(--color-primary-200);*/
-    color: var(--color-primary-100)
+    color: var(--color-primary-100);
 }
 
 html {

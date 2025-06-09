@@ -1,116 +1,99 @@
 <script lang="ts">
-	import { supabase } from '$lib/supabase';
-	import { goto } from '$app/navigation';
-	import { Heading } from 'flowbite-svelte';
+    import { supabase } from '$lib/supabase';
+    import { goto } from '$app/navigation';
+    import { Heading } from 'flowbite-svelte';
     import { addAuthor, getAuthorByEmail } from '$lib/strapiRepository';
-	import { userStore } from './store'
+    import { userStore } from './store';
 
-	let email = '';
-	let password = '';
-	let username = '';
-	let error = '';
-	let loading = false;
-	let isSignUp = false;
+    let email = '';
+    let password = '';
+    let username = '';
+    let error = '';
+    let loading = false;
+    let isSignUp = false;
 
-	async function fetchUser() {
-		return await getAuthorByEmail(email);
-	}
+    async function fetchUser() {
+        return await getAuthorByEmail(email);
+    }
 
-	const handleAuth = async () => {
-		try {
-			loading = true;
-			error = '';
+    const handleAuth = async () => {
+        try {
+            loading = true;
+            error = '';
 
-			if (isSignUp) {
-				if (!username.trim()) {
-					throw new Error('Пожалуйста, введите ваше имя');
-				}
+            if (isSignUp) {
+                if (!username.trim()) {
+                    throw new Error('Пожалуйста, введите ваше имя');
+                }
 
-				const { error: signUpError } = await supabase.auth.signUp({
-					email,
-					password,
-					options: {
-						data: {
-							display_name: username
-						}
-					}
-				});
-				if (signUpError) throw signUpError;
+                const { error: signUpError } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            display_name: username
+                        }
+                    }
+                });
+                if (signUpError) throw signUpError;
 
                 await addAuthor(username, email);
 
-				const user = await fetchUser();
-				userStore.set(user);
-				goto('/');
-			} else {
-				const { error: signInError } = await supabase.auth.signInWithPassword({
-					email,
-					password
-				});
-				if (signInError) throw signInError;
+                const user = await fetchUser();
+                userStore.set(user);
+                goto('/');
+            } else {
+                const { error: signInError } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                if (signInError) throw signInError;
 
-				const user = await fetchUser();
-				userStore.set(user);
-				goto('/');
-			}
-		} catch (err) {
-			if (err instanceof Error) {
-				error = err.message;
-			}
-		} finally {
-			loading = false;
-		}
-	};
-
-
+                const user = await fetchUser();
+                userStore.set(user);
+                goto('/');
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                error = err.message;
+            }
+        } finally {
+            loading = false;
+        }
+    };
 </script>
 
 <div>
-	<Heading tag="h1" class="auth-heading">{isSignUp ? 'Регистрация' : 'Вход'}</Heading>
+    <Heading tag="h1" class="auth-heading">{isSignUp ? 'Регистрация' : 'Вход'}</Heading>
 
-	{#if isSignUp}
-		<input
-			bind:value={username}
-			type="text"
-			placeholder="Ваше имя"
-			required
-			class="auth-input"
-		/>
-	{/if}
+    {#if isSignUp}
+        <input
+            bind:value={username}
+            type="text"
+            placeholder="Ваше имя"
+            required
+            class="auth-input"
+        />
+    {/if}
 
-	<input
-		bind:value={email}
-		type="email"
-		placeholder="Email"
-		required
-		class="auth-input"
-	/>
-	<input
-		bind:value={password}
-		type="password"
-		placeholder="Пароль"
-		required
-		class="auth-input"
-	/>
+    <input bind:value={email} type="email" placeholder="Email" required class="auth-input" />
+    <input bind:value={password} type="password" placeholder="Пароль" required class="auth-input" />
 
-	<button
-		class="auth-button auth-button--primary"
-		on:click={handleAuth}
-		disabled={loading}
-	>
-		{isSignUp ? 'Зарегистрироваться' : 'Войти'}
-	</button>
+    <button class="auth-button auth-button--primary" on:click={handleAuth} disabled={loading}>
+        {isSignUp ? 'Зарегистрироваться' : 'Войти'}
+    </button>
 
-	<button
-		class="auth-button auth-button--secondary"
-		on:click={() => isSignUp = !isSignUp}
-		disabled={loading}
-	>
-		{isSignUp ? 'Войти' : 'Зарегистрироваться'}
-	</button>
+    <button
+        class="auth-button auth-button--secondary"
+        on:click={() => (isSignUp = !isSignUp)}
+        disabled={loading}
+    >
+        {isSignUp ? 'Войти' : 'Зарегистрироваться'}
+    </button>
 
-	{#if error}<p class="error">{error}</p>{/if}
+    {#if error}<p class="error">{error}</p>{/if}
 </div>
+
 <style>
     div {
         max-width: 400px;

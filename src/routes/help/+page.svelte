@@ -1,74 +1,72 @@
-<script lang="ts">
-	let email = $state('');
-	let message = $state('');
-	let isSubmitted = $state(false);
-	let isLoading = $state(false);
+<script>
+    let email = '';
+    let message = '';
+    let isSubmitted = false;
+    let isLoading = false;
 
-	const handleSubmit = async (event: SubmitEvent) => {
-		event.preventDefault()
-		isLoading = true;
-		await new Promise(resolve => setTimeout(resolve, 1500));
-		isLoading = false;
-		isSubmitted = true;
-		email = '';
-		message = '';
-	};
+    const handleSubmit = async () => {
+        isLoading = true;
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        isLoading = false;
+        isSubmitted = true;
+        email = '';
+        message = '';
+    };
 </script>
 
 <svelte:head>
-	<title>Поддержка | Frontend Courses</title>
+    <title>Поддержка | Frontend Courses</title>
 </svelte:head>
 
 <div class="cosmic-background">
-	<header class="stellar-header">
-		<h1>🚀 Центр космической поддержки</h1>
-		<p>Мы на связи, как спутник на орбите!</p>
-	</header>
+    <header class="stellar-header">
+        <h1>🚀 Центр космической поддержки</h1>
+        <p>Мы на связи, как спутник на орбите!</p>
+    </header>
 
-	<main class="nebula-container">
-		{#if isSubmitted}
-			<div class="success-message">
-				<p>📡 Ваш сигнал принят! Скоро ответим!</p>
-				<button class="launch-button" onclick={() => isSubmitted = false}>Отправить ещё одно сообщение</button>
-			</div>
-		{:else}
-			<form class="contact-form" onsubmit={handleSubmit}>
-				<div class="form-group">
-					<label for="email">Ваш космический адрес:</label>
-					<input
-						type="email"
-						id="email"
-						bind:value={email}
-						placeholder="user@galaxy.com"
-						required
-					/>
-				</div>
+    <main class="nebula-container">
+        {#if isSubmitted}
+            <div class="success-message">
+                <p>📡 Ваш сигнал принят! Скоро ответим!</p>
+                <button on:click={() => (isSubmitted = false)}></button>
+            </div>
+        {:else}
+            <form class="contact-form" on:submit|preventDefault={handleSubmit}>
+                <div class="form-group">
+                    <label for="email">Ваш космический адрес:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        bind:value={email}
+                        placeholder="user@galaxy.com"
+                        required
+                    />
+                </div>
 
-				<div class="form-group">
-					<label for="message">Текст сообщения:</label>
-					<textarea
-						id="message"
-						bind:value={message}
-						placeholder="Опишите вашу проблему или вопрос..."
-						required></textarea>
-				</div>
+                <div class="form-group">
+                    <label for="message">Текст сообщения:</label>
+                    <textarea
+                        id="message"
+                        bind:value={message}
+                        placeholder="Опишите вашу проблему или вопрос..."
+                        required
+                    />
+                </div>
 
-				<button class="launch-button" type="submit" disabled={isLoading}>
-					{#if isLoading}
-						⌛ Отправка...
-					{:else}
-						Отправить
-					{/if}
-				</button>
-			</form>
-		{/if}
-
-
+                <button class="launch-button" type="submit" disabled={isLoading}>
+                    {#if isLoading}
+                        ⌛ Отправка...
+                    {:else}
+                        Отправить
+                    {/if}
+                </button>
+            </form>
+        {/if}
     </main>
 
-	<footer class="cosmic-footer">
-		<p>© {new Date().getFullYear()} Frontend Cosmos. Все права защищены.</p>
-	</footer>
+    <footer class="cosmic-footer">
+        <p>© {new Date().getFullYear()} Frontend Cosmos. Все права защищены.</p>
+    </footer>
 </div>
 
 <style>
@@ -79,7 +77,6 @@
         text-align: center;
         margin-bottom: 3rem;
         animation: pulse 4s infinite;
-
         p {
             font-size: 1.2rem;
         }
@@ -117,7 +114,8 @@
         gap: 0.5rem;
     }
 
-    input, textarea {
+    input,
+    textarea {
         padding: 0.8rem;
         background: rgba(10, 15, 40, 0.7);
         border: 1px solid #3b3b8a;
@@ -127,14 +125,15 @@
         transition: all 0.3s;
     }
 
-    input:focus, textarea:focus {
+    input:focus,
+    textarea:focus {
         outline: none;
         border-color: #6ee7ff;
         box-shadow: 0 0 0 2px rgba(110, 231, 255, 0.3);
     }
 
     .launch-button {
-        background: #FE8A70;
+        background: #fe8a70;
         color: white;
         border: none;
         padding: 1rem;
@@ -149,7 +148,7 @@
     }
 
     .launch-button {
-        background: #FE8A70;
+        background: #fe8a70;
         color: white;
         border: none;
         padding: 1rem;
@@ -166,7 +165,7 @@
     }
 
     .launch-button:hover:not(:disabled) {
-        background: #FF6B4D;
+        background: #ff6b4d;
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(254, 138, 112, 0.4);
     }
@@ -199,11 +198,6 @@
     }
 
     .success-message {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-				gap: 16px;
         text-align: center;
         padding: 2rem;
         background: rgba(40, 160, 80, 0.2);

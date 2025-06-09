@@ -1,346 +1,212 @@
 <script lang="ts">
-    interface LectionItem {
+    type Lection = {
         title: string;
         url: string;
-    }
+    };
 
-    // Пример данных лекций
-    const lections: LectionItem[] = [
-        { title: 'Введение в Svelte', url: '#' },
-        { title: 'Основы TypeScript', url: '#' },
-        { title: 'CSS Grid Layout', url: '#' },
-        { title: 'Анимации в Web', url: '#' },
-        { title: 'Оптимизация производительности', url: '#' },
-        { title: 'Работа с API', url: '#' },
-        { title: 'Тестирование компонентов', url: '#' },
-        { title: 'State Management', url: '#' },
-        { title: 'Web Components', url: '#' }
-    ];
+    const lections: Lection[] = [
+        'Введение в Svelte',
+        'Основы TypeScript', 
+        'CSS Grid Layout',
+        'Анимации в Web',
+        'Оптимизация производительности',
+        'Работа с API',
+        'Тестирование компонентов',
+        'State Management',
+        'Web Components'
+    ].map(title => ({ title, url: '#' }));
 
-    let activeModalLections = false;
-    let scrollPosition = 0;
-    const scrollStep = 200;
+    let scrollPos = 0;
+    const scrollStep = 400;
 
-    function scrollLeft() {
-        const container = document.querySelector('.lections-scroll-container');
-        if (container) {
-            scrollPosition = Math.max(0, scrollPosition - scrollStep);
-            container.scrollTo({ left: scrollPosition, behavior: 'smooth' });
-        }
-    }
+    const scroll = (direction: 'left' | 'right') => {
+        const container = document.querySelector('.scroll-container');
+        if (!container) return;
 
-    function scrollRight() {
-        const container = document.querySelector('.lections-scroll-container');
-        if (container) {
-            const maxScroll = container.scrollWidth - container.clientWidth;
-            scrollPosition = Math.min(maxScroll, scrollPosition + scrollStep);
-            container.scrollTo({ left: scrollPosition, behavior: 'smooth' });
-        }
-    }
-
-    function openModalLections() {
-        activeModalLections = true;
-    }
-
-    function closeModalLections() {
-        activeModalLections = false;
-    }
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        scrollPos = Math.max(0, Math.min(maxScroll, scrollPos + (direction === 'left' ? -scrollStep : scrollStep)));
+        container.scrollTo({ left: scrollPos, behavior: 'smooth' });
+    };
 </script>
 
-<div class="block lections-block">
-    <div class="title lections-title">Lections</div>
-
-    {#if lections.length > 0}
-        <div class="lections-container">
-            <button class="scroll-button left" on:click={scrollLeft} aria-label="Scroll left">
-                &lt;
-            </button>
-
-            <div class="lections-scroll-container">
-                {#each lections.slice(0, 6) as lection}
-                    <!-- Показываем первые 6 в скролле -->
-                    <a href={lection.url} class="lection-card" target="_blank" rel="noopener">
-                        <div class="lection-placeholder"></div>
-                        <span class="lection-title">{lection.title}</span>
-                    </a>
-                {/each}
-            </div>
-
-            <button class="scroll-button right" on:click={scrollRight} aria-label="Scroll right">
-                &gt;
-            </button>
+<div class="lections-block">
+    <h2 class="title">[ Lections ]</h2>
+    
+    {#if lections.length === 0}
+        <div class="empty-state">
+            <img src="https://via.placeholder.com/100" alt="No lections" />
+            <div>Lections not found</div>
         </div>
     {:else}
-        <div class="no-lections">
-            <img src="https://via.placeholder.com/100" alt="No lections" class="no-lections-img" />
-            <div class="no-lections-text">Lections not found</div>
-        </div>
-    {/if}
-    <div class="button-container">
-        <button class="read-more-btn" on:click={openModalLections}> Read more </button>
-    </div>
-</div>
-
-{#if activeModalLections}
-    <div class="modal-backdrop" on:click|self={closeModalLections}>
-        <div class="modal">
-            <h2>All Lections</h2>
-            <div class="modal-lections-grid">
-                {#each lections as lection}
-                    <a href={lection.url} class="lection-card" target="_blank" rel="noopener">
-                        <div class="lection-placeholder"></div>
-                        <span class="lection-title">{lection.title}</span>
+        <div class="container">
+            <button class="nav-btn" on:click={() => scroll('left')}>&lt;</button>
+            
+            <div class="scroll-container">
+                {#each lections as { title, url }}
+                    <a href={url} class="card" target="_blank" rel="noopener">
+                        <div class="thumb">
+                            <span>📚</span>
+                        </div>
+                        <span class="name">{title}</span>
+                        <div class="hover-effect"></div>
                     </a>
                 {/each}
             </div>
-            <div class="modal-button-container">
-                <button class="close-btn" on:click={closeModalLections}> Close </button>
-            </div>
+            
+            <button class="nav-btn" on:click={() => scroll('right')}>&gt;</button>
         </div>
-    </div>
-{/if}
+    {/if}
+</div>
 
 <style>
-    .block {
-        position: relative;
-        /* background: #f0f0f0;
-        border: 1px solid #ccc;
-        padding: 10px; */
-        box-sizing: border-box;
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .button-container {
-        position: relative;
-        height: 30px;
-    }
-
-    .read-more-btn {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        padding: 5px 10px;
-        background: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-        font-size: 12px;
-    }
-
-    .read-more-btn:hover {
-        background: #45a049;
-    }
-
-    .modal-backdrop {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-
-    .modal {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        width: 60%;
-        max-width: 500px;
-        position: relative;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-        display: flex;
-        flex-direction: column;
-        min-height: 300px;
-        max-height: 600px;
-    }
-
-    .modal-content {
-        overflow: auto;
-        flex: 1;
-        white-space: pre-line; /* Сохраняет переносы строк */
-        overflow-wrap: break-word;
-    }
-
-    .modal-button-container {
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .close-btn {
-        padding: 8px 16px;
-        background: #f44336;
-        color: white;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-    .close-btn:hover {
-        background: #d32f2f;
-    }
-
-    .page.dimmed {
-        filter: brightness(0.7);
-        pointer-events: none;
-        user-select: none;
-    }
-
     .lections-block {
         display: flex;
         flex-direction: column;
     }
 
-    .lections-title {
-        text-align: center;
-        margin-bottom: 15px;
+    .title {
+        margin: 5px 0 15px 10px;
+        font-size: 1.5rem;
+        font-weight: 600;
         color: #333;
     }
 
-    .lections-container {
+    .container {
         display: flex;
         align-items: center;
-        position: relative;
     }
 
-    .lections-scroll-container {
+    .scroll-container {
         display: flex;
         overflow-x: auto;
         scroll-behavior: smooth;
         gap: 15px;
         padding: 10px 0;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE/Edge */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
 
-    .lections-scroll-container::-webkit-scrollbar {
-        display: none; /* Chrome/Safari */
+    .scroll-container::-webkit-scrollbar {
+        display: none;
     }
 
-    .lection-card {
-        flex: 0 0 auto;
-        width: 150px;
-        height: 180px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        border: 2px dashed #4CAF50;
-        border-radius: 8px;
-        padding: 15px;
-        text-decoration: none;
-        color: #333;
-        transition: transform 0.2s;
-    }
-
-    .lection-card:hover {
-        transform: translateY(-5px);
-        border-color: #45a049;
-    }
-
-    .lection-placeholder {
-        width: 120px;
-        height: 120px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: #f8f8f8;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #999;
-    }
-
-    .lection-title {
-        text-align: center;
-        font-size: 0.9rem;
-        word-break: break-word;
-    }
-
-    .scroll-button {
+    .nav-btn {
         background: white;
         border: 1px solid #ddd;
         border-radius: 50%;
         width: 30px;
         height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        z-index: 1;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        display: grid;
         flex-shrink: 0;
+        place-items: center;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .scroll-button:hover {
+    .nav-btn:hover {
         background: #f5f5f5;
     }
 
-    .scroll-button.left {
+    .nav-btn:first-child {
         margin-right: 10px;
     }
 
-    .scroll-button.right {
+    .nav-btn:last-child {
         margin-left: 10px;
     }
 
-    .no-lections {
-        flex: 1;
+    .card {
+        position: relative;
+        width: 160px;
+        height: 200px;
         display: flex;
         flex-direction: column;
+        flex-shrink: 0;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        color: #2d3748;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .thumb {
+        width: 100%;
+        height: 120px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .thumb span {
+        font-size: 3rem;
+        opacity: 0.8;
+    }
+
+    .name {
+        padding: 16px;
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1.4;
+        flex-grow: 1;
+        display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .hover-effect {
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 4px;
+        background: linear-gradient(90deg, #4f46e5, #10b981);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover .hover-effect {
+        transform: scaleX(1);
+    }
+
+    .empty-state {
+        display: grid;
+        place-items: center;
         gap: 10px;
         color: #777;
     }
 
-    .no-lections-img {
+    .empty-state img {
         width: 80px;
         opacity: 0.5;
     }
 
-    .no-lections-text {
-        font-size: 0.9rem;
-    }
-
     @media (max-width: 768px) {
-        .lection-card {
-            width: 120px;
-            height: 150px;
+        .card {
+            width: 160px;
+            height: 200px;
         }
-        
-        .lection-placeholder {
-            width: 90px;
-            height: 90px;
-        }
-    }
 
-    .modal-lections-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-        padding: 10px;
-        max-height: 60vh;
-        overflow-y: auto;
-    }
-
-    @media (max-width: 768px) {
-        .modal-lections-grid {
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
+        .thumb {
+            height: 100px;
         }
     }
 
     @media (max-width: 480px) {
-        .modal-lections-grid {
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 10px;
+        .card {
+            width: 140px;
+            height: 180px;
+        }
+
+        .thumb span {
+            font-size: 2.5rem;
         }
     }
 </style>
