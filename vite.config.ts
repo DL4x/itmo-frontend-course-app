@@ -4,5 +4,6 @@ import { enhancedImages } from '@sveltejs/enhanced-img';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-	plugins: [tailwindcss(),  enhancedImages(), sveltekit()]
+    assetsInclude: ['**/*.json'],
+    plugins: [tailwindcss(), enhancedImages(), sveltekit()]
 });

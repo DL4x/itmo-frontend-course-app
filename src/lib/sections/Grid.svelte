@@ -58,5 +58,4 @@
             grid-template-columns: 100% !important;
         }
     }
-    
 </style>

@@ -144,7 +144,6 @@
     </div>
 {/if}
 
-
 <style>
     .block {
         position: relative;
@@ -189,10 +188,8 @@
 
         /* position: relative; */
         height: 30px;
-
         /* display: flex; */
         /* justify-content: flex-end; */
-
     }
 
     .read-more-btn {
@@ -207,7 +204,6 @@
         border-radius: 3px;
         cursor: pointer;
         font-size: 12px;
-
     }
 
     .read-more-btn:hover {

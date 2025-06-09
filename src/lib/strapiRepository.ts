@@ -3,7 +3,8 @@ import {
     type AuthorComment,
     type Course,
     type Education,
-    type Presentation, type PresentationStatus,
+    type Presentation,
+    type PresentationStatus,
     type ProgressBar,
     type Skill,
     type TimeRange,
@@ -15,7 +16,8 @@ import {
     assertValidComment,
     assertValidCourse,
     assertValidEducation,
-    assertValidPresentation, assertValidPresentationStatus,
+    assertValidPresentation,
+    assertValidPresentationStatus,
     assertValidProgressBar,
     assertValidSkill,
     assertValidTimeRange,
@@ -99,14 +101,21 @@ function parseEducation(json: object): Education {
 
 async function parsePresentationStatus(json: object): Promise<PresentationStatus> {
     assertField('id' in json && typeof json.id === 'number', 'id', 'number');
-    assertField('is_visited' in json && (typeof json.is_visited === 'boolean' || json.is_visited === null), 'is_visited', 'boolean');
-    assertField('presentation_document_id' in json && typeof json.presentation_document_id === 'string', 'presentation_document_id', 'string');
-
+    assertField(
+        'is_visited' in json && (typeof json.is_visited === 'boolean' || json.is_visited === null),
+        'is_visited',
+        'boolean'
+    );
+    assertField(
+        'presentation_document_id' in json && typeof json.presentation_document_id === 'string',
+        'presentation_document_id',
+        'string'
+    );
 
     const result = {
         id: json.id.toString(),
         isVisited: json.is_visited !== null,
-        presentationDocumentId: json.presentation_document_id,
+        presentationDocumentId: json.presentation_document_id
     };
     assertValidPresentationStatus(result);
     return result;
@@ -115,11 +124,15 @@ async function parsePresentationStatus(json: object): Promise<PresentationStatus
 async function parseProgressBar(json: object): Promise<ProgressBar> {
     assertField('id' in json && typeof json.id === 'number', 'id', 'number');
     assertField(
-        'course_document_id' in json && typeof json.course_document_id === 'string', 'course_document_id',
+        'course_document_id' in json && typeof json.course_document_id === 'string',
+        'course_document_id',
         'string'
     );
-    assertField('presentation_check' in json && Array.isArray(json.presentation_check), 'presentation_check', 'Array');
-
+    assertField(
+        'presentation_check' in json && Array.isArray(json.presentation_check),
+        'presentation_check',
+        'Array'
+    );
 
     const result = {
         id: json.id.toString(),
@@ -293,16 +306,16 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
         'string'
     );
     assertField(
-    	'presentation_preview' in json &&
-    		typeof json.presentation_preview === 'object' &&
-    		json.presentation_preview != null,
-    	'presentation_preview',
-    	'object'
+        'presentation_preview' in json &&
+            typeof json.presentation_preview === 'object' &&
+            json.presentation_preview != null,
+        'presentation_preview',
+        'object'
     );
     assertField(
-    	'url' in json.presentation_preview && typeof json.presentation_preview.url === 'string',
-    	'url',
-    	'string'
+        'url' in json.presentation_preview && typeof json.presentation_preview.url === 'string',
+        'url',
+        'string'
     );
     let presentation_owners = [];
     if ('presentation_owners' in json && Array.isArray(json.presentation_owners)) {
@@ -333,7 +346,7 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
         presentationDescription: json.presentation_description,
         presentationUrl: json.presentation_url,
         documentId: json.documentId,
-        presentationPreviewUrl: `https://strapi-production-51d5.up.railway.app${json.presentation_preview.url}`,
+        presentationPreviewUrl: getFullImagePath(json.presentation_preview.url),
         votedPersons: await Promise.all(voted_persons.map(parseVotedPerson)),
         presentationOwners: await Promise.all(
             presentation_owners.map((author: object) => {
@@ -360,11 +373,46 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
     return result;
 }
 
+async function parseCoursePreview(json: unknown): Promise<Course> {
+    assert(typeof json === 'object' && json !== null, 'json must be object');
+    assertField(
+        'documentId' in json && typeof json.documentId === 'string',
+        'documentId',
+        'string'
+    );
+    assertField(
+        'course_name' in json && typeof json.course_name === 'string',
+        'course_name',
+        'string'
+    );
+    assertField(
+        'url' in json.course_preview && typeof json.course_preview.url === 'string',
+        'url',
+        'string'
+    );
+
+    const result = {
+        id: json.id.toString(),
+        documentId: json.documentId,
+        courseName: json.course_name,
+        courseDescription: undefined,
+        coursePreviewUrl: getFullImagePath(json.course_preview.url),
+        presentationCount: undefined,
+        presentations: undefined
+    };
+    assertValidCourse(result);
+    return result;
+}
+
 async function parseCourse(json: unknown): Promise<Course> {
     assert(typeof json === 'object' && json !== null, 'json must be object');
 
     assertField('id' in json && typeof json.id === 'number', 'id', 'number');
-    assertField('presentation_count' in json && typeof json.presentation_count === 'number', 'presentation_count', 'number');
+    assertField(
+        'presentation_count' in json && typeof json.presentation_count === 'number',
+        'presentation_count',
+        'number'
+    );
     assertField(
         'documentId' in json && typeof json.documentId === 'string',
         'documentId',
@@ -404,17 +452,18 @@ async function parseCourse(json: unknown): Promise<Course> {
         documentId: json.documentId,
         courseName: json.course_name,
         courseDescription: json.course_description,
-        coursePreviewUrl: json.course_preview.url,
+        coursePreviewUrl: getFullImagePath(json.course_preview.url),
         presentationCount: json.presentation_count,
-        presentations: await Promise.all(json.presentations.map((pres) => {
-            assertField(
-                'documentId' in pres && typeof pres.documentId === 'string',
-                'documentId',
-                'string'
-            );
-            return getPresentationByDocumentId(pres.documentId);
-            }
-        ))
+        presentations: await Promise.all(
+            json.presentations.map((pres) => {
+                assertField(
+                    'documentId' in pres && typeof pres.documentId === 'string',
+                    'documentId',
+                    'string'
+                );
+                return getPresentationByDocumentId(pres.documentId);
+            })
+        )
     };
     assertValidCourse(result);
     return result;
@@ -440,16 +489,17 @@ const strapi = new Strapi({
 export async function getAuthorByDocumentId(documentId: string): Promise<Author> {
     const response = await strapi.findOne(`persons`, documentId, {
         populate: {
-            companies: {populate: '*'},
-            educations: {populate: '*'},
-            skills: {populate: '*'},
-            created_presentations: {populate: '*'},
-            comments: {populate: '*'},
-            favourites: {populate: '*'},
+            companies: { populate: '*' },
+            educations: { populate: '*' },
+            skills: { populate: '*' },
+            created_presentations: { populate: '*' },
+            comments: { populate: '*' },
+            favourites: { populate: '*' },
             progress_bars: {
-                populate: '*',
+                populate: '*'
             }
-        }});
+        }
+    });
     const json: object = response.data;
     assert(json !== null);
     return parseAuthor(json);
@@ -461,14 +511,14 @@ export async function getAuthorByEmail(email: string): Promise<Author> {
             person_email: email
         },
         populate: {
-            companies: {populate: '*'},
-            educations: {populate: '*'},
-            skills: {populate: '*'},
-            created_presentations: {populate: '*'},
-            comments: {populate: '*'},
-            favourites: {populate: '*'},
+            companies: { populate: '*' },
+            educations: { populate: '*' },
+            skills: { populate: '*' },
+            created_presentations: { populate: '*' },
+            comments: { populate: '*' },
+            favourites: { populate: '*' },
             progress_bars: {
-                populate: '*',
+                populate: '*'
             }
         }
     });
@@ -484,22 +534,20 @@ export async function getAuthorByEmail(email: string): Promise<Author> {
 export async function getAllAuthors(): Promise<Author[]> {
     const response = await strapi.find('persons', {
         populate: {
-            companies: {populate: '*'},
-            educations: {populate: '*'},
-            skills: {populate: '*'},
-            created_presentations: {populate: '*'},
-            comments: {populate: '*'},
-            favourites: {populate: '*'},
+            companies: { populate: '*' },
+            educations: { populate: '*' },
+            skills: { populate: '*' },
+            created_presentations: { populate: '*' },
+            comments: { populate: '*' },
+            favourites: { populate: '*' },
             progress_bars: {
-                populate: '*',
+                populate: '*'
             }
-
         }
     });
     const json = response.data;
     assertField(Array.isArray(response.data), 'data', 'Array');
 
-    console.log('All authors has this JSON:', json);
     return Promise.all(json.map(parseAuthor));
 }
 
@@ -541,7 +589,6 @@ export async function getAllPresentations(): Promise<Presentation[]> {
     const json = response.data;
     assertField(Array.isArray(response.data), 'data', 'Array');
 
-    console.log('All authors has this JSON:', json);
     return Promise.all(
         json.map((value) => {
             return parsePresentation(value);
@@ -569,7 +616,6 @@ export async function getAllComments(): Promise<AuthorComment[]> {
     const json = response.data;
     assertField(Array.isArray(response.data), 'data', 'Array');
 
-    console.log('All authors has this JSON:', json);
     return await Promise.all(json.map(parseComment));
 }
 
@@ -604,8 +650,19 @@ export async function getAllCourses(): Promise<Course[]> {
     const json = response.data;
     assertField(Array.isArray(response.data), 'data', 'Array');
 
-    console.log('All authors has this JSON:', json);
     return await Promise.all(json.map(parseCourse));
+}
+
+export async function getAllCoursePreviews(): Promise<Course[]> {
+    const response = await strapi.find('courses', {
+        populate: {
+            course_preview: { populate: '*' }
+        }
+    });
+    const json = response.data;
+    assertField(Array.isArray(response.data), 'data', 'Array');
+
+    return await Promise.all(json.map(parseCoursePreview));
 }
 
 /**
@@ -725,21 +782,20 @@ export async function addComment(
     authorDocumentId: string,
     presentationDocumentId: string
 ) {
-    const response = await strapi.create('comments', {
+    await strapi.create('comments', {
         comment_description: commentDescription,
         person: authorDocumentId,
         presentation: presentationDocumentId
     });
-    console.log(response);
 }
 
 /**
  * For those who will draw pictures so as not to worry about the path.
  *
- * @param imageUrl image url. This url must be in the "key" format, and it should not contain http:// or anything like that.
+ * @param strapiImageUrl image url. This url must be in the "key" format, and it should not contain http:// or anything like that.
  *
  * @return full path to image in Strapi
  */
-export function getFullImagePath(imageUrl: string): string {
-    return path + '/uploads/' + imageUrl;
+export function getFullImagePath(strapiImageUrl: string): string {
+    return path + strapiImageUrl;
 }

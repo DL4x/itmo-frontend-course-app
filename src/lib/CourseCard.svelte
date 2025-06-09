@@ -8,10 +8,10 @@
 
     // Цвета из задания
     const colors = {
-        background: '#F2E9E4',
+        background: 'var(--color-primary-50)',
         titleBg: '#9A8C98',
         descriptionBg: '#C9ADA7',
-        button: '#FE8A70',
+        button: 'var(--color-primary-700)', //'#FE8A70',
         buttonHover: '#E07A60'
     };
 

@@ -1,16 +1,16 @@
 <script>
-    let email = "";
-    let message = "";
+    let email = '';
+    let message = '';
     let isSubmitted = false;
     let isLoading = false;
 
     const handleSubmit = async () => {
         isLoading = true;
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        await new Promise((resolve) => setTimeout(resolve, 1500));
         isLoading = false;
         isSubmitted = true;
-        email = "";
-        message = "";
+        email = '';
+        message = '';
     };
 </script>
 
@@ -28,7 +28,7 @@
         {#if isSubmitted}
             <div class="success-message">
                 <p>📡 Ваш сигнал принят! Скоро ответим!</p>
-                <button on:click={() => isSubmitted = false}></button>
+                <button on:click={() => (isSubmitted = false)}></button>
             </div>
         {:else}
             <form class="contact-form" on:submit|preventDefault={handleSubmit}>
@@ -62,15 +62,6 @@
                 </button>
             </form>
         {/if}
-
-        <div class="orbit-support">
-            <h2>📡 Другие способы связи:</h2>
-            <ul>
-                <li>Email: <a href="mailto:support@frontend-cosmos.com">support@frontend-cosmos.com</a></li>
-                <li>Telegram: <a href="https://t.me/frontend_cosmos">@frontend_cosmos</a></li>
-                <li>Discord: <a href="#">Frontend Galaxy</a></li>
-            </ul>
-        </div>
     </main>
 
     <footer class="cosmic-footer">
@@ -79,7 +70,9 @@
 </div>
 
 <style>
-
+    .cosmic-background {
+        font-family: 'ALS Gorizont', sans-serif;
+    }
     .stellar-header {
         text-align: center;
         margin-bottom: 3rem;
@@ -92,7 +85,6 @@
     .stellar-header h1 {
         font-size: 3.5rem;
         margin-top: 4rem;
-        font-family: 'JetBrains Mono', monospace;
         background: linear-gradient(90deg, #6ee7ff, #a855f7);
         -webkit-background-clip: text;
         background-clip: text;
@@ -122,7 +114,8 @@
         gap: 0.5rem;
     }
 
-    input, textarea {
+    input,
+    textarea {
         padding: 0.8rem;
         background: rgba(10, 15, 40, 0.7);
         border: 1px solid #3b3b8a;
@@ -132,14 +125,15 @@
         transition: all 0.3s;
     }
 
-    input:focus, textarea:focus {
+    input:focus,
+    textarea:focus {
         outline: none;
         border-color: #6ee7ff;
         box-shadow: 0 0 0 2px rgba(110, 231, 255, 0.3);
     }
 
     .launch-button {
-        background: #FE8A70;
+        background: #fe8a70;
         color: white;
         border: none;
         padding: 1rem;
@@ -154,7 +148,7 @@
     }
 
     .launch-button {
-        background: #FE8A70;
+        background: #fe8a70;
         color: white;
         border: none;
         padding: 1rem;
@@ -171,7 +165,7 @@
     }
 
     .launch-button:hover:not(:disabled) {
-        background: #FF6B4D;
+        background: #ff6b4d;
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(254, 138, 112, 0.4);
     }
@@ -194,7 +188,7 @@
         left: -50%;
         width: 200%;
         height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
         opacity: 0;
         transition: opacity 0.5s;
     }
@@ -244,13 +238,23 @@
     }
 
     @keyframes pulse {
-        0% { opacity: 0.95; }
-        50% { opacity: 1; }
-        100% { opacity: 0.95; }
+        0% {
+            opacity: 0.95;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0.95;
+        }
     }
 
     @keyframes fade {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
     }
 </style>

@@ -1,12 +1,12 @@
 import { assertNotEmpty } from '$lib/errors';
 
 export interface TimeRange {
-	start: number;
-	end: number;
+    start: number;
+    end: number;
 }
 
 export interface IDObject {
-	id: string;
+    id: string;
 }
 
 /**
@@ -15,8 +15,8 @@ export interface IDObject {
  * @property {string} name skill name
  */
 export interface Skill extends IDObject {
-	name: string;
-	value: number;
+    name: string;
+    value: number;
 }
 
 /**
@@ -25,8 +25,8 @@ export interface Skill extends IDObject {
  * @property {string} href href for better view
  */
 export interface Contact {
-	value: string;
-	href: string;
+    value: string;
+    href: string;
 }
 
 /**
@@ -37,27 +37,27 @@ export interface Contact {
  */
 
 export function createEmailContact(email: string): Contact {
-	assertNotEmpty(email, 'email');
-	return {
-		value: email,
-		href: `mailto:${email}`,
-	};
+    assertNotEmpty(email, 'email');
+    return {
+        value: email,
+        href: `mailto:${email}`
+    };
 }
 
 export interface Education extends IDObject {
-	title: string;
-	subtitle: string;
-	timeRange: TimeRange;
+    title: string;
+    subtitle: string;
+    timeRange: TimeRange;
 }
 
 export interface PresentationStatus extends IDObject {
-	isVisited: boolean;
-	presentationDocumentId: string;
+    isVisited: boolean;
+    presentationDocumentId: string;
 }
 
-export interface ProgressBar extends IDObject{
-	presentationChecks: PresentationStatus[];
-	courseDocumentId: string;
+export interface ProgressBar extends IDObject {
+    presentationChecks: PresentationStatus[];
+    courseDocumentId: string;
 }
 
 /**
@@ -69,15 +69,15 @@ export interface ProgressBar extends IDObject{
  * @property {Contact} phone optional field for the author's phone
  * @property {Contact} email author email
  */
-export interface Author extends IDObject{
-	name: string;
-	educations: Education[];
-	skills: Skill[];
-	progressBars: ProgressBar[];
-	favourites: Presentation[];
-	address?: Contact;
-	phone?: Contact;
-	email: Contact;
+export interface Author extends IDObject {
+    name: string;
+    educations: Education[];
+    skills: Skill[];
+    progressBars: ProgressBar[];
+    favourites: Presentation[];
+    address?: Contact;
+    phone?: Contact;
+    email: Contact;
 }
 
 /**
@@ -86,8 +86,8 @@ export interface Author extends IDObject{
  * @property {Author} author comment author
  */
 export interface AuthorComment extends IDObject {
-	commentDescription: string;
-	author: Author;
+    commentDescription: string;
+    author: Author;
 }
 
 /**
@@ -103,14 +103,14 @@ export interface AuthorComment extends IDObject {
  */
 export interface Presentation extends IDObject {
     documentId: string;
-	presentationName: string;
-	presentationDescription: string;
-	presentationUrl: string;
-	presentationPreviewUrl?: string;
-	presentationOwners: Author[];
-	comments: AuthorComment[];
-	votedPersons: VotedPerson[];
-	course?: Course;
+    presentationName: string;
+    presentationDescription: string;
+    presentationUrl: string;
+    presentationPreviewUrl?: string;
+    presentationOwners: Author[];
+    comments: AuthorComment[];
+    votedPersons: VotedPerson[];
+    course?: Course;
 }
 
 /**
@@ -119,8 +119,8 @@ export interface Presentation extends IDObject {
  * @property {number} personScore Current number must be in range [0; 5]
  */
 export interface VotedPerson extends IDObject {
-	author: Author;
-	personScore: number;
+    author: Author;
+    personScore: number;
 }
 
 /**
@@ -132,9 +132,9 @@ export interface VotedPerson extends IDObject {
  */
 export interface Course extends IDObject {
     documentId: string;
-	courseName: string;
-	coursePreviewUrl: string;
-	courseDescription: string;
-	presentations: Presentation[];
-	presentationCount: number;
+    courseName: string;
+    coursePreviewUrl: string;
+    courseDescription?: string;
+    presentations?: Presentation[];
+    presentationCount?: number;
 }

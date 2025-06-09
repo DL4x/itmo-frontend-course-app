@@ -1,122 +1,105 @@
 <script lang="ts">
-	import { supabase } from '$lib/supabase';
-	import { goto } from '$app/navigation';
-	import { Heading } from 'flowbite-svelte';
+    import { supabase } from '$lib/supabase';
+    import { goto } from '$app/navigation';
+    import { Heading } from 'flowbite-svelte';
     import { addAuthor, getAuthorByEmail } from '$lib/strapiRepository';
-	import { userStore } from '../store'
+    import { userStore } from './store';
 
-	let email = '';
-	let password = '';
-	let username = '';
-	let error = '';
-	let loading = false;
-	let isSignUp = false;
+    let email = '';
+    let password = '';
+    let username = '';
+    let error = '';
+    let loading = false;
+    let isSignUp = false;
 
-	async function fetchUser() {
-		return await getAuthorByEmail(email);
-	}
+    async function fetchUser() {
+        return await getAuthorByEmail(email);
+    }
 
-	const handleAuth = async () => {
-		try {
-			loading = true;
-			error = '';
+    const handleAuth = async () => {
+        try {
+            loading = true;
+            error = '';
 
-			if (isSignUp) {
-				if (!username.trim()) {
-					throw new Error('Пожалуйста, введите ваше имя');
-				}
+            if (isSignUp) {
+                if (!username.trim()) {
+                    throw new Error('Пожалуйста, введите ваше имя');
+                }
 
-				const { error: signUpError } = await supabase.auth.signUp({
-					email,
-					password,
-					options: {
-						data: {
-							display_name: username
-						}
-					}
-				});
-				if (signUpError) throw signUpError;
+                const { error: signUpError } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            display_name: username
+                        }
+                    }
+                });
+                if (signUpError) throw signUpError;
 
                 await addAuthor(username, email);
 
-				const user = await fetchUser();
-				userStore.set(user);
-				goto('/');
-			} else {
-				const { error: signInError } = await supabase.auth.signInWithPassword({
-					email,
-					password
-				});
-				if (signInError) throw signInError;
+                const user = await fetchUser();
+                userStore.set(user);
+                goto('/');
+            } else {
+                const { error: signInError } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                if (signInError) throw signInError;
 
-				const user = await fetchUser();
-				userStore.set(user);
-				goto('/');
-			}
-		} catch (err) {
-			if (err instanceof Error) {
-				error = err.message;
-			}
-		} finally {
-			loading = false;
-		}
-	};
-
-
+                const user = await fetchUser();
+                userStore.set(user);
+                goto('/');
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                error = err.message;
+            }
+        } finally {
+            loading = false;
+        }
+    };
 </script>
 
 <div>
-	<Heading tag="h1" class="auth-heading">{isSignUp ? 'Регистрация' : 'Вход'}</Heading>
+    <Heading tag="h1" class="auth-heading">{isSignUp ? 'Регистрация' : 'Вход'}</Heading>
 
-	{#if isSignUp}
-		<input
-			bind:value={username}
-			type="text"
-			placeholder="Ваше имя"
-			required
-			class="auth-input"
-		/>
-	{/if}
+    {#if isSignUp}
+        <input
+            bind:value={username}
+            type="text"
+            placeholder="Ваше имя"
+            required
+            class="auth-input"
+        />
+    {/if}
 
-	<input
-		bind:value={email}
-		type="email"
-		placeholder="Email"
-		required
-		class="auth-input"
-	/>
-	<input
-		bind:value={password}
-		type="password"
-		placeholder="Пароль"
-		required
-		class="auth-input"
-	/>
+    <input bind:value={email} type="email" placeholder="Email" required class="auth-input" />
+    <input bind:value={password} type="password" placeholder="Пароль" required class="auth-input" />
 
-	<button
-		class="auth-button auth-button--primary"
-		on:click={handleAuth}
-		disabled={loading}
-	>
-		{isSignUp ? 'Зарегистрироваться' : 'Войти'}
-	</button>
+    <button class="auth-button auth-button--primary" on:click={handleAuth} disabled={loading}>
+        {isSignUp ? 'Зарегистрироваться' : 'Войти'}
+    </button>
 
-	<button
-		class="auth-button auth-button--secondary"
-		on:click={() => isSignUp = !isSignUp}
-		disabled={loading}
-	>
-		{isSignUp ? 'Войти' : 'Зарегистрироваться'}
-	</button>
+    <button
+        class="auth-button auth-button--secondary"
+        on:click={() => (isSignUp = !isSignUp)}
+        disabled={loading}
+    >
+        {isSignUp ? 'Войти' : 'Зарегистрироваться'}
+    </button>
 
-	{#if error}<p class="error">{error}</p>{/if}
+    {#if error}<p class="error">{error}</p>{/if}
 </div>
+
 <style>
     div {
         max-width: 400px;
         margin: 2rem auto;
         padding: 2rem;
-        background: #ffebe0;
+        background: var(--color-primary-50);
         border-radius: 12px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -143,7 +126,7 @@
 
     input:focus {
         outline: none;
-        border-color: #FE8A70;
+        border-color: var(--color-primary-700);
         box-shadow: 0 0 0 3px rgba(235, 79, 39, 0.2);
     }
 
@@ -165,23 +148,23 @@
     }
 
     Button:first-of-type {
-        background-color: #FE8A70;
+        background-color: var(--color-primary-700);
         color: white;
     }
 
     Button:first-of-type:hover {
-        background-color: #FE8A70;
+        background-color: var(--color-primary-700);
     }
 
     Button:last-of-type {
         background-color: transparent;
-        color: #FE8A70;
+        color: var(--color-primary-700);
         border: 1px solid #e2e8f0;
     }
 
     Button:last-of-type:hover {
         background-color: #f8fafc;
-        border-color: #FE8A70;
+        border-color: var(--color-primary-700);
     }
 
     Button[disabled] {
@@ -190,7 +173,7 @@
     }
 
     .error {
-        color: #FE8A70;
+        color: var(--color-primary-700);
         text-align: center;
         margin-top: 1rem;
         padding: 0.5rem;
