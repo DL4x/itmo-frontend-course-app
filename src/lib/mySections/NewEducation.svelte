@@ -40,14 +40,14 @@
         activeBlockEducation = false;
     }
 
-    import { fade, fly } from 'svelte/transition';
-    import { quintOut } from 'svelte/easing';
+    import {fade, fly} from 'svelte/transition';
+    import {quintOut} from 'svelte/easing';
 </script>
 
 <div class="block">
     <div class="up-block">
         <div class="title">[ Education ]</div>
-        <button class="info-dots" on:click={openModalEducation}>
+        <button aria-label="show more" class="info-dots" on:click={openModalEducation}>
             <span class="dot"></span>
             <span class="dot"></span>
             <span class="dot"></span>
@@ -79,9 +79,9 @@
     {:else}
         <div class="no-education">
             <img
-                src="https://via.placeholder.com/100"
-                alt="No education"
-                class="no-education-img"
+                    src="https://via.placeholder.com/100"
+                    alt="No education"
+                    class="no-education-img"
             />
             <div class="no-education-text">Education not found</div>
         </div>
@@ -90,9 +90,9 @@
 
 {#if activeBlockEducation}
     <div
-        transition:fade={{ duration: 300 }}
-        class="modal-backdrop"
-        on:click|self={closeModalEducation}
+            transition:fade={{ duration: 300 }}
+            class="modal-backdrop"
+            on:click|self={closeModalEducation}
     >
         <div transition:fly={{ y: 100, duration: 300, easing: quintOut }} class="modal-window">
             <div class="modal-title">Education</div>
@@ -106,7 +106,7 @@
                 {/each}
             </div>
             <div class="modal-button-container">
-                <button class="modal-close-btn" on:click={closeModalEducation}> Close </button>
+                <button class="modal-close-btn" on:click={closeModalEducation}> Close</button>
             </div>
         </div>
     </div>
@@ -118,43 +118,41 @@
         justify-content: space-between;
         align-items: center;
         /* justify-content: center; */
-        
+
     }
 
     .info-dots {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    border-radius: 50%;
-    transition: all 0.3s ease;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        border-radius: 50%;
+        transition: all 0.3s ease;
 
-    margin-right: 5%;
-  }
-  
-  .info-dots:hover {
-    background: red;
-  }
-  
-  .info-dots:active {
-    transform: scale(0.95);
-  }
-  
-  .dot {
-    width: 8px;
-    height: 8px;
-    background-color: #4a5568;
-    border-radius: 50%;
-    margin: 0 2px;
-    /* margin-right: 6px; */
-  }
+        margin-right: 5%;
+    }
 
+    .info-dots:hover {
+        background: red;
+    }
 
+    .info-dots:active {
+        transform: scale(0.95);
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+        background-color: #4a5568;
+        border-radius: 50%;
+        margin: 0 2px;
+        /* margin-right: 6px; */
+    }
 
 
     .block {
@@ -371,9 +369,8 @@
         cursor: pointer;
         font-size: 14px;
 
-        transition:
-            transform 0.2s,
-            background-color 0.2s;
+        transition: transform 0.2s,
+        background-color 0.2s;
     }
 
     .modal-close-btn:hover {

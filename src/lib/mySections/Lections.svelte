@@ -6,7 +6,7 @@
 
     const lections: Lection[] = [
         'Введение в Svelte',
-        'Основы TypeScript', 
+        'Основы TypeScript',
         'CSS Grid Layout',
         'Анимации в Web',
         'Оптимизация производительности',
@@ -14,7 +14,7 @@
         'Тестирование компонентов',
         'State Management',
         'Web Components'
-    ].map(title => ({ title, url: '#' }));
+    ].map(title => ({title, url: '#'}));
 
     let scrollPos = 0;
     const scrollStep = 400;
@@ -25,24 +25,24 @@
 
         const maxScroll = container.scrollWidth - container.clientWidth;
         scrollPos = Math.max(0, Math.min(maxScroll, scrollPos + (direction === 'left' ? -scrollStep : scrollStep)));
-        container.scrollTo({ left: scrollPos, behavior: 'smooth' });
+        container.scrollTo({left: scrollPos, behavior: 'smooth'});
     };
 </script>
 
 <div class="lections-block">
     <h2 class="title">[ Lections ]</h2>
-    
+
     {#if lections.length === 0}
         <div class="empty-state">
-            <img src="https://via.placeholder.com/100" alt="No lections" />
+            <img src="https://via.placeholder.com/100" alt="No lections"/>
             <div>Lections not found</div>
         </div>
     {:else}
         <div class="container">
             <button class="nav-btn" on:click={() => scroll('left')}>&lt;</button>
-            
+
             <div class="scroll-container">
-                {#each lections as { title, url }}
+                {#each lections as {title, url}}
                     <a href={url} class="card" target="_blank" rel="noopener">
                         <div class="thumb">
                             <span>📚</span>
@@ -52,7 +52,7 @@
                     </a>
                 {/each}
             </div>
-            
+
             <button class="nav-btn" on:click={() => scroll('right')}>&gt;</button>
         </div>
     {/if}

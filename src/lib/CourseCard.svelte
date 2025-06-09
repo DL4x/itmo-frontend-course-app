@@ -32,7 +32,7 @@
 
 <div class="course-card" style="background-color: {colors.background}">
     <div class="image-container">
-        <img src={course.image} alt={course.title} />
+        <img alt={course.title} src={course.image}/>
     </div>
 
     <div class="title" style="background-color: {colors.titleBg}">
@@ -44,9 +44,9 @@
     </div>
 
     <button
-        style="background-color: {colors.button}"
-        on:mouseenter={handleMouseEnter}
-        on:mouseleave={handleMouseLeave}
+            on:mouseenter={handleMouseEnter}
+            on:mouseleave={handleMouseLeave}
+            style="background-color: {colors.button}"
     >
         Перейти к курсу
     </button>

@@ -1,4 +1,6 @@
 <script lang="ts">
+    import {self} from 'svelte/legacy';
+
     interface ExperienceItem {
         company: string;
         period: string;
@@ -49,13 +51,13 @@
         activeBlockExperience = true;
     }
 
-    function closeModalExperience(event: MouseEvent) {
+    function closeModalExperience(event: Event) {
         // event.preventDefault();
         activeBlockExperience = false;
     }
 </script>
 
-<div class="block experience-block" on:click={openModalExperience}>
+<div class="block experience-block" onclick={openModalExperience}>
     <div class="title experience-title">[ Experience ]</div>
     {#if experienceItems.length > 0}
         <div class="experience-content">
@@ -68,7 +70,7 @@
                         </div>
                         <div class="period">{item.period}</div>
                     </div>
-                    
+
                     <div class="description">{item.description}</div>
                 </div>
             {/each}
@@ -76,9 +78,9 @@
     {:else}
         <div class="no-experience">
             <img
-                src="https://via.placeholder.com/100"
-                alt="No experience"
-                class="no-experience-img"
+                    src="https://via.placeholder.com/100"
+                    alt="No experience"
+                    class="no-experience-img"
             />
             <div class="no-experience-text">Experience not found</div>
         </div>
@@ -89,7 +91,7 @@
 </div>
 
 {#if activeBlockExperience}
-    <div class="modal-backdrop" on:click|self={closeModalExperience}>
+    <div class="modal-backdrop" onclick={self(closeModalExperience)}>
         <div class="modal">
             <h2>Work Experience</h2>
             <div class="modal-experience-content">
@@ -99,13 +101,13 @@
                         <div class="period">{item.period}</div>
                         <div class="description">{item.description}</div>
                         {#if index < modalExperienceItems.length - 1}
-                            <hr class="divider" />
+                            <hr class="divider"/>
                         {/if}
                     </div>
                 {/each}
             </div>
             <div class="modal-button-container">
-                <button class="close-btn" on:click={closeModalExperience}> Close </button>
+                <button class="close-btn" onclick={closeModalExperience}> Close</button>
             </div>
         </div>
     </div>

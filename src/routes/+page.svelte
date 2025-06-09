@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type { PageProps } from './$types';
-    import { Button, Card } from 'flowbite-svelte';
-    import { fly } from 'svelte/transition';
+    import type {PageProps} from './$types';
+    import {Card} from 'flowbite-svelte';
+    import {fly} from 'svelte/transition';
     import '/src/app.css';
     import Lottie from '$lib/Lottie.svelte';
-    import { quintOut } from 'svelte/easing';
-    import { onMount } from 'svelte';
+    import {quintOut} from 'svelte/easing';
+    import {onMount} from 'svelte';
 
     let ready = $state(false);
     onMount(() => (ready = true));
@@ -17,7 +17,7 @@
         showCourses = !showCourses;
     }
 
-    const { data }: PageProps = $props();
+    const {data}: PageProps = $props();
 </script>
 
 <svelte:head>
@@ -26,8 +26,8 @@
 
 {#if !showCourses}
     <section
-        class="greeting-page-container"
-        transition:fly={{ x: -1000, duration: 800, easing: quintOut }}
+            class="greeting-page-container"
+            transition:fly={{ x: -1000, duration: 800, easing: quintOut }}
     >
         {#if ready}
             <div class="left" in:fly={{ x: -100, duration: 800 }}>
@@ -37,25 +37,25 @@
                     которые реально работают в индустрии. Готовы начать путь от основ до продвинутых
                     техник?
                 </p>
-                <a
-                    class="courses-btn"
-                    on:click={toggleView}
-                    on:mouseenter={() => (isHovered = true)}
-                    on:mouseleave={() => (isHovered = false)}
+                <button
+                        class="courses-btn"
+                        onclick={toggleView}
+                        onmouseenter={() => (isHovered = true)}
+                        onmouseleave={() => (isHovered = false)}
                 >
                     <span class="courses-btn-text">
                         {isHovered ? 'Погнали' : 'Список курсов'}
                     </span>
                     <span class="hover-effect"></span>
-                </a>
+                </button>
             </div>
 
             <div class="right" in:fly={{ x: 100, duration: 800 }}>
                 <Lottie
-                    path="/src/images/starting_page/cosmonaut.json"
-                    width="40rem"
-                    height="40rem"
-                    mirrored={true}
+                        path="/src/images/starting_page/cosmonaut.json"
+                        width="40rem"
+                        height="40rem"
+                        mirrored={true}
                 />
             </div>
         {/if}
@@ -65,23 +65,18 @@
         <div class="courses-grid">
             {#each data.courses as course (course.id)}
                 <Card
-                    img={course.coursePreviewUrl ?? '/src/images/starting_page/paste_picture.webp'}
-                    class="border-1 border-[#B1B5C3] rounded-xl transition-transform hover:-translate-y-1 overflow-hidden"
+                        img={course.coursePreviewUrl ?? '/src/images/starting_page/paste_picture.webp'}
+                        class="my-card overflow-hidden"
+                        href="/courses/{course.documentId}"
                 >
                     <h5
-                        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+                            class="mb-2 text-2xl font-bold course-title tracking-tight"
                     >
                         {course.courseName}
                     </h5>
-                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 leading-tight">
+                    <p class="mb-3 font-normal course-description leading-tight">
                         Здесь вы ознакомитесь с основами
                     </p>
-                    <Button
-                        href="/courses/{course.documentId}"
-                        class="bg-black text-white rounded-full px-6 py-2 w-32 transition cursor-pointer"
-                    >
-                        Подробнее
-                    </Button>
                 </Card>
             {/each}
         </div>
@@ -89,13 +84,20 @@
 {/if}
 
 <style>
+    .course-title {
+        color: var(--color-primary-300);
+    }
+
+    .course-description {
+        color: var(--color-primary-100);
+    }
+
     .greeting-page-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
         align-items: center;
         gap: 1vw;
-        padding: 5%;
-        padding-left: 10%;
+        padding: 5% 5% 5% 10%;
         height: 95vh;
         box-sizing: border-box;
     }
@@ -198,9 +200,8 @@
     .courses-btn-text::after {
         content: '→';
         opacity: 0;
-        transition:
-            opacity 0.3s ease,
-            transform 0.3s ease;
+        transition: opacity 0.3s ease,
+        transform 0.3s ease;
         transform: translateX(-10px);
     }
 

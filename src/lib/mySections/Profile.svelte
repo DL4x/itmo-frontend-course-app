@@ -8,9 +8,9 @@
         city: "Москва",
         bio: "Frontend-разработчик с 5-летним опытом работы. Специализируюсь на Svelte, React и TypeScript. Увлечен созданием интуитивно понятных и производительных пользовательских интерфейсов.",
         links: [
-            { icon: "/src/images/github.png", url: "https://github.com/username", label: "GitHub" },
-            { icon: "/src/images/telegram.png", url: "https://t.me/username", label: "Telegram" },
-            { icon: "/src/images/email.png", url: "mailto:user@example.com", label: "Email" }
+            {icon: "/src/images/github.png", url: "https://github.com/username", label: "GitHub"},
+            {icon: "/src/images/telegram.png", url: "https://t.me/username", label: "Telegram"},
+            {icon: "/src/images/email.png", url: "mailto:user@example.com", label: "Email"}
         ]
     };
 </script>
@@ -18,10 +18,10 @@
 <div class="profile-block">
     <header class="header">
         <enhanced:img
-            alt="Profile Photo"
-            class="photo"
-            src="/src/images/profileImages/1.png"
-            width="300px"
+                alt="Profile Photo"
+                class="photo"
+                src="/src/images/profileImages/1.png"
+                width="300px"
         />
         <div class="info">
             <h1>{profile.name}</h1>
@@ -39,9 +39,9 @@
     </section>
 
     <div class="social">
-        {#each profile.links as { icon, url, label }}
+        {#each profile.links as {icon, url, label}}
             <a href={url} target="_blank" class="link" aria-label={label}>
-                <img src={icon} alt={label} class={"icon " + label} />
+                <img src={icon} alt={label} class={"icon " + label}/>
             </a>
         {/each}
     </div>
@@ -144,7 +144,7 @@
             text-align: center;
             gap: 1.5rem;
         }
-        
+
         h1 {
             font-size: 1.5rem;
         }

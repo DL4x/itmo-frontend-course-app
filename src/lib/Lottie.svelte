@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import {onMount} from 'svelte';
     import lottie from 'lottie-web';
-    import type { AnimationItem } from 'lottie-web';
+    import type {AnimationItem} from 'lottie-web';
 
     export let path: string | undefined;
     export let loop = true;
@@ -23,7 +23,7 @@
             renderer,
             loop,
             autoplay,
-            ...(path ? { path } : {})
+            ...(path ? {path} : {})
         });
 
         animation.setSpeed(speed);
@@ -35,6 +35,6 @@
 </script>
 
 <div
-    bind:this={container}
-    style="width: {width}; height: {height}; transform: {mirrored ? 'scaleX(-1)' : 'none'};"
+        bind:this={container}
+        style="width: {width}; height: {height}; transform: {mirrored ? 'scaleX(-1)' : 'none'};"
 ></div>

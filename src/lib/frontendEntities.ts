@@ -25,7 +25,6 @@ export function mapToPresentationCardData(
     index: number,
     visited: Set<string>
 ): PresentationCardData {
-    // console.log(`average rate of presentation '${presentation.presentationName}' is ${average}`);
     return {
         lectureNumber: index + 1,
         name: presentation.presentationName,
@@ -35,8 +34,12 @@ export function mapToPresentationCardData(
         commentsCount: presentation.comments.length,
         id: presentation.documentId,
         averageUserScore: averageScoreOf(presentation.votedPersons),
-        visited: visited?.has(presentation.documentId)
+        visited: visited.has(presentation.documentId),
     };
+}
+
+export interface ToggleableTag {
+
 }
 
 export interface CoursePageData extends IDObject {
@@ -55,10 +58,11 @@ export function mapToCoursePageData(course: Course): CoursePageData {
             .filter((status) => status.isVisited)
             .map((status) => status.presentationDocumentId)
     );
+
     return {
         id: course.documentId,
         title: course.courseName,
-        description: course.courseDescription,
+        description: course.courseDescription ?? '',
         previewUrl:
             course.coursePreviewUrl.length !== 0
                 ? course.coursePreviewUrl

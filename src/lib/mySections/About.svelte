@@ -34,7 +34,7 @@
     // Фильтруем только существующие ссылки
     const activeLinks = Object.entries(contacts.links)
         .filter(([_, value]) => value)
-        .map(([key, value]) => ({ type: key, url: value }));
+        .map(([key, value]) => ({type: key, url: value}));
 
     // Берем только первые 5 ссылок для основного отображения
     const visibleLinks = activeLinks.slice(0, 5);
@@ -46,6 +46,7 @@
 
     let modalTitleContacts = '';
     let modalContacts: ContactData = contacts;
+
     function openModalContacts() {
         // event.preventDefault();
         modalTitleContacts = contacts.title;
@@ -94,12 +95,12 @@
         </div>
     {:else}
         <div class="no-contacts">
-            <img src="https://via.placeholder.com/100" alt="No contacts" class="no-contacts-img" />
+            <img src="https://via.placeholder.com/100" alt="No contacts" class="no-contacts-img"/>
             <div class="no-contacts-text">Contacts not found</div>
         </div>
     {/if}
     <div class="button-container">
-        <button class="read-more-btn" on:click={openModalContacts}> Read more </button>
+        <button class="read-more-btn" on:click={openModalContacts}> Read more</button>
     </div>
 </div>
 
@@ -138,7 +139,7 @@
                 </div>
             </div>
             <div class="modal-button-container">
-                <button class="close-btn" on:click={closeModalContacts}> Close </button>
+                <button class="close-btn" on:click={closeModalContacts}> Close</button>
             </div>
         </div>
     </div>
@@ -154,7 +155,7 @@
         min-width: 0;
         display: flex;
         flex-direction: column;
-        
+
         flex: 1;
     }
 

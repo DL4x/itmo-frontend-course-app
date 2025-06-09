@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
     let email = '';
     let message = '';
     let isSubmitted = false;
     let isLoading = false;
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (event: SubmitEvent) => {
+        event.preventDefault();
         isLoading = true;
         await new Promise((resolve) => setTimeout(resolve, 1500));
         isLoading = false;
@@ -28,29 +29,29 @@
         {#if isSubmitted}
             <div class="success-message">
                 <p>📡 Ваш сигнал принят! Скоро ответим!</p>
-                <button on:click={() => (isSubmitted = false)}></button>
+                <button class="launch-button" onclick={() => (isSubmitted = false)}>Отправить ещё одно сообщение
+                </button>
             </div>
         {:else}
-            <form class="contact-form" on:submit|preventDefault={handleSubmit}>
+            <form class="contact-form" onsubmit={handleSubmit}>
                 <div class="form-group">
                     <label for="email">Ваш космический адрес:</label>
                     <input
-                        type="email"
-                        id="email"
-                        bind:value={email}
-                        placeholder="user@galaxy.com"
-                        required
+                            type="email"
+                            id="email"
+                            bind:value={email}
+                            placeholder="user@galaxy.com"
+                            required
                     />
                 </div>
 
                 <div class="form-group">
                     <label for="message">Текст сообщения:</label>
                     <textarea
-                        id="message"
-                        bind:value={message}
-                        placeholder="Опишите вашу проблему или вопрос..."
-                        required
-                    />
+                            id="message"
+                            bind:value={message}
+                            placeholder="Опишите вашу проблему или вопрос..."
+                            required></textarea>
                 </div>
 
                 <button class="launch-button" type="submit" disabled={isLoading}>
@@ -73,10 +74,12 @@
     .cosmic-background {
         font-family: 'ALS Gorizont', sans-serif;
     }
+
     .stellar-header {
         text-align: center;
         margin-bottom: 3rem;
         animation: pulse 4s infinite;
+
         p {
             font-size: 1.2rem;
         }
@@ -198,6 +201,11 @@
     }
 
     .success-message {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+
         text-align: center;
         padding: 2rem;
         background: rgba(40, 160, 80, 0.2);

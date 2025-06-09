@@ -6,13 +6,13 @@
     };
 
     const education: Education[] = [
-        { institution: 'Samara Lyceum', degree: 'Certificate of secondary general education', period: '2018 - 2022' },
-        { institution: 'Stanford University', degree: 'Bachelor of Computer Science', period: '2022 - 2026' },
-        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
-        { institution: 'Samara Lyceum', degree: 'Certificate of secondary general education', period: '2018 - 2022' },
-        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
-        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
-        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' }
+        {institution: 'Samara Lyceum', degree: 'Certificate of secondary general education', period: '2018 - 2022'},
+        {institution: 'Stanford University', degree: 'Bachelor of Computer Science', period: '2022 - 2026'},
+        {institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028'},
+        {institution: 'Samara Lyceum', degree: 'Certificate of secondary general education', period: '2018 - 2022'},
+        {institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028'},
+        {institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028'},
+        {institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028'}
     ];
 
     let scrollPos = 0;
@@ -24,25 +24,25 @@
 
         const maxScroll = container.scrollWidth - container.clientWidth;
         scrollPos = Math.max(0, Math.min(maxScroll, scrollPos + (direction === 'left' ? -scrollStep : scrollStep)));
-        container.scrollTo({ left: scrollPos, behavior: 'smooth' });
+        container.scrollTo({left: scrollPos, behavior: 'smooth'});
     };
 </script>
 
 <div class="education-block">
     <div class="title">[ Education ]</div>
-    
+
     {#if education.length === 0}
         <div class="empty-state">
-            <img src="https://via.placeholder.com/100" alt="No education" />
+            <img src="https://via.placeholder.com/100" alt="No education"/>
             <div>Education not found</div>
         </div>
     {:else}
         <div class="timeline">
             <div class="line"></div>
             <button class="nav-btn left" on:click={() => scroll('left')} aria-label="Scroll left">&lt;</button>
-            
+
             <div class="education-scroll-container">
-                {#each education as { institution, degree, period }}
+                {#each education as {institution, degree, period}}
                     <div class="item">
                         <div class="marker"></div>
                         <div class="period">{period}</div>
@@ -53,7 +53,7 @@
                     </div>
                 {/each}
             </div>
-            
+
             <button class="nav-btn right" on:click={() => scroll('right')} aria-label="Scroll right">&gt;</button>
         </div>
     {/if}

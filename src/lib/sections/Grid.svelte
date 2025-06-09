@@ -8,14 +8,24 @@
 
 <div class="page">
     <div class="column column-1">
-        <div class="block profile-block"><Profile /></div>
-        <div class="block skills-block"><Skills /></div>
+        <div class="block profile-block">
+            <Profile/>
+        </div>
+        <div class="block skills-block">
+            <Skills/>
+        </div>
     </div>
 
     <div class="column column-2">
-        <div class="block"><Education /></div>
-        <div class="block"><Experience /></div>
-        <div class="block"><Lections /></div>
+        <div class="block">
+            <Education/>
+        </div>
+        <div class="block">
+            <Experience/>
+        </div>
+        <div class="block">
+            <Lections/>
+        </div>
     </div>
 </div>
 

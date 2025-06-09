@@ -1,7 +1,8 @@
 <script lang="ts">
-    import type { PageProps } from './$types';
+    import type {PageProps} from './$types';
     import '/src/app.css';
-    const { data }: PageProps = $props();
+
+    const {data}: PageProps = $props();
 </script>
 
 <svelte:head>
@@ -47,6 +48,7 @@
         opacity: 0.9;
         line-height: 1.6;
     }
+
     main {
         max-width: 1200px;
         margin: 0 auto;
@@ -76,9 +78,9 @@
         flex-direction: column;
         align-items: center;
         padding: 25px;
-        background: rgba(40, 45, 90, 0.7);
+        background: var(--color-my-card-background);
         border-radius: 12px;
-        border: 1px solid rgba(100, 150, 255, 0.15);
+        border: 1px solid var(--color-my-card-border);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         text-decoration: none;
         transition: all 0.3s ease;

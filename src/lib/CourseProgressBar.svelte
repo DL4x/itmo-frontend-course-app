@@ -1,40 +1,12 @@
 <script lang="ts">
-    import { userStore } from '$lib/store';
-    import type { Author } from '$lib/index';
-    import { Progressbar } from 'flowbite-svelte';
+    import {Progressbar} from 'flowbite-svelte';
 
     interface Props {
-        courseDocumentId: string;
+        progress?: number;
     }
 
-    const { courseDocumentId }: Props = $props();
-
-    function getProgress(author: Author): number {
-        const progressBar = author.progressBars.find(
-            (x) => x.courseDocumentId === courseDocumentId
-        );
-        if (progressBar === undefined) {
-            return 0;
-        }
-        let count = 0;
-        for (const presentationCheck of progressBar.presentationChecks) {
-            if (presentationCheck.isVisited) {
-                count++;
-            }
-        }
-        return Math.round((count / progressBar.presentationChecks.length) * 100);
-    }
+    const {progress}: Props = $props();
 </script>
-
-{#if $userStore === null}
-    <p>Войдите в аккаунт чтобы отслеживать ваш прогресс</p>
-{:else}
-    <Progressbar progress={getProgress($userStore)} labelOutside="Ваш прогресс"></Progressbar>
-    <!--	<div class="progress-bar">-->
-    <!--		Ваш прогресс:-->
-    <!--		-->
-    <!--	</div>-->
-{/if}
 
 <style>
     p {
@@ -42,4 +14,33 @@
         border-radius: 8px;
         padding: 8px;
     }
+
+    .progress {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+
+    .text-label {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
 </style>
+
+{#if progress === undefined }
+    <p>Войдите в аккаунт чтобы отслеживать ваш прогресс</p>
+{:else}
+    <div class="progress">
+        <div class="text-label">
+            <span class="progress-bar-text">Ваш прогресс:</span>
+            <span class="progress-bar-value">{progress}%</span>
+        </div>
+        <Progressbar classLabelOutside="text-primary-100" progress={progress}/>
+    </div>
+    <!--	<div class="progress-bar">-->
+    <!--		Ваш прогресс:-->
+    <!--		-->
+    <!--	</div>-->
+{/if}
