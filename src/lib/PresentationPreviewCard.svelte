@@ -75,7 +75,7 @@
 {#if authors.length !== 0 || tags.length !== 0}
     <div class="details">
         {#if authors.length !== 0}
-            <div class="flex flex-row flex-wrap gap-4">
+            <div class="flex flex-row flex-wrap gap-2">
                 {#each authors as author (author.id)}
                     <AuthorSmallCard {...author}/>
                 {/each}
