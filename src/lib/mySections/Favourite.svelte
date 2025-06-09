@@ -6,15 +6,15 @@
 
     // Пример данных лекций
     const lections: LectionItem[] = [
-        { title: 'Введение в Svelte', url: '#' },
-        { title: 'Основы TypeScript', url: '#' },
-        { title: 'CSS Grid Layout', url: '#' },
-        { title: 'Анимации в Web', url: '#' },
-        { title: 'Оптимизация производительности', url: '#' },
-        { title: 'Работа с API', url: '#' },
-        { title: 'Тестирование компонентов', url: '#' },
-        { title: 'State Management', url: '#' },
-        { title: 'Web Components', url: '#' }
+        {title: 'Введение в Svelte', url: '#'},
+        {title: 'Основы TypeScript', url: '#'},
+        {title: 'CSS Grid Layout', url: '#'},
+        {title: 'Анимации в Web', url: '#'},
+        {title: 'Оптимизация производительности', url: '#'},
+        {title: 'Работа с API', url: '#'},
+        {title: 'Тестирование компонентов', url: '#'},
+        {title: 'State Management', url: '#'},
+        {title: 'Web Components', url: '#'}
     ];
 
     let activeModalLections = false;
@@ -25,7 +25,7 @@
         const container = document.querySelector('.lections-scroll-container');
         if (container) {
             scrollPosition = Math.max(0, scrollPosition - scrollStep);
-            container.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+            container.scrollTo({left: scrollPosition, behavior: 'smooth'});
         }
     }
 
@@ -34,7 +34,7 @@
         if (container) {
             const maxScroll = container.scrollWidth - container.clientWidth;
             scrollPosition = Math.min(maxScroll, scrollPosition + scrollStep);
-            container.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+            container.scrollTo({left: scrollPosition, behavior: 'smooth'});
         }
     }
 
@@ -46,8 +46,8 @@
         activeModalLections = false;
     }
 
-    import { fade, fly } from 'svelte/transition';
-    import { quintOut } from 'svelte/easing';
+    import {fade, fly} from 'svelte/transition';
+    import {quintOut} from 'svelte/easing';
 </script>
 
 <div class="block">
@@ -77,12 +77,12 @@
         </div>
     {:else}
         <div class="no-lections">
-            <img src="https://via.placeholder.com/100" alt="No lections" class="no-lections-img" />
+            <img src="https://via.placeholder.com/100" alt="No lections" class="no-lections-img"/>
             <div class="no-lections-text">Lections not found</div>
         </div>
     {/if}
     <div class="button-container">
-        <button class="read-more-btn" on:click={openModalLections}> Read more </button>
+        <button class="read-more-btn" on:click={openModalLections}> Read more</button>
     </div>
 </div>
 
@@ -102,7 +102,7 @@
                 {/each}
             </div>
             <div class="modal-button-container">
-                <button class="close-btn" on:click={closeModalLections}> Close </button>
+                <button class="close-btn" on:click={closeModalLections}> Close</button>
             </div>
         </div>
     </div>
@@ -167,7 +167,9 @@
     }
 
     @keyframes fadeIn {
-        to { background: rgba(0, 0, 0, 0.5); }
+        to {
+            background: rgba(0, 0, 0, 0.5);
+        }
     }
 
     .modal-window {
@@ -182,7 +184,7 @@
         flex-direction: column;
         min-height: 300px;
         max-height: 600px;
-        
+
         gap: 15px;
     }
 
@@ -222,7 +224,6 @@
         user-select: none;
     }
 
-    
 
     .lections-container {
         display: flex;
@@ -297,9 +298,8 @@
         border-radius: 12px;
         overflow: hidden;
         background: white;
-        box-shadow:
-            0 4px 6px -1px rgba(0, 0, 0, 0.1),
-            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border: 1px solid #e2e8f0;
         z-index: 1;
@@ -307,9 +307,8 @@
 
     .lection-card:hover {
         transform: translateY(-5px);
-        box-shadow:
-            0 10px 15px -3px rgba(0, 0, 0, 0.1),
-            0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
 
     .lection-placeholder {

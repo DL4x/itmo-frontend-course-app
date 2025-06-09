@@ -8,15 +8,15 @@
 
     // Пример данных о навыках
     const skillsItems: SkillItem[] = [
-        { name: 'JavaScript', level: 5 },
-        { name: 'TypeScript', level: 4 },
-        { name: 'Svelte', level: 4 },
-        { name: 'HTML/CSS', level: 5 },
-        { name: 'React', level: 3 },
-        { name: 'Node.js', level: 4 },
-        { name: 'Git', level: 4 },
-        { name: 'Docker', level: 3 },
-        { name: 'Python', level: 2 }
+        {name: 'JavaScript', level: 5},
+        {name: 'TypeScript', level: 4},
+        {name: 'Svelte', level: 4},
+        {name: 'HTML/CSS', level: 5},
+        {name: 'React', level: 3},
+        {name: 'Node.js', level: 4},
+        {name: 'Git', level: 4},
+        {name: 'Docker', level: 3},
+        {name: 'Python', level: 2}
     ];
 
     // Берем только первые 6 навыков для основного отображения
@@ -34,8 +34,8 @@
     }
 
 
-    import { fade, fly } from 'svelte/transition';
-    import { quintOut } from 'svelte/easing';
+    import {fade, fly} from 'svelte/transition';
+    import {quintOut} from 'svelte/easing';
 
 </script>
 
@@ -59,7 +59,7 @@
         </div>
     {:else}
         <div class="no-skills">
-            <img src="https://via.placeholder.com/100" alt="No skills" class="no-skills-img" />
+            <img src="https://via.placeholder.com/100" alt="No skills" class="no-skills-img"/>
             <div class="no-skills-text">Skills not found</div>
         </div>
     {/if}
@@ -72,19 +72,19 @@
             <div class="modal-grid">
                 {#each skillsItems as skill}
                     <div class="skill-tag">
-                    <span class="skill-name">{skill.name}</span>
-                    <!-- {#if skill.level}
-                        <div class="skill-level-container">
-                            <span class="skill-level" style="--level: {skill.level}">
-                                {'★'.repeat(skill.level)}{'☆'.repeat(5 - skill.level)}
-                            </span>
-                        </div>
-                    {/if} -->
-                </div>
+                        <span class="skill-name">{skill.name}</span>
+                        <!-- {#if skill.level}
+                            <div class="skill-level-container">
+                                <span class="skill-level" style="--level: {skill.level}">
+                                    {'★'.repeat(skill.level)}{'☆'.repeat(5 - skill.level)}
+                                </span>
+                            </div>
+                        {/if} -->
+                    </div>
                 {/each}
             </div>
             <div class="modal-button-container">
-                <button class="close-btn" on:click={closeModalSkills}> Close </button>
+                <button class="close-btn" on:click={closeModalSkills}> Close</button>
             </div>
         </div>
     </div>
@@ -141,7 +141,9 @@
     }
 
     @keyframes fadeIn {
-        to { background: rgba(0, 0, 0, 0.5); }
+        to {
+            background: rgba(0, 0, 0, 0.5);
+        }
     }
 
     .modal-window {
@@ -194,9 +196,8 @@
         background: white;
         border-radius: 24px;
         padding: 10px 18px;
-        box-shadow: 
-            0 2px 4px rgba(0,0,0,0.1),
-            0 4px 12px rgba(0,0,0,0.08);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.08);
         transition: all 0.3s ease;
         border: 1px solid #e0e0e0;
         margin: 5px;
@@ -206,9 +207,8 @@
 
     .skill-tag:hover {
         transform: translateY(-3px);
-        box-shadow: 
-            0 4px 8px rgba(0,0,0,0.15),
-            0 8px 24px rgba(0,0,0,0.12);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15),
+        0 8px 24px rgba(0, 0, 0, 0.12);
     }
 
     .skill-name {
@@ -217,15 +217,6 @@
         font-size: 0.95rem;
         margin-bottom: 4px;
     }
-
-
-
-
-
-
-
-
-
 
 
     .no-skills {

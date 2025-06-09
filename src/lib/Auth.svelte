@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { supabase } from '$lib/supabase';
-    import { goto } from '$app/navigation';
-    import { Heading } from 'flowbite-svelte';
-    import { addAuthor, getAuthorByEmail } from '$lib/strapiRepository';
-    import { userStore } from './store';
+    import {supabase} from '$lib/supabase';
+    import {goto} from '$app/navigation';
+    import {Heading} from 'flowbite-svelte';
+    import {addAuthor, getAuthorByEmail} from '$lib/strapiRepository';
+    import {userStore} from './store';
 
     let email = '';
     let password = '';
@@ -26,7 +26,7 @@
                     throw new Error('Пожалуйста, введите ваше имя');
                 }
 
-                const { error: signUpError } = await supabase.auth.signUp({
+                const {error: signUpError} = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
@@ -43,7 +43,7 @@
                 userStore.set(user);
                 goto('/');
             } else {
-                const { error: signInError } = await supabase.auth.signInWithPassword({
+                const {error: signInError} = await supabase.auth.signInWithPassword({
                     email,
                     password
                 });
@@ -64,29 +64,29 @@
 </script>
 
 <div>
-    <Heading tag="h1" class="auth-heading">{isSignUp ? 'Регистрация' : 'Вход'}</Heading>
+    <Heading class="auth-heading" tag="h1">{isSignUp ? 'Регистрация' : 'Вход'}</Heading>
 
     {#if isSignUp}
         <input
-            bind:value={username}
-            type="text"
-            placeholder="Ваше имя"
-            required
-            class="auth-input"
+                bind:value={username}
+                type="text"
+                placeholder="Ваше имя"
+                required
+                class="auth-input"
         />
     {/if}
 
-    <input bind:value={email} type="email" placeholder="Email" required class="auth-input" />
-    <input bind:value={password} type="password" placeholder="Пароль" required class="auth-input" />
+    <input bind:value={email} class="auth-input" placeholder="Email" required type="email"/>
+    <input bind:value={password} class="auth-input" placeholder="Пароль" required type="password"/>
 
-    <button class="auth-button auth-button--primary" on:click={handleAuth} disabled={loading}>
+    <button class="auth-button auth-button--primary" disabled={loading} on:click={handleAuth}>
         {isSignUp ? 'Зарегистрироваться' : 'Войти'}
     </button>
 
     <button
-        class="auth-button auth-button--secondary"
-        on:click={() => (isSignUp = !isSignUp)}
-        disabled={loading}
+            class="auth-button auth-button--secondary"
+            disabled={loading}
+            on:click={() => (isSignUp = !isSignUp)}
     >
         {isSignUp ? 'Войти' : 'Зарегистрироваться'}
     </button>

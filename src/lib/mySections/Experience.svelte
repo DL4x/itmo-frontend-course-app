@@ -65,7 +65,7 @@
             0,
             Math.min(maxScroll, scrollPos + (direction === 'left' ? -cardWidth : cardWidth))
         );
-        container.scrollTo({ left: scrollPos, behavior: 'smooth' });
+        container.scrollTo({left: scrollPos, behavior: 'smooth'});
     };
 </script>
 
@@ -74,7 +74,7 @@
 
     {#if experiences.length === 0}
         <div class="empty-state">
-            <img src="https://via.placeholder.com/100" alt="No experience" />
+            <img src="https://via.placeholder.com/100" alt="No experience"/>
             <div>Experience not found</div>
         </div>
     {:else}
@@ -82,7 +82,7 @@
             <button class="nav-btn left" on:click={() => scroll('left')}>&lt;</button>
 
             <div class="experience-scroll-container">
-                {#each experiences as { company, position, period, description }}
+                {#each experiences as {company, position, period, description}}
                     <article class="card">
                         <header>
                             <div>

@@ -1,22 +1,14 @@
 <script lang="ts">
-    import Profile from '$lib/mySections/Profile.svelte';
-    import About from '$lib/mySections/About.svelte';
-    import Education from '$lib/mySections/Education.svelte';
-    import Experience from '$lib/mySections/Experience.svelte';
-    import Skills from '$lib/mySections/Skills.svelte';
-    import Lections from '$lib/mySections/Lections.svelte';
-    import Favourite from '$lib/mySections/Favourite.svelte';
     import NewProfile from '$lib/mySections/NewProfile.svelte';
     import NewSkills from '$lib/mySections/NewSkills.svelte';
     import NewEducation from '$lib/mySections/NewEducation.svelte';
     import NewExperience from '$lib/mySections/NewExperience.svelte';
     import NewLections from '$lib/mySections/NewLections.svelte';
-    import GptEducation from '$lib/mySections/GptEducation.svelte';
+    import {self} from 'svelte/legacy';
 
-
-    let activeBlock: boolean = false;
-    let fullContent: string = '';
-    let currentTitle: string = '';
+    let activeBlock: boolean = $state(false);
+    let fullContent: string = $state('');
+    let currentTitle: string = $state('');
 
 
     function openModal() {
@@ -80,28 +72,38 @@
 <div class="page" class:dimmed={activeBlock}>
     <!-- Колонка 1 -->
     <div class="column column-1">
-        <div class="block profile-block"><NewProfile /></div>
-        <div class="block"><NewSkills /></div>
+        <div class="block profile-block">
+            <NewProfile/>
+        </div>
+        <div class="block">
+            <NewSkills/>
+        </div>
     </div>
 
     <!-- Колонка 2 -->
     <div class="column column-2">
-        <div class="block"><NewEducation /></div>
-        <div class="block"><NewExperience /></div>
-        <div class="block"><NewLections /></div>
+        <div class="block">
+            <NewEducation/>
+        </div>
+        <div class="block">
+            <NewExperience/>
+        </div>
+        <div class="block">
+            <NewLections/>
+        </div>
     </div>
 </div>
 
 
 {#if activeBlock}
-    <div class="modal-backdrop" on:click|self={closeModal}>
+    <div class="modal-backdrop" onclick={self(closeModal)}>
         <div class="modal">
             <h2>{currentTitle}</h2>
             <div class="modal-content">
                 {fullContent}
             </div>
             <div class="modal-button-container">
-                <button class="close-btn" on:click={closeModal}> Close </button>
+                <button class="close-btn" onclick={closeModal}> Close</button>
             </div>
         </div>
     </div>
@@ -259,5 +261,5 @@
             grid-template-columns: 100% !important;
         }
     }
-    
+
 </style>

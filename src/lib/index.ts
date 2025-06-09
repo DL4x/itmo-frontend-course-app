@@ -135,6 +135,6 @@ export interface Course extends IDObject {
     courseName: string;
     coursePreviewUrl: string;
     courseDescription?: string;
-    presentations?: Presentation[];
+    presentations: Presentation[];
     presentationCount?: number;
 }

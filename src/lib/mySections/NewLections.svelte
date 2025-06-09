@@ -5,15 +5,15 @@
     }
 
     const lections: LectionItem[] = [
-        { title: 'Введение в Svelte', url: '#' },
-        { title: 'Основы TypeScript', url: '#' },
-        { title: 'CSS Grid Layout', url: '#' },
-        { title: 'Анимации в Web', url: '#' },
-        { title: 'Оптимизация производительности', url: '#' },
-        { title: 'Работа с API', url: '#' },
-        { title: 'Тестирование компонентов', url: '#' },
-        { title: 'State Management', url: '#' },
-        { title: 'Web Components', url: '#' }
+        {title: 'Введение в Svelte', url: '#'},
+        {title: 'Основы TypeScript', url: '#'},
+        {title: 'CSS Grid Layout', url: '#'},
+        {title: 'Анимации в Web', url: '#'},
+        {title: 'Оптимизация производительности', url: '#'},
+        {title: 'Работа с API', url: '#'},
+        {title: 'Тестирование компонентов', url: '#'},
+        {title: 'State Management', url: '#'},
+        {title: 'Web Components', url: '#'}
     ];
 
     let scrollPosition = 0;
@@ -23,7 +23,7 @@
         const container = document.querySelector('.lections-scroll-container');
         if (container) {
             scrollPosition = Math.max(0, scrollPosition - scrollStep);
-            container.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+            container.scrollTo({left: scrollPosition, behavior: 'smooth'});
         }
     }
 
@@ -32,7 +32,7 @@
         if (container) {
             const maxScroll = container.scrollWidth - container.clientWidth;
             scrollPosition = Math.min(maxScroll, scrollPosition + scrollStep);
-            container.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+            container.scrollTo({left: scrollPosition, behavior: 'smooth'});
         }
     }
 </script>
@@ -63,7 +63,7 @@
         </div>
     {:else}
         <div class="no-lections">
-            <img src="https://via.placeholder.com/100" alt="No lections" class="no-lections-img" />
+            <img src="https://via.placeholder.com/100" alt="No lections" class="no-lections-img"/>
             <div class="no-lections-text">Lections not found</div>
         </div>
     {/if}
@@ -122,9 +122,8 @@
         border-radius: 12px;
         overflow: hidden;
         background: white;
-        box-shadow:
-            0 4px 6px -1px rgba(0, 0, 0, 0.1),
-            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border: 1px solid #e2e8f0;
         z-index: 1;
@@ -132,9 +131,8 @@
 
     .lection-card:hover {
         transform: translateY(-5px);
-        box-shadow:
-            0 10px 15px -3px rgba(0, 0, 0, 0.1),
-            0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
 
     .lection-placeholder {

@@ -1,10 +1,10 @@
 <script lang="ts">
-    import type { SvelteHTMLElements } from 'svelte/elements';
+    import type {SvelteHTMLElements} from 'svelte/elements';
 
-    const { lineHeight, ...rest }: SvelteHTMLElements['div'] & { lineHeight: string } = $props();
+    const {lineHeight, ...rest}: SvelteHTMLElements['div'] & { lineHeight: string } = $props();
 </script>
 
-<div style:height={lineHeight} {...rest}></div>
+<div {...rest} style:height={lineHeight}></div>
 
 <style>
     * {

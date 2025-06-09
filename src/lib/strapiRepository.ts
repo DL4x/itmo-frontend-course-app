@@ -375,21 +375,33 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
 
 async function parseCoursePreview(json: unknown): Promise<Course> {
     assert(typeof json === 'object' && json !== null, 'json must be object');
+
     assertField(
         'documentId' in json && typeof json.documentId === 'string',
         'documentId',
         'string'
     );
+
     assertField(
         'course_name' in json && typeof json.course_name === 'string',
         'course_name',
         'string'
     );
+
+    assertField(
+        'course_preview' in json && typeof json.course_preview === 'object',
+        'course_preview',
+        'object'
+    );
+    assert(json.course_preview !== null);
+
     assertField(
         'url' in json.course_preview && typeof json.course_preview.url === 'string',
         'url',
         'string'
     );
+
+    assertField('id' in json && typeof json.id === 'number', 'id', 'number');
 
     const result = {
         id: json.id.toString(),
@@ -398,7 +410,7 @@ async function parseCoursePreview(json: unknown): Promise<Course> {
         courseDescription: undefined,
         coursePreviewUrl: getFullImagePath(json.course_preview.url),
         presentationCount: undefined,
-        presentations: undefined
+        presentations: []
     };
     assertValidCourse(result);
     return result;

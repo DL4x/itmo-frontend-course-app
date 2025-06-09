@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { Avatar } from 'flowbite-svelte';
+    import {Avatar} from 'flowbite-svelte';
 
     interface Props {
         id: string;
         name: string;
     }
 
-    const { id, name }: Props = $props();
+    const {id, name}: Props = $props();
 
     function getInitials(str: string): string {
         if (str.length == 2) return str.toUpperCase();
@@ -23,9 +23,9 @@
     }
 </script>
 
-<a href="/resumes/{id}" class="chip bg-gray flex flex-row gap-2 items-center">
-    <Avatar size="sm" class="bg-primary-400 group-hover:bg-primary-400 transition-colors"
-        >{getInitials(name)}</Avatar
+<a class="chip bg-gray flex flex-row gap-2 items-center" href="/resumes/{id}">
+    <Avatar class="bg-primary-400 group-hover:bg-primary-400 transition-colors" size="sm"
+    >{getInitials(name)}</Avatar
     >
     <div class="font-medium dark:text-white flex flex-col">
         <h6 class="text-sm">{name}</h6>

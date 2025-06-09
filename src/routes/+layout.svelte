@@ -10,8 +10,8 @@
         NavLi,
         NavUl
     } from 'flowbite-svelte';
-    import { page } from '$app/state';
-    import { userStore } from '$lib/store';
+    import {page} from '$app/state';
+    import {userStore} from '$lib/store';
 
     function signOut() {
         userStore.set(null);
@@ -20,7 +20,7 @@
 
 <Navbar class="sticky bg-my-gray flex items-center">
     <NavBrand href="/">
-        <enhanced:img width="50" src="/src/images/planet.png" alt="Main logo" />
+        <enhanced:img alt="Main logo" src="/src/images/planet.png" width="50"/>
     </NavBrand>
 
     <div class="flex items-center md:order-2 ml-auto">
@@ -33,7 +33,7 @@
                 Войти
             </Button>
         {/if}
-        <NavHamburger />
+        <NavHamburger/>
     </div>
 
     <Dropdown placement="bottom" triggeredBy="#user-menu">
@@ -41,21 +41,21 @@
     </Dropdown>
 
     <NavUl
-        activeUrl={page.url.pathname}
-        class="order-1 ml-auto"
-        ulClass="md:flex md:items-center md:gap-8 not-md:mt-4 bg-my-gray border-0"
-        nonActiveClass="not-md:hover:bg-primary-700/35"
+            activeUrl={page.url.pathname}
+            class="order-1 ml-auto"
+            nonActiveClass="not-md:hover:bg-primary-700/35"
+            ulClass="md:flex md:items-center md:gap-8 not-md:mt-4 bg-my-gray border-0"
     >
-        <NavLi href="/" class="mx-4 font-bold tracking-widest uppercase text-primary-50">
+        <NavLi class="mx-4 font-bold tracking-widest uppercase text-primary-50" href="/">
             Главная
         </NavLi>
-        <NavLi href="/resumes" class="mx-4 font-bold tracking-widest uppercase text-primary-50">
+        <NavLi class="mx-4 font-bold tracking-widest uppercase text-primary-50" href="/resumes">
             О нас
         </NavLi>
-        <NavLi href="/help" class="mx-4 font-bold tracking-widest uppercase text-primary-50">
+        <NavLi class="mx-4 font-bold tracking-widest uppercase text-primary-50" href="/help">
             Поддержка
         </NavLi>
     </NavUl>
 </Navbar>
 
-<slot />
+<slot/>
