@@ -4,9 +4,9 @@
     import PresentationPreviewCard from '$lib/PresentationPreviewCard.svelte';
     import CourseProgressBar from '$lib/CourseProgressBar.svelte';
     import {favoritePresentationsIDs, type PresentationCardData} from '$lib/frontendEntities';
-    import type {Author, Presentation} from '$lib';
+    import type {Author} from '$lib';
     import {userStore} from '$lib/store';
-    import {CheckboxButton, Search, Select, Toggle} from 'flowbite-svelte';
+    import {Search, Toggle} from 'flowbite-svelte';
     import {flip} from 'svelte/animate';
     import {goto, preloadData} from '$app/navigation';
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {Progressbar} from 'flowbite-svelte';
+    import {Button, Progressbar} from 'flowbite-svelte';
 
     interface Props {
         progress?: number;
@@ -30,7 +30,9 @@
 </style>
 
 {#if progress === undefined }
-    <p>Войдите в аккаунт чтобы отслеживать ваш прогресс</p>
+    <Button href="/auth" class="font-bold tracking-widest uppercase bg-primary-700">
+        Войдите в аккаунт чтобы отслеживать ваш прогресс
+    </Button>
 {:else}
     <div class="progress">
         <div class="text-label">
