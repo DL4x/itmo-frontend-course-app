@@ -41,7 +41,7 @@ export function createEmailContact(email: string): Contact {
     assertNotEmpty(email, 'email');
     return {
         value: email,
-        href: `mailto:${email}`
+        href: `mailto:${email}`,
     };
 }
 
@@ -51,14 +51,26 @@ export interface Education extends IDObject {
     timeRange: TimeRange;
 }
 
+export interface Company extends IDObject {
+    companyName: string;
+    companyDescription: string;
+    position: string;
+    period: string;
+}
+
 export interface PresentationStatus extends IDObject {
-    isVisited: boolean;
     presentationDocumentId: string;
+    progressBarDocumentId: string;
 }
 
 export interface ProgressBar extends IDObject {
-    presentationChecks: PresentationStatus[];
+    presentations: PresentationStatus[];
     courseDocumentId: string;
+}
+
+export interface Favourite extends IDObject {
+    presentationDocumentId: string;
+    authorDocumentId: string;
 }
 
 /**
@@ -72,13 +84,17 @@ export interface ProgressBar extends IDObject {
  */
 export interface Author extends IDObject {
     name: string;
+    companies: Company[]
     educations: Education[];
     skills: Skill[];
     progressBars: ProgressBar[];
-    favourites: Presentation[];
+    favourites: Favourite[];
     address?: Contact;
     phone?: Contact;
     email: Contact;
+    authorBirthday: string;
+    authorCity: string;
+    authorDescription: string;
 }
 
 /**
@@ -111,7 +127,13 @@ export interface Presentation extends IDObject {
     presentationOwners: Author[];
     comments: AuthorComment[];
     votedPersons: VotedPerson[];
+    tags: Tag[];
     course?: Course;
+}
+
+export interface Tag extends IDObject {
+    documentId: string;
+    name: string;
 }
 
 /**
@@ -135,7 +157,7 @@ export interface Course extends IDObject {
     documentId: string;
     courseName: string;
     coursePreviewUrl: string;
-    courseDescription?: string;
+    courseDescription: string;
     presentations: Presentation[];
-    presentationCount?: number;
+    presentationCount: number;
 }
