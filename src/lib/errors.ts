@@ -1,14 +1,14 @@
 import type {
     Author,
-    AuthorComment,
+    AuthorComment, Company,
     Contact,
     Course,
-    Education,
+    Education, Favourite,
     IDObject,
     Presentation,
     PresentationStatus,
     ProgressBar,
-    Skill,
+    Skill, Tag,
     TimeRange,
     VotedPerson
 } from '$lib/index';
@@ -33,31 +33,42 @@ export function assertIsInt(value: number, objectName: string) {
     assert(Number.isInteger(value), `${objectName} must be an integer`);
 }
 
-export function assertValidTimeRange({ end, start }: TimeRange) {
+export function assertValidTimeRange({end, start}: TimeRange) {
     assertIsInt(start, 'start');
     assertIsInt(end, 'end');
     assert(start <= end, 'Time range start must be <= time range end');
 }
 
-export function assertValidIDObject({ id }: IDObject) {
+export function assertValidIDObject({id}: IDObject) {
     assertNotEmpty(id, 'id');
 }
 
 export function assertValidSkill(skill: Skill) {
     assertValidIDObject(skill);
-    const { name, value } = skill;
+    const {name, value} = skill;
     assertNotEmpty(name, 'name');
     assertIsInt(value, 'value');
     assert(0 <= value && value <= 100, 'Skill must be an integer in range [0;100]');
 }
 
-export function assertValidContact({ value }: Contact) {
+export function assertValidContact({value}: Contact) {
     assertNotEmpty(value, 'Contact value');
 }
 
 export function assertValidEducation(education: Education) {
     assertValidIDObject(education);
     assertNotEmpty(education.title, 'title');
+}
+
+export function assertValidCompany(company: Company) {
+    assertValidIDObject(company);
+    assertNotEmpty(company.companyName, 'name');
+}
+
+export function assertValidFavourite(favourite: Favourite) {
+    assertValidIDObject(favourite);
+    assertNotEmpty(favourite.authorDocumentId, 'authorId');
+    assertNotEmpty(favourite.presentationDocumentId, 'presentationId');
 }
 
 export function assertValidPresentationStatus(presentationStatus: PresentationStatus) {
@@ -83,6 +94,11 @@ export function assertValidPresentation(presentation: Presentation) {
     assertValidIDObject(presentation);
     assertNotEmpty(presentation.presentationName, 'presentation_name');
     assertNotEmpty(presentation.presentationUrl, 'presentation_url');
+}
+
+export function assertValidTag(tag: Tag) {
+    assertValidIDObject(tag);
+    assertNotEmpty(tag.name, 'tag_name');
 }
 
 export function assertValidVotedPerson(votedPerson: VotedPerson) {
