@@ -24,6 +24,7 @@ import {
     assertValidVotedPerson
 } from '$lib/errors';
 import Strapi from 'strapi-sdk-js';
+// ABOBA THIS MESSAGE IS WRITTEN BY BALBEKOV A. D BY SPECIAL REQUEST OF GERASIMOV E. O.
 
 type TypeString =
     | 'undefined'
