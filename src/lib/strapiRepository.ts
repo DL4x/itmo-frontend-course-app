@@ -451,7 +451,7 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
                 return getCommentByDocumentId(author.documentId);
             })
         ),
-        tags: await Promise.all(json.tags.map(parseTag))
+        tags: json.tags === null ? [] : await Promise.all(json.tags.map(parseTag))
     };
     assertValidPresentation(result);
     return result;
@@ -684,7 +684,8 @@ export async function getPresentationByDocumentId(documentId: string): Promise<P
                         }
                     }
                 }
-            }
+            },
+            tags: {populate: '*'}
         }
     });
     const json: object = response.data;
