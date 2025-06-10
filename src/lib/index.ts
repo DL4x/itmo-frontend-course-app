@@ -1,4 +1,5 @@
 import { assertNotEmpty } from '$lib/errors';
+// ABOBA THIS MESSAGE IS WRITTEN BY BALBEKOV A. D BY SPECIAL REQUEST OF GERASIMOV E. O.
 
 export interface TimeRange {
     start: number;

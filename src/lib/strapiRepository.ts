@@ -429,7 +429,7 @@ async function parsePresentation(json: unknown): Promise<Presentation> {
         presentationDescription: json.presentation_description,
         presentationUrl: json.presentation_url,
         documentId: json.documentId,
-        presentationPreviewUrl: `https://strapi-production-51d5.up.railway.app${json.presentation_preview.url}`,
+        presentationPreviewUrl: getFullImagePath(json.presentation_preview.url),
         votedPersons: await Promise.all(voted_persons.map(parseVotedPerson)),
         presentationOwners: await Promise.all(
             presentation_owners.map((author: object) => {
@@ -472,6 +472,49 @@ async function parseTag(json: unknown): Promise<Tag> {
         name: json.tag_name,
     };
     assertValidTag(result);
+    return result;
+}
+
+async function parseCoursePreview(json: unknown): Promise<Course> {
+    assert(typeof json === 'object' && json !== null, 'json must be object');
+
+    assertField(
+        'documentId' in json && typeof json.documentId === 'string',
+        'documentId',
+        'string'
+    );
+
+    assertField(
+        'course_name' in json && typeof json.course_name === 'string',
+        'course_name',
+        'string'
+    );
+
+    assertField(
+        'course_preview' in json && typeof json.course_preview === 'object',
+        'course_preview',
+        'object'
+    );
+    assert(json.course_preview !== null);
+
+    assertField(
+        'url' in json.course_preview && typeof json.course_preview.url === 'string',
+        'url',
+        'string'
+    );
+
+    assertField('id' in json && typeof json.id === 'number', 'id', 'number');
+
+    const result = {
+        id: json.id.toString(),
+        documentId: json.documentId,
+        courseName: json.course_name,
+        courseDescription: "",
+        coursePreviewUrl: getFullImagePath(json.course_preview.url),
+        presentationCount: 7,
+        presentations: []
+    };
+    assertValidCourse(result);
     return result;
 }
 
@@ -523,7 +566,7 @@ async function parseCourse(json: unknown): Promise<Course> {
         documentId: json.documentId,
         courseName: json.course_name,
         courseDescription: json.course_description,
-        coursePreviewUrl: json.course_preview.url,
+        coursePreviewUrl: getFullImagePath(json.course_preview.url),
         presentationCount: json.presentation_count,
         presentations: await Promise.all(
             json.presentations.map((pres) => {
@@ -724,6 +767,18 @@ export async function getAllCourses(): Promise<Course[]> {
     return await Promise.all(json.map(parseCourse));
 }
 
+export async function getAllCoursePreviews(): Promise<Course[]> {
+    const response = await strapi.find('courses', {
+        populate: {
+            course_preview: { populate: '*' }
+        }
+    });
+    const json = response.data;
+    assertField(Array.isArray(response.data), 'data', 'Array');
+
+    return await Promise.all(json.map(parseCoursePreview));
+}
+
 /**
  * @param documentId the {@linkcode string} that Strapi generates by default
  *
@@ -915,6 +970,7 @@ function getFavouritesJson(favourites: Favourite[]) {
  *
  * @return json-object of {@linkcode PresentationStatus} for add to Strapi
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getPresentationStatusesJson(presentationStatuses: PresentationStatus[]) {
     const result = [];
     for (const presentationStatus of presentationStatuses) {
@@ -1029,7 +1085,7 @@ export async function addComment(
  * @return full path to image in Strapi
  */
 export function getFullImagePath(imageUrl: string): string {
-    return path + '/uploads/' + imageUrl;
+    return path + imageUrl;
 }
 
 export async function deleteFavouritePresentation(author: Author, presentationDocumentId: string): Promise<void> {

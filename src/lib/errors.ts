@@ -12,6 +12,7 @@ import type {
     TimeRange,
     VotedPerson
 } from '$lib/index';
+// ABOBA THIS MESSAGE IS WRITTEN BY BALBEKOV A. D BY SPECIAL REQUEST OF GERASIMOV E. O.
 
 export class AssertionFailedError extends Error {
     constructor(message?: string) {
