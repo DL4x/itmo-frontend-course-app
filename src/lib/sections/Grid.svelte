@@ -4,27 +4,52 @@
     import Experience from '$lib/mySections/Experience.svelte';
     import Skills from '$lib/mySections/Skills.svelte';
     import Lections from '$lib/mySections/Lections.svelte';
+
+    import type { Author } from '$lib';
+
+    const {
+        name,
+        companies,
+        educations,
+        skills,
+        progressBars,
+        favourites,
+        address,
+        phone,
+        email,
+        authorBirthday,
+        authorCity,
+        authorDescription
+    }: Author = $props();
 </script>
 
 <div class="page">
     <div class="column column-1">
         <div class="block profile-block">
-            <Profile/>
+            <Profile
+                {name}
+                {address}
+                {phone}
+                {email}
+                {authorBirthday}
+                {authorCity}
+                {authorDescription}
+            />
         </div>
         <div class="block skills-block">
-            <Skills/>
+            <Skills {...skills} />
         </div>
     </div>
 
     <div class="column column-2">
         <div class="block">
-            <Education/>
+            <Education {...educations} />
         </div>
         <div class="block">
-            <Experience/>
+            <Experience {...companies} />
         </div>
         <div class="block">
-            <Lections/>
+            <Lections />
         </div>
     </div>
 </div>
