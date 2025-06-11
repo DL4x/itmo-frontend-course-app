@@ -3,7 +3,8 @@ import { derived, get } from 'svelte/store';
 import { userStore } from '$lib/store';
 
 export interface PresentationCardData extends IDObject {
-    name: string;
+    courseId: string;
+    title: string;
     description: string;
     previewUrl: string;
     authors: Author[];
@@ -26,14 +27,15 @@ export function mapToPresentationCardData(
     visited: Set<string>
 ): PresentationCardData {
     return {
-        name: `Лекция №${index + 1}: ${presentation.presentationName}`,
+        courseId: presentation.courseDocumentId,
+        title: `Лекция №${index + 1}: ${presentation.presentationName}`,
         description: presentation.presentationDescription,
         previewUrl: presentation.presentationPreviewUrl ?? '',
         authors: presentation.presentationOwners,
         commentsCount: presentation.comments.length,
-        id: presentation.documentId,
+        id: presentation.id,
         averageUserScore: averageScoreOf(presentation.votedAuthors),
-        visited: visited.has(presentation.documentId),
+        visited: visited.has(presentation.id),
         tags: new Set(presentation.tags.map((tag) => tag.name))
     };
 }
@@ -49,13 +51,13 @@ export function mapToCoursePageData(course: Course): CoursePageData {
     const user = get(userStore);
     const visited = new Set<string>(
         (user !== null ? user.progressBars : [])
-            .filter((progressBar) => progressBar.courseDocumentId === course.documentId)
+            .filter((progressBar) => progressBar.courseDocumentId === course.id)
             .flatMap((progressBar) => progressBar.presentations)
             .map((status) => status.presentationDocumentId)
     );
 
     return {
-        id: course.documentId,
+        id: course.id,
         title: course.courseName,
         description: course.courseDescription ?? '',
         previewUrl:

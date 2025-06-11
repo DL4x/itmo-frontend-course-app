@@ -67,7 +67,7 @@
                 <Card
                     img={course.coursePreviewUrl ?? '/images/black.webp'}
                     class="my-card overflow-hidden"
-                    href="/courses/{course.documentId}"
+                    href="/courses/{course.id}"
                 >
                     <h5
                             class="mb-2 text-2xl font-bold course-title tracking-tight"

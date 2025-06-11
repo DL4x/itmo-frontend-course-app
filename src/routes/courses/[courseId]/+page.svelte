@@ -52,7 +52,7 @@
 
             const target = searchQuery.toLowerCase();
 
-            const nameContains = presData.name.toLowerCase().includes(target);
+            const nameContains = presData.title.toLowerCase().includes(target);
             const descriptionContains = presData.description.toLowerCase().includes(target);
             const authorContains = presData.authors.some(author => author.name.toLowerCase().includes(target))
             return nameContains || descriptionContains || authorContains;

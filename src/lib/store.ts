@@ -17,5 +17,6 @@ userStore.subscribe((user) => {
 });
 
 export async function notifyUserDataChanged(author: Author) {
+    console.log("User data changed and refetches");
     userStore.set(await getAuthorByDocumentId(author.id));
 }

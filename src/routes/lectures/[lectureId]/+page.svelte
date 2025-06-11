@@ -1,12 +1,19 @@
 <script lang="ts">
     import type {PageProps} from './$types';
     import {Modal, Heading, Rating, Card, Button, Textarea, P} from 'flowbite-svelte';
-    import {addComment} from '$lib/strapiRepository';
-    import {userStore} from '$lib/store';
+    import {addComment, addProgressPresentation} from '$lib/strapiRepository';
+    import {notifyUserDataChanged, userStore} from '$lib/store';
     import type {AuthorComment} from '$lib';
     import {getPresentationSummary} from "$lib/deepseekRepository";
+    import {onMount} from "svelte";
 
     const {data}: PageProps = $props();
+    onMount(() => {
+        if ($userStore === null) return;
+        console.log(`User visits lecture ${data.presentation.presentationName} with courseId = ${data.presentation.courseDocumentId}`);
+        addProgressPresentation($userStore, data.presentation.courseDocumentId, data.presentation.id)
+            .then(() => notifyUserDataChanged($userStore));
+    })
 
     let commentText: string = $state('');
     let comments: AuthorComment[] = data.presentation.comments;
@@ -25,7 +32,7 @@
         name: `${data.presentation.presentationName} | ITMO Frontend Courses`,
         short_name: "ITMO Lecture",
         description: data.presentation.presentationDescription,
-        start_url: `/lectures/${data.presentation.documentId}`,
+        start_url: `/lectures/${data.presentation.id}`,
         theme_color: "#FE8A70",
         background_color: "#ffffff"
     };
@@ -42,7 +49,7 @@
             return;
         }
 
-        await addComment(commentText, $userStore.id, data.presentation.documentId);
+        await addComment(commentText, $userStore.id, data.presentation.id);
         commentText = '';
 
         window.location.reload();
