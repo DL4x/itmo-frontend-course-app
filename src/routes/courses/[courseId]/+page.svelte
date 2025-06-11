@@ -22,13 +22,9 @@
         if (progressBar === undefined) {
             return 0;
         }
-        let count = 0;
-        for (const presentationCheck of progressBar.presentationChecks) {
-            if (presentationCheck.isVisited) {
-                count++;
-            }
-        }
-        return Math.round((count / data.presentations.length) * 100);
+        return Math.round(
+            (progressBar.presentations.length / data.presentations.length) * 100
+        );
     }
 
     function containsText(presData: PresentationCardData, searchQuery: string): boolean {

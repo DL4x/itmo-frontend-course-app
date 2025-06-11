@@ -11,7 +11,6 @@
     export let width: string = '100%';
     export let height: string = '100%';
     export let mirrored = false;
-
     let container: HTMLDivElement;
     let animation: AnimationItem | null = null;
 
