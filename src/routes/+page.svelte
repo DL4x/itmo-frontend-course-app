@@ -26,8 +26,8 @@
 
 {#if !showCourses}
     <section
-            class="greeting-page-container"
-            transition:fly={{ x: -1000, duration: 800, easing: quintOut }}
+        class="greeting-page-container"
+        transition:fly={{ x: -1000, duration: 800, easing: quintOut }}
     >
         {#if ready}
             <div class="left" in:fly={{ x: -100, duration: 800 }}>
@@ -38,10 +38,10 @@
                     техник?
                 </p>
                 <button
-                        class="courses-btn"
-                        onclick={toggleView}
-                        onmouseenter={() => (isHovered = true)}
-                        onmouseleave={() => (isHovered = false)}
+                    class="courses-btn"
+                    onclick={toggleView}
+                    onmouseenter={() => (isHovered = true)}
+                    onmouseleave={() => (isHovered = false)}
                 >
                     <span class="courses-btn-text">
                         {isHovered ? 'Погнали' : 'Список курсов'}
@@ -52,10 +52,9 @@
 
             <div class="right" in:fly={{ x: 100, duration: 800 }}>
                 <Lottie
-                        path="/src/images/starting_page/cosmonaut.json"
-                        width="40rem"
-                        height="40rem"
-                        mirrored={true}
+                    path="/src/images/starting_page/cosmonaut.json"
+                    class="lottie-animation"
+                    mirrored={true}
                 />
             </div>
         {/if}
@@ -65,13 +64,11 @@
         <div class="courses-grid">
             {#each data.courses as course (course.id)}
                 <Card
-                        img={course.coursePreviewUrl ?? '/src/images/starting_page/paste_picture.webp'}
-                        class="my-card overflow-hidden"
-                        href="/courses/{course.documentId}"
+                    img={course.coursePreviewUrl ?? '/src/images/starting_page/paste_picture.webp'}
+                    class="my-card overflow-hidden"
+                    href="/courses/{course.documentId}"
                 >
-                    <h5
-                            class="mb-2 text-2xl font-bold course-title tracking-tight"
-                    >
+                    <h5 class="mb-2 text-2xl font-bold course-title tracking-tight">
                         {course.courseName}
                     </h5>
                     <p class="mb-3 font-normal course-description leading-tight">
@@ -81,9 +78,14 @@
             {/each}
         </div>
     </section>
+
 {/if}
 
 <style>
+    :global(html) {
+        font-size: 16px;
+    }
+
     .course-title {
         color: var(--color-primary-300);
     }
@@ -96,58 +98,57 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         align-items: center;
-        gap: 1vw;
-        padding: 5% 5% 5% 10%;
-        height: 95vh;
+        gap: 2rem;
+        padding: 2rem 5%;
+        min-height: 100vh;
         box-sizing: border-box;
     }
 
     .left {
-        grid-column: 1;
-        display: grid;
-        grid-template-rows: auto auto auto;
+        display: flex;
+        flex-direction: column;
         gap: 2rem;
-        max-width: 100rem;
+        max-width: 100%;
     }
 
     .right {
-        grid-column: 2;
-        display: grid;
-        justify-items: end;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .lottie-animation {
+        width: 100%;
+        max-width: 40rem;
+        height: auto;
+        aspect-ratio: 1/1;
     }
 
     h1 {
         font-weight: 700;
-        font-size: 3rem;
-        line-height: 100%;
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1.2;
         letter-spacing: -0.02em;
         color: var(--color-primary-50);
-        margin-right: 2rem;
-        grid-row: 1;
-    }
-
-    h2 {
-        font-weight: 550;
-        font-size: 4rem;
-        line-height: 100%;
-        letter-spacing: -0.02em;
-        color: #141416;
+        margin: 0;
     }
 
     p {
         font-weight: 400;
-        font-size: 1.2rem;
-        line-height: 150%;
+        font-size: clamp(1rem, 1.5vw, 1.2rem);
+        line-height: 1.5;
         color: #c9ada7;
-        grid-row: 2;
+        margin: 0;
     }
 
     .courses-btn {
         position: relative;
-        width: 280px;
+        width: 100%;
+        max-width: 280px;
         height: 56px;
-        display: grid;
-        place-items: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         border-radius: 8px;
         background: var(--color-primary-500);
         overflow: hidden;
@@ -155,19 +156,20 @@
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border: none;
-        grid-row: 3;
+        margin-top: 1rem;
     }
 
     .courses-btn-text {
         position: relative;
         z-index: 2;
         font-weight: 600;
-        font-size: 18px;
+        font-size: clamp(1rem, 1.1vw, 1.125rem);
         letter-spacing: 0.5px;
         color: white;
         transition: all 0.3s ease;
         display: flex;
         align-items: center;
+        gap: 0.5rem;
     }
 
     .hover-effect {
@@ -180,11 +182,9 @@
         transition: 0.5s;
     }
 
-    /* Анимации */
     .courses-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        color: var(--color-primary-700);
     }
 
     .courses-btn:hover .hover-effect {
@@ -196,12 +196,10 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    /* Иконка стрелки (опционально) */
     .courses-btn-text::after {
         content: '→';
         opacity: 0;
-        transition: opacity 0.3s ease,
-        transform 0.3s ease;
+        transition: opacity 0.3s ease, transform 0.3s ease;
         transform: translateX(-10px);
     }
 
@@ -211,46 +209,81 @@
     }
 
     .course-list-container {
-        display: grid;
-        place-items: center;
-        gap: 1vw;
-        height: 95vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 2rem 5%;
+        min-height: 100vh;
         box-sizing: border-box;
+        width: 100%;
     }
 
-    @media (max-width: 1080px) {
+    .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        width: 100%;
+        max-width: 1200px;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         .greeting-page-container {
             grid-template-columns: 1fr;
             grid-template-rows: auto auto;
-            padding: 5%;
-            height: auto;
-            min-height: 95vh;
             gap: 3rem;
+            padding: 3rem 5%;
         }
 
         .left {
-            grid-row: 2;
-            grid-column: 1;
-            max-width: 100%;
+            order: 2;
             text-align: center;
+            align-items: center;
         }
 
         .right {
-            grid-row: 1;
-            grid-column: 1;
-            justify-items: center;
-            width: 100%;
+            order: 1;
         }
 
-        .lottie-container {
-            max-width: 300px;
+        .lottie-animation {
+            max-width: 30rem;
         }
 
         .courses-btn {
-            justify-self: center;
+            margin: 0 auto;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .greeting-page-container {
+            padding: 2rem 1.5rem;
+            gap: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        p {
+            font-size: 1rem;
+        }
+
+        .courses-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .lottie-animation {
+            max-width: 20rem;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .courses-btn {
+            height: 48px;
+            max-width: 240px;
+        }
+
+        .courses-btn-text {
+            font-size: 0.9rem;
         }
     }
 </style>

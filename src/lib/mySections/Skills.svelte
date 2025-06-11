@@ -1,7 +1,6 @@
 <script lang="ts">
-    import {fade, fly} from 'svelte/transition';
-    import {quintOut} from 'svelte/easing';
-    import {self} from 'svelte/legacy';
+    import { fade, fly } from 'svelte/transition';
+    import { quintOut } from 'svelte/easing';
 
     type Skill = { name: string };
 
@@ -15,7 +14,7 @@
         'Git',
         'Docker',
         'Python'
-    ].map((name) => ({name}));
+    ].map((name) => ({ name }));
 
     const visibleSkills = skills.slice(0, 7);
     let showAllSkills = false;
@@ -28,33 +27,33 @@
 
     {#if skills.length === 0}
         <div class="no-skills">
-            <img src="https://via.placeholder.com/100" alt="No skills"/>
+            <img src="https://via.placeholder.com/100" alt="No skills" />
             <div>Skills not found</div>
         </div>
     {:else}
         <div class="skills-grid">
-            {#each visibleSkills as {name}}
+            {#each visibleSkills as { name }}
                 <div class="skill-tag">
                     <span>{name}</span>
                 </div>
             {/each}
-            <button class="skills-show-more" onclick={toggleSkillsModal}>&gt;</button>
+            
         </div>
     {/if}
 </div>
 
 {#if showAllSkills}
-    <div class="skills-modal-backdrop" transition:fade onclick={self(toggleSkillsModal)}>
+    <div class="skills-modal-backdrop" transition:fade on:click|self={toggleSkillsModal}>
         <div class="skills-modal-window" transition:fly={{ y: 100, easing: quintOut }}>
             <div class="skills-modal-title">All Skills</div>
             <div class="skills-modal-grid">
-                {#each skills as {name}}
+                {#each skills as { name }}
                     <div class="skill-tag">
                         <span>{name}</span>
                     </div>
                 {/each}
             </div>
-            <button class="skills-close-btn" onclick={toggleSkillsModal}>Close</button>
+
         </div>
     </div>
 {/if}
@@ -63,14 +62,15 @@
     .skills-block {
         display: flex;
         flex-direction: column;
+
     }
 
     .skills-title,
     .skills-modal-title {
         margin: 5px 0 15px 10px;
-        color: #333;
         font-size: 1.5rem;
         font-weight: 600;
+        color: #ffebe0;
     }
 
     .skills-grid,
@@ -88,9 +88,8 @@
     }
 
     .skills-show-more {
-        background: rgb(245, 121, 75);
+        background: var(--color-primary-700);
         color: white;
-        border: 1px solid #ddd;
         border-radius: 50%;
         width: 45px;
         height: 45px;
@@ -149,26 +148,26 @@
 
     .skill-tag {
         display: inline-flex;
-        background: white;
-        border-radius: 24px;
         padding: 10px 18px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
-        0 4px 12px rgba(0, 0, 0, 0.08);
+        background: rgba(51, 69, 161, 0.2);
+        border: 1px solid #3b3b8a;
+        border-radius: 8px;
+        color: white;
         transition: all 0.3s ease;
-        border: 1px solid #e0e0e0;
         margin: 5px;
         justify-content: center;
     }
 
     .skill-tag:hover {
         transform: translateY(-3px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15),
-        0 8px 24px rgba(0, 0, 0, 0.12);
+        box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.15),
+            0 8px 24px rgba(0, 0, 0, 0.12);
     }
 
     .skill-tag span {
         font-weight: 600;
-        color: #4a5568;
+        color: white;
         font-size: 0.95rem;
     }
 

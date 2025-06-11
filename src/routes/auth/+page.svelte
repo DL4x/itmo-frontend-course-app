@@ -1,9 +1,8 @@
 <script lang="ts">
-    import {supabase} from '$lib/supabase';
-    import {goto} from '$app/navigation';
-    import {Heading} from 'flowbite-svelte';
-    import {addAuthor, getAuthorByEmail} from '$lib/strapiRepository';
-    import {userStore} from '$lib/store';
+    import { supabase } from '$lib/supabase';
+    import { goto } from '$app/navigation';
+    import { addAuthor, getAuthorByEmail } from '$lib/strapiRepository';
+    import { userStore } from '$lib/store';
 
     let email = '';
     let password = '';
@@ -26,7 +25,7 @@
                     throw new Error('Пожалуйста, введите ваше имя');
                 }
 
-                const {error: signUpError} = await supabase.auth.signUp({
+                const { error: signUpError } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
@@ -43,7 +42,7 @@
                 userStore.set(user);
                 goto('/');
             } else {
-                const {error: signInError} = await supabase.auth.signInWithPassword({
+                const { error: signInError } = await supabase.auth.signInWithPassword({
                     email,
                     password
                 });
@@ -63,123 +62,162 @@
     };
 </script>
 
-<div>
-    <Heading class="auth-heading" tag="h1">{isSignUp ? 'Регистрация' : 'Вход'}</Heading>
+<div class="nebula-container">
+    <div class="stellar-header">
+        <h1>{isSignUp ? 'Регистрация' : 'Вход'}</h1>
+    </div>
 
-    {#if isSignUp}
-        <input
-                bind:value={username}
-                type="text"
-                placeholder="Ваше имя"
-                required
-                class="auth-input"
-        />
-    {/if}
+    <div class="contact-form">
+        {#if isSignUp}
+            <div class="form-group">
+                <input
+                    bind:value={username}
+                    type="text"
+                    placeholder="Ваше имя"
+                    required
+                    class="auth-input"
+                />
+            </div>
+        {/if}
 
-    <input bind:value={email} class="auth-input" placeholder="Email" required type="email"/>
-    <input bind:value={password} class="auth-input" placeholder="Пароль" required type="password"/>
+        <div class="form-group">
+            <input bind:value={email} type="email" placeholder="Email" required class="auth-input" />
+        </div>
 
-    <button class="auth-button auth-button--primary" disabled={loading} on:click={handleAuth}>
-        {isSignUp ? 'Зарегистрироваться' : 'Войти'}
-    </button>
+        <div class="form-group">
+            <input bind:value={password} type="password" placeholder="Пароль" required class="auth-input" />
+        </div>
 
-    <button
-            class="auth-button auth-button--secondary"
-            disabled={loading}
+        <button class="launch-button" on:click={handleAuth} disabled={loading}>
+            {isSignUp ? 'Зарегистрироваться' : 'Войти'}
+        </button>
+
+        <button
+            class="launch-button"
             on:click={() => (isSignUp = !isSignUp)}
-    >
-        {isSignUp ? 'Войти' : 'Зарегистрироваться'}
-    </button>
+            disabled={loading}
+            style="background: rgba(10, 15, 40, 0.7); border: 1px solid #3b3b8a;"
+        >
+            {isSignUp ? 'Войти' : 'Зарегистрироваться'}
+        </button>
 
-    {#if error}<p class="error">{error}</p>{/if}
+        {#if error}
+            <div class="error-message" style="color: #fe8a70; text-align: center; margin-top: 1rem;">
+                {error}
+            </div>
+        {/if}
+    </div>
 </div>
 
 <style>
-    div {
+    .nebula-container {
         max-width: 400px;
         margin: 2rem auto;
+        background: rgba(20, 30, 80, 0.5);
+        border-radius: 16px;
         padding: 2rem;
-        background: var(--color-primary-50);
-        border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        box-shadow: 0 0 30px rgba(100, 70, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(100, 150, 255, 0.2);
+        animation: fadeIn 0.4s ease-out;
     }
 
-    :global(h1) {
-        color: #2d3748;
-        text-align: center;
-        margin-bottom: 1.5rem;
-        font-size: 2rem;
-        font-weight: 600;
+    .stellar-header h1 {
+        font-size: 2.5rem;
+        margin: 1rem 0;
+        background: linear-gradient(90deg, #6ee7ff, #a855f7);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: pulse 4s infinite;
     }
 
-    input {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        margin-bottom: 1rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        box-sizing: border-box;
+    .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
 
-    input:focus {
-        outline: none;
-        border-color: var(--color-primary-700);
-        box-shadow: 0 0 0 3px rgba(235, 79, 39, 0.2);
-    }
-
-    Button {
-        width: 100%;
-        padding: 0.75rem;
-        margin-top: 0.5rem;
-        border: none;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.3s ease;
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
     }
 
     .auth-input {
-        background: #fff9f5;
-        color: #2d3748;
-    }
-
-    Button:first-of-type {
-        background-color: var(--color-primary-700);
+        padding: 0.8rem;
+        background: rgba(10, 15, 40, 0.7);
+        border: 1px solid #3b3b8a;
+        border-radius: 8px;
         color: white;
+        font-size: 1rem;
+        transition: all 0.3s;
+        width: 100%;
     }
 
-    Button:first-of-type:hover {
-        background-color: var(--color-primary-700);
+    .auth-input:focus {
+        outline: none;
+        border-color: #6ee7ff;
+        box-shadow: 0 0 0 2px rgba(110, 231, 255, 0.3);
     }
 
-    Button:last-of-type {
-        background-color: transparent;
-        color: var(--color-primary-700);
-        border: 1px solid #e2e8f0;
+    .launch-button {
+        background: #fe8a70;
+        color: white;
+        border: none;
+        padding: 1rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
     }
 
-    Button:last-of-type:hover {
-        background-color: #f8fafc;
-        border-color: var(--color-primary-700);
+    .launch-button:hover:not(:disabled) {
+        background: #ff6b4d;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(254, 138, 112, 0.4);
     }
 
-    Button[disabled] {
-        opacity: 0.7;
+    .launch-button:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    .launch-button:disabled {
+        background: #444;
         cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
     }
 
-    .error {
-        color: var(--color-primary-700);
-        text-align: center;
-        margin-top: 1rem;
-        padding: 0.5rem;
-        background-color: #fee2e2;
-        border-radius: 6px;
-        font-size: 0.9rem;
+    .launch-button::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
+
+    .launch-button:hover::after {
+        opacity: 1;
+    }
+
+    @keyframes pulse {
+        0% {
+            opacity: 0.95;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0.95;
+        }
     }
 
     @keyframes fadeIn {
@@ -192,8 +230,121 @@
             transform: translateY(0);
         }
     }
+    .nebula-courses-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 1rem;
+    }
 
-    div {
-        animation: fadeIn 0.4s ease-out;
+    .stellar-courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+
+    .cosmic-card {
+        background: rgba(20, 30, 80, 0.5);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 0 30px rgba(100, 70, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(100, 150, 255, 0.2);
+        transition: all 0.4s ease;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .cosmic-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(100, 70, 255, 0.3);
+        border-color: rgba(110, 231, 255, 0.4);
+    }
+
+    .cosmic-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #6ee7ff, #a855f7);
+    }
+
+    .cosmic-card h5 {
+        font-size: 1.5rem;
+        margin: 1rem 0;
+        background: linear-gradient(90deg, #6ee7ff, #a855f7);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .cosmic-card p {
+        color: rgba(200, 200, 255, 0.8);
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+    }
+
+    .stellar-button {
+        background: linear-gradient(90deg, #6ee7ff, #a855f7);
+        color: white;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .stellar-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(110, 231, 255, 0.4);
+    }
+
+    .stellar-button:active {
+        transform: translateY(0);
+    }
+
+    .stellar-button::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
+
+    .stellar-button:hover::after {
+        opacity: 1;
+    }
+
+    .cosmic-card-img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        border: 1px solid rgba(100, 150, 255, 0.3);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>

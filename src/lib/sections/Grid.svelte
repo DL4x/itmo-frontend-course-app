@@ -49,8 +49,10 @@
 
     .block {
         position: relative;
-        background: #f0f0f0;
-        border: 5px solid #ccc;
+        background: rgba(20, 30, 80, 0.5);
+        box-shadow: 0 0 30px rgba(100, 70, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(100, 150, 255, 0.2);
         padding: 10px;
         box-sizing: border-box;
         min-width: 0;

@@ -80,31 +80,32 @@
     h1 {
         font-size: 1.8rem;
         margin: 0 0 0.5rem;
-        color: #1a202c;
+        color: #ffebe0;
     }
 
     .details {
         font-size: 1.1rem;
-        color: #4a5568;
+        color: #a8a29e;
         margin-bottom: 1rem;
     }
 
     .details span {
-        color: #718096;
+        color: #a8a29e;
     }
 
     .contacts {
         font-size: 1rem;
-        color: #2d3748;
+        color: #a8a29e;
     }
 
     .bio {
         margin: 2rem 0;
         padding: 1.5rem;
-        background: #f8fafc;
         border-radius: 8px;
         line-height: 1.6;
-        color: #4a5568;
+        background: rgba(51, 69, 161, 0.2);
+        border: 1px solid #3b3b8a;
+        color: white;
     }
 
     .social {

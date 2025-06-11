@@ -6,7 +6,7 @@
 
     const lections: Lection[] = [
         'Введение в Svelte',
-        'Основы TypeScript',
+        'Основы TypeScript', 
         'CSS Grid Layout',
         'Анимации в Web',
         'Оптимизация производительности',
@@ -14,7 +14,7 @@
         'Тестирование компонентов',
         'State Management',
         'Web Components'
-    ].map(title => ({title, url: '#'}));
+    ].map(title => ({ title, url: '#' }));
 
     let scrollPos = 0;
     const scrollStep = 400;
@@ -25,7 +25,7 @@
 
         const maxScroll = container.scrollWidth - container.clientWidth;
         scrollPos = Math.max(0, Math.min(maxScroll, scrollPos + (direction === 'left' ? -scrollStep : scrollStep)));
-        container.scrollTo({left: scrollPos, behavior: 'smooth'});
+        container.scrollTo({ left: scrollPos, behavior: 'smooth' });
     };
 </script>
 
@@ -34,15 +34,19 @@
 
     {#if lections.length === 0}
         <div class="empty-state">
-            <img src="https://via.placeholder.com/100" alt="No lections"/>
+            <img src="https://via.placeholder.com/100" alt="No lections" />
             <div>Lections not found</div>
         </div>
     {:else}
         <div class="container">
-            <button class="nav-btn" on:click={() => scroll('left')}>&lt;</button>
+            <button class="nav-btn nav-btn--left" on:click={() => scroll('left')}>
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+                </svg>
+            </button>
 
             <div class="scroll-container">
-                {#each lections as {title, url}}
+                {#each lections as { title, url }}
                     <a href={url} class="card" target="_blank" rel="noopener">
                         <div class="thumb">
                             <span>📚</span>
@@ -52,8 +56,11 @@
                     </a>
                 {/each}
             </div>
-
-            <button class="nav-btn" on:click={() => scroll('right')}>&gt;</button>
+            <button class="nav-btn nav-btn--right" on:click={() => scroll('right')}>
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                </svg>
+            </button>
         </div>
     {/if}
 </div>
@@ -62,18 +69,20 @@
     .lections-block {
         display: flex;
         flex-direction: column;
+        padding: 10px;
     }
 
     .title {
         margin: 5px 0 15px 10px;
         font-size: 1.5rem;
         font-weight: 600;
-        color: #333;
+        color: #ffebe0;
     }
 
     .container {
         display: flex;
         align-items: center;
+        position: relative;
     }
 
     .scroll-container {
@@ -84,6 +93,7 @@
         padding: 10px 0;
         scrollbar-width: none;
         -ms-overflow-style: none;
+        width: 100%;
     }
 
     .scroll-container::-webkit-scrollbar {
@@ -97,22 +107,29 @@
         width: 30px;
         height: 30px;
         display: grid;
-        flex-shrink: 0;
         place-items: center;
         cursor: pointer;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 10;
+    }
+
+    .container:hover .nav-btn {
+        opacity: 0.8;
     }
 
     .nav-btn:hover {
         background: #f5f5f5;
+        opacity: 1 !important;
     }
 
-    .nav-btn:first-child {
-        margin-right: 10px;
+    .nav-btn--left {
+        left: 10px;
     }
 
-    .nav-btn:last-child {
-        margin-left: 10px;
+    .nav-btn--right {
+        right: 10px;
     }
 
     .card {
@@ -125,11 +142,10 @@
         background: white;
         border-radius: 12px;
         overflow: hidden;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        text-decoration: none;
-        color: #2d3748;
+        background: rgba(51, 69, 161, 0.2);
+        border: 1px solid #3b3b8a;
+        color: white;
+        transition: transform 0.2s ease;
     }
 
     .card:hover {

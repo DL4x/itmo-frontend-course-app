@@ -79,7 +79,11 @@
         </div>
     {:else}
         <div class="container">
-            <button class="nav-btn left" on:click={() => scroll('left')}>&lt;</button>
+            <button class="nav-btn nav-btn--left" on:click={() => scroll('left')}>
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+                </svg>
+            </button>
 
             <div class="experience-scroll-container">
                 {#each experiences as {company, position, period, description}}
@@ -96,7 +100,11 @@
                 {/each}
             </div>
 
-            <button class="nav-btn right" on:click={() => scroll('right')}>&gt;</button>
+            <button class="nav-btn nav-btn--right" on:click={() => scroll('right')}>
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                </svg>
+            </button>
         </div>
     {/if}
 </div>
@@ -111,13 +119,14 @@
         margin: 5px 0 15px 10px;
         font-size: 1.5rem;
         font-weight: 600;
-        color: #333;
+        color: #ffebe0;
     }
 
     .container {
         display: flex;
         align-items: center;
         width: 100%;
+        position: relative;
     }
 
     .experience-scroll-container {
@@ -136,7 +145,6 @@
 
     .nav-btn {
         background: white;
-        border: 1px solid #ddd;
         border-radius: 50%;
         width: 30px;
         height: 30px;
@@ -144,26 +152,34 @@
         flex-shrink: 0;
         place-items: center;
         cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 10;
+    }
+
+    .container:hover .nav-btn {
+        opacity: 0.8;
     }
 
     .nav-btn:hover {
         background: #f5f5f5;
+        opacity: 0.8 !important;
     }
 
-    .nav-btn.left {
-        margin-right: 10px;
+    .nav-btn--left {
+        left: 10px;
     }
 
-    .nav-btn.right {
-        margin-left: 10px;
+    .nav-btn--right {
+        right: 10px;
     }
 
     .card {
-        background: #f8f9fa;
         padding: 15px 5%;
+        background: rgba(51, 69, 161, 0.2);
+        border: 1px solid #3b3b8a;
         border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        color: white;
         flex-shrink: 0;
         width: 100%;
     }
@@ -177,16 +193,16 @@
     .company {
         font-weight: bold;
         font-size: 1.5rem;
-        color: #2c3e50;
+        color: #ffebe0;
     }
 
     .period {
-        color: #7f8c8d;
+        color: #ffebe0;
         align-self: center;
     }
 
     .desc {
-        color: #555;
+        color: #ffebe0;
         line-height: 1.5;
     }
 

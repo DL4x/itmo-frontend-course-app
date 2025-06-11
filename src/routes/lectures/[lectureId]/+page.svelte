@@ -1,6 +1,6 @@
 <script lang="ts">
     import type {PageProps} from './$types';
-    import {Heading, Rating, Card, Button, Textarea, P} from 'flowbite-svelte';
+    import {Heading, Rating, Card, Button, Textarea, P, Avatar} from 'flowbite-svelte';
     import {addComment} from '$lib/strapiRepository';
     import {userStore} from '$lib/store';
     import type {AuthorComment} from '$lib';
@@ -20,6 +20,15 @@
         );
     }
 
+    const dynamicManifest = {
+        name: `${data.presentation.presentationName} | ITMO Frontend Courses`,
+        short_name: "ITMO Lecture",
+        description: data.presentation.presentationDescription,
+        start_url: `/lectures/${data.presentation.documentId}`,
+        theme_color: "#FE8A70",
+        background_color: "#ffffff"
+    };
+
     async function handleComment() {
         if (!$userStore?.name) {
             return;
@@ -34,6 +43,8 @@
 
 <svelte:head>
     <title>{data.presentation.presentationName} | Lectures</title>
+    <link rel="manifest" href="manifest.json" data-sveltekit-preload-data="true" />
+    <meta name="theme-color" content="#FE8A70" />
 </svelte:head>
 
 <div class="w-[80%] mx-auto px-4 py-8">
@@ -48,12 +59,7 @@
         </div>
         <div class="w-full md:w-auto md:text-right">
             <p class="text-sm text-[#fcefe8] dark:text-gray-400">Average rating</p>
-            <Rating
-                    class="justify-start md:justify-end"
-                    id="lecture-rating"
-                    rating={averageRating()}
-                    total={5}
-            />
+            <Rating id="lecture-rating" total={5} rating={averageRating()} class="justify-start md:justify-end" />
             <p class="text-xs text-[#fcefe8] dark:text-gray-400 mt-1">
                 Based on {data.presentation.votedPersons.length} votes
             </p>
@@ -63,56 +69,33 @@
     <div class="w-full mb-8">
         <div class="w-full aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
             <iframe
-                    allowfullscreen
-                    class="w-full h-full"
-                    src="https://docs.google.com/presentation/d/{data.presentation
-                    .presentationUrl}/embed?start=false&loop=false"
-                    title="Lecture presentation"
+                title="Lecture presentation"
+                class="w-full h-full"
+                src='https://docs.google.com/presentation/d/{data.presentation.presentationUrl}/embed?start=false&loop=false'
+                allowfullscreen
             >
             </iframe>
         </div>
 
         <div class="mt-4">
             <a
-                    class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                    download="presentation.pdf"
-                    href={`https://docs.google.com/presentation/d/${data.presentation.presentationUrl}/export/pdf`}
+                href={`https://docs.google.com/presentation/d/${data.presentation.presentationUrl}/export/pdf`}
+                download="presentation.pdf"
+                class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
             >
-                <svg
-                        class="w-5 h-5 mr-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                    ></path>
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                 </svg>
                 Скачать PDF
             </a>
 
             <a
-                    class="inline-flex items-center px-4 py-2 ml-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-                    download="presentation.pptx"
-                    href={`https://docs.google.com/presentation/d/${data.presentation.presentationUrl}/export/pptx`}
+                href={`https://docs.google.com/presentation/d/${data.presentation.presentationUrl}/export/pptx`}
+                download="presentation.pptx"
+                class="inline-flex items-center px-4 py-2 ml-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
             >
-                <svg
-                        class="w-5 h-5 mr-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                    ></path>
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                 </svg>
                 Скачать PPTX
             </a>
@@ -121,16 +104,16 @@
 
     <div class="w-full mb-8">
         <Card class="w-full max-w-none bg-[#c7c1bc] dark:bg-gray-800">
-            <Heading class="mb-4 text-xl sm:text-2xl text-[#615151] dark:text-white" tag="h3">
+            <Heading tag="h3" class="mb-4 text-xl sm:text-2xl text-[#615151] dark:text-white">
                 Написать комментарий
             </Heading>
             <form class="w-full">
-                <Textarea
-                        bind:value={commentText}
-                        class="w-full mb-4 text-xs sm:text-sm"
-                        placeholder="Расскажите, как вам лекция"
-                        rows={2}
-                />
+            <Textarea
+                bind:value={commentText}
+                placeholder="Расскажите, как вам лекция"
+                rows={2}
+                class="w-full mb-4 text-xs sm:text-sm"
+            />
                 <Button class="w-full sm:w-auto bg-[#FE8A70]" on:click={handleComment}>
                     Опубликовать
                 </Button>
@@ -139,36 +122,44 @@
     </div>
 
     <div class="w-full">
-        <Heading class="mb-4 text-xl sm:text-2xl text-[#fcefe8] dark:text-white" tag="h3"
-        >Комментарии
-        </Heading
-        >
+        <Heading tag="h3" class="mb-4 text-xl sm:text-2xl text-[#fcefe8] dark:text-white">Комментарии</Heading>
         <div class="space-y-4 w-full">
             {#if comments.length === 0}
-                <Heading tag="h4" class="text-base sm:text-lg text-gray-600 dark:text-gray-300"
-                >Комментариев пока нет...
-                </Heading
-                >
+                <Heading tag="h4" class="text-base sm:text-lg text-gray-600 dark:text-gray-300">Комментариев пока нет...</Heading>
             {:else}
                 {#each comments as comment (comment.id)}
-                    <Card class="w-full max-w-none bg-[#c7c1bc] flex items-start gap-3">
-                        <div class="flex flex-col md:flex-row justify-between">
-                            <div
-                                    class="flex items-center justify-center w-15 h-11 rounded-full bg-[#615151] text-white font-semibold text-xl"
-                            >
+                    <Card class="w-full max-w-none bg-[#c7c1bc] rounded-lg shadow-sm">
+                        <div class="flex items-start">
+                            <Avatar class="size-l bg-[#615151] text-white transition-colors flex-shrink-0">
                                 {comment.author.name.charAt(0).toUpperCase()}
+                            </Avatar>
+                            <div class="ml-4 md:ml-6 flex-1">
+                                <div class="flex items-center justify-between">
+                                    <Heading
+                                        tag="h2"
+                                        class="text-base mt-2 sm:text-lg font-semibold text-[#615151] dark:text-gray-200"
+                                    >
+                                        {comment.author.name}
+                                    </Heading>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">
+                                         {new Date("2024-12-12").toLocaleDateString()}
+                                    </span>
+                                </div>
+
+                                <P class="text-base mt-3 sm:text-lg text-[#000000]/90 dark:text-gray-300">
+                                    {comment.commentDescription}
+                                </P>
+
+                                <div class="mt-4 flex items-center space-x-4 text-sm">
+                                    <button class="text-[#615151] hover:text-[#3a2f2f] dark:text-gray-400 dark:hover:text-gray-300">
+                                        <i class="far fa-reply mr-1"></i> Ответить
+                                    </button>
+                                    <button class="text-[#615151] hover:text-[#3a2f2f] dark:text-gray-400 dark:hover:text-gray-300">
+                                        <i class="far fa-thumbs-up mr-1"></i> Нравится
+                                    </button>
+
+                                </div>
                             </div>
-                            <Heading
-                                    tag="h2"
-                                    class="text-base sm:text-lg font-semibold text-[#615151] dark:text-gray-200 ml-4 md:ml-6 mt-2"
-                            >
-                                {comment.author.name}
-                            </Heading>
-                        </div>
-                        <div class="ml-16 md:ml-17">
-                            <P class="text-base sm:text-lg text-[#615151] dark:text-gray-300">
-                                {comment.commentDescription}
-                            </P>
                         </div>
                     </Card>
                 {/each}
@@ -177,9 +168,10 @@
     </div>
 </div>
 
+
 <style>
     .lecture-name {
-        color: #ffebe0;
+        color: #FFEBE0;
         font-size: 2.2rem;
         font-weight: bold;
         margin-bottom: 1rem;

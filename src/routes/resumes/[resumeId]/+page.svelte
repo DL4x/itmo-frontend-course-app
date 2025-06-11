@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-    <title>Resume</title>
+    <title>Резюме</title>
 </svelte:head>
 
 <div class="Content text-black">
@@ -18,7 +18,7 @@
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap'); /* DM Sans */
 
     .Content {
-        font-family: 'JetBrains Mono', monospace;
+        font-family: 'ALS Gorizont', sans-serif;
         /* width: 1140px; */
         width: 90%;
         display: flex;
@@ -28,10 +28,4 @@
         margin-top: 30px;
     }
 
-    @font-face {
-        font-family: 'JetBrains Mono';
-        font-weight: 500;
-        font-style: normal;
-        src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
-    }
 </style>

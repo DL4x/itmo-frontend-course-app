@@ -6,13 +6,13 @@
     };
 
     const education: Education[] = [
-        {institution: 'Samara Lyceum', degree: 'Certificate of secondary general education', period: '2018 - 2022'},
-        {institution: 'Stanford University', degree: 'Bachelor of Computer Science', period: '2022 - 2026'},
-        {institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028'},
-        {institution: 'Samara Lyceum', degree: 'Certificate of secondary general education', period: '2018 - 2022'},
-        {institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028'},
-        {institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028'},
-        {institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028'}
+        { institution: 'Samara Lyceum', degree: 'Certificate of secondary general education', period: '2018 - 2022' },
+        { institution: 'Stanford University', degree: 'Bachelor of Computer Science', period: '2022 - 2026' },
+        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
+        { institution: 'Samara Lyceum', degree: 'Certificate of secondary general education', period: '2018 - 2022' },
+        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
+        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
+        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' }
     ];
 
     let scrollPos = 0;
@@ -24,7 +24,7 @@
 
         const maxScroll = container.scrollWidth - container.clientWidth;
         scrollPos = Math.max(0, Math.min(maxScroll, scrollPos + (direction === 'left' ? -scrollStep : scrollStep)));
-        container.scrollTo({left: scrollPos, behavior: 'smooth'});
+        container.scrollTo({ left: scrollPos, behavior: 'smooth' });
     };
 </script>
 
@@ -33,17 +33,21 @@
 
     {#if education.length === 0}
         <div class="empty-state">
-            <img src="https://via.placeholder.com/100" alt="No education"/>
+            <img src="https://via.placeholder.com/100" alt="No education" />
             <div>Education not found</div>
         </div>
     {:else}
         <div class="timeline">
             <div class="line"></div>
-            <button class="nav-btn left" on:click={() => scroll('left')} aria-label="Scroll left">&lt;</button>
+            <button class="nav-btn nav-btn--left" on:click={() => scroll('left')}>
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+                </svg>
+            </button>
 
             <div class="education-scroll-container">
-                {#each education as {institution, degree, period}}
-                    <div class="item">
+                {#each education as { institution, degree, period }, i}
+                    <div class="item" class:first-marker={i === 0} class:last-marker={i === education.length - 1}>
                         <div class="marker"></div>
                         <div class="period">{period}</div>
                         <div class="content">
@@ -54,7 +58,11 @@
                 {/each}
             </div>
 
-            <button class="nav-btn right" on:click={() => scroll('right')} aria-label="Scroll right">&gt;</button>
+            <button class="nav-btn nav-btn--right" on:click={() => scroll('right')}>
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                </svg>
+            </button>
         </div>
     {/if}
 </div>
@@ -63,11 +71,12 @@
     .education-block {
         display: flex;
         flex-direction: column;
+        padding: 10px;
     }
 
     .title {
         margin: 5px 0 15px 10px;
-        color: #333;
+        color: #ffebe0;
         font-size: 1.5rem;
         font-weight: 600;
     }
@@ -75,12 +84,15 @@
     .timeline {
         position: relative;
         display: flex;
+        align-items: center;
     }
 
     .line {
         position: absolute;
-        inset: 10px 0 auto 0;
-        height: 4px;
+        left: 0;
+        right: 0;
+        top: 12px;
+        height: 2px;
         background: #e2e8f0;
         z-index: 1;
     }
@@ -92,6 +104,7 @@
         gap: 15px;
         padding: 20px 0;
         scrollbar-width: none;
+        width: 100%;
     }
 
     .education-scroll-container::-webkit-scrollbar {
@@ -106,23 +119,29 @@
         height: 30px;
         display: grid;
         place-items: center;
-        flex-shrink: 0;
         cursor: pointer;
-        z-index: 1;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        align-self: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 10;
+        flex-shrink: 0;
+    }
+
+    .timeline:hover .nav-btn {
+        opacity: 0.8;
     }
 
     .nav-btn:hover {
         background: #f5f5f5;
+        opacity: 1 !important;
     }
 
-    .nav-btn.left {
-        margin-right: 10px;
+    .nav-btn--left {
+        left: 10px;
     }
 
-    .nav-btn.right {
-        margin-left: 10px;
+    .nav-btn--right {
+        right: 10px;
     }
 
     .item {
@@ -146,7 +165,7 @@
     }
 
     .period {
-        color: #4f46e5;
+        color: white;
         font-weight: 600;
         margin: -15px 0 0.5rem;
     }
@@ -158,13 +177,13 @@
 
     .institution {
         font-weight: bold;
-        font-size: 1.5rem;
-        color: #1a202c;
+        font-size: 1.2rem;
+        color: #e6d8c8;
         line-height: 1.5rem;
     }
 
     .degree {
-        color: #4a5568;
+        color: #a8a29e;
         line-height: 1.1rem;
     }
 
