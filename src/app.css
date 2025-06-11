@@ -26,7 +26,7 @@
     font-family: 'ALS Gorizont';
     font-weight: 500;
     font-style: normal;
-    src: url('src/fonts/als-gorizont-variable.ttf') format('truetype');
+    src: url('/fonts/als-gorizont-variable.ttf') format('truetype');
 }
 
 body {

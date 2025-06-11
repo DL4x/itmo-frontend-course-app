@@ -43,7 +43,7 @@
         <enhanced:img
             alt="Profile Photo"
             class="photo"
-            src="/src/images/profileImages/1.png"
+            src="/static/profile/1.png"
             width="300px"
         />
         <div class="info">
