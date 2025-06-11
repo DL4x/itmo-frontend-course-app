@@ -3,7 +3,6 @@ import { derived, get } from 'svelte/store';
 import { userStore } from '$lib/store';
 
 export interface PresentationCardData extends IDObject {
-    lectureNumber: number;
     name: string;
     description: string;
     previewUrl: string;
@@ -11,7 +10,7 @@ export interface PresentationCardData extends IDObject {
     commentsCount: number;
     averageUserScore?: number;
     visited: boolean;
-    tags: string[];
+    tags: Set<string>;
 }
 
 function averageScoreOf(votedPersons: VotedPerson[]): number | undefined {
@@ -27,8 +26,7 @@ export function mapToPresentationCardData(
     visited: Set<string>
 ): PresentationCardData {
     return {
-        lectureNumber: index + 1,
-        name: presentation.presentationName,
+        name: `Лекция №${index + 1}: ${presentation.presentationName}`,
         description: presentation.presentationDescription,
         previewUrl: presentation.presentationPreviewUrl ?? '',
         authors: presentation.presentationOwners,
@@ -36,9 +34,10 @@ export function mapToPresentationCardData(
         id: presentation.documentId,
         averageUserScore: averageScoreOf(presentation.votedPersons),
         visited: visited.has(presentation.documentId),
-        tags: presentation.tags.map(tag => tag.name)
+        tags: new Set(presentation.tags.map((tag) => tag.name))
     };
 }
+
 export interface CoursePageData extends IDObject {
     title: string;
     previewUrl: string;

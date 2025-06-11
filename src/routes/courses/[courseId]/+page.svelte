@@ -5,14 +5,13 @@
     import CourseProgressBar from '$lib/CourseProgressBar.svelte';
     import {favoritePresentationsIDs, type PresentationCardData} from '$lib/frontendEntities';
     import type {Author} from '$lib';
-    import {userStore} from '$lib/store';
+    import {notifyUserDataChanged, userStore} from '$lib/store';
     import {Search, Toggle} from 'flowbite-svelte';
     import {flip} from 'svelte/animate';
     import {goto, preloadData} from '$app/navigation';
     import TagsList from "$lib/TagsList.svelte";
     import {SvelteSet} from "svelte/reactivity";
     import {addFavouritePresentation, deleteFavouritePresentation} from "$lib/strapiRepository";
-    import {notifyUserDataChanged} from "$lib/supabase";
 
     const {data}: PageProps = $props();
 
@@ -22,57 +21,69 @@
             .map(author => author.name)
     ).size);
 
-    const requiredTags = new SvelteSet<string>();
-    const allTags = $derived(new Set<string>(data.presentations.flatMap(cardData => cardData.tags)));
+    /**
+     * There is a function in STD library that can replace this function, but it's still too new and experimental, so I implement this from scratch
+     */
+    function unionOfSets<T>(...sets: Set<T>[]): Set<T> {
+        const result = new Set<T>();
+        for (const set of sets) for (const x of set.keys()) result.add(x);
+        return result;
+    }
 
     function getProgress(author: Author | null): number | undefined {
         if (author === null) {
             return undefined;
         }
-        const progressBar = author.progressBars.find((x) => x.courseDocumentId === data.id);
-        if (progressBar === undefined) {
-            return 0;
-        }
-        return Math.round(
+        const progressBar = author.progressBars.find(x => x.courseDocumentId === data.id);
+        return progressBar === undefined ? 0 : Math.round(
             (progressBar.presentations.length / data.presentations.length) * 100
         );
     }
 
-    function containsText(presData: PresentationCardData, searchQuery: string): boolean {
-        if (searchQuery.length === 0) return true;
-
-        const target = searchQuery.toLowerCase();
-        const nameContains = presData.name.toLowerCase().includes(target);
-        const descriptionContains = presData.description.toLowerCase().includes(target);
-        const authorContains = presData.authors.some(author => author.name.toLowerCase().includes(target))
-        return nameContains || descriptionContains || authorContains;
-    }
-
+    const requiredTags = new SvelteSet<string>();
     let searchQuery = $state('');
     let showOnlyUnvisited = $state(false);
     let showOnlyFavorites = $state(false);
 
-    function hasTag(tags: SvelteSet<string>, cardData: PresentationCardData): boolean {
-        return tags.size === 0 ? true : cardData.tags.some(tag => tags.has(tag));
-    }
-
+    const allTags = $derived(unionOfSets(...data.presentations.map(cardData => cardData.tags)));
     const presentations = $derived.by(() => {
+        function textFilter(presData: PresentationCardData): boolean {
+            if (searchQuery.length === 0) return true;
+
+            const target = searchQuery.toLowerCase();
+
+            const nameContains = presData.name.toLowerCase().includes(target);
+            const descriptionContains = presData.description.toLowerCase().includes(target);
+            const authorContains = presData.authors.some(author => author.name.toLowerCase().includes(target))
+            return nameContains || descriptionContains || authorContains;
+        }
+
+        function tagsFilter(cardData: PresentationCardData): boolean {
+            if (requiredTags.size === 0) {
+                return true;
+            }
+
+            return requiredTags.keys().every(tag => cardData.tags.has(tag));
+        }
+
+        const restFilters = (it: PresentationCardData): boolean => tagsFilter(it) && textFilter(it);
+
         if (showOnlyFavorites) {
             if ($favoritePresentationsIDs === null) return [];
             if ($favoritePresentationsIDs.size === 0) return [];
             if (showOnlyUnvisited) {
                 return data.presentations.filter(
-                    it => !it.visited && $favoritePresentationsIDs.has(it.id) && hasTag(requiredTags, it) && containsText(it, searchQuery)
+                    it => !it.visited && $favoritePresentationsIDs.has(it.id) && restFilters(it)
                 );
             }
             return data.presentations.filter(
-                it => $favoritePresentationsIDs.has(it.id) && hasTag(requiredTags, it) && containsText(it, searchQuery)
+                it => $favoritePresentationsIDs.has(it.id) && restFilters(it)
             );
         }
         if (showOnlyUnvisited) {
-            return data.presentations.filter(it => !it.visited && hasTag(requiredTags, it) && containsText(it, searchQuery));
+            return data.presentations.filter(it => !it.visited && restFilters(it));
         }
-        return data.presentations.filter(it => hasTag(requiredTags, it) && containsText(it, searchQuery));
+        return data.presentations.filter(restFilters);
     });
 
     function onTagClick(tag: string) {
@@ -85,21 +96,19 @@
         }
     }
 
-    $inspect(requiredTags);
-
-    function onFavoriteClicked(author: Author | null, presentationDocumentId: string) {
+    async function onFavoriteClicked(author: Author | null, presentationDocumentId: string) {
         if ($favoritePresentationsIDs === null || author === null) {
             console.error(`Favorite clicked but user is not logged`);
             return;
         }
         if ($favoritePresentationsIDs.has(presentationDocumentId)) {
             console.log("Deleting presentation from favorites");
-            deleteFavouritePresentation(author, presentationDocumentId);
+            await deleteFavouritePresentation(author, presentationDocumentId);
         } else {
             console.log("Adding presentation to favorites");
-            addFavouritePresentation(author, presentationDocumentId);
+            await addFavouritePresentation(author, presentationDocumentId);
         }
-        notifyUserDataChanged(author);
+        await notifyUserDataChanged(author);
     }
 </script>
 
@@ -111,8 +120,8 @@
     .text-block {
         display: flex;
         flex-direction: column;
-        gap: 32px;
-        justify-content: center;
+        gap: 16px;
+        justify-content: space-between;
         font-size: var(--text-xl);
     }
 
@@ -131,17 +140,12 @@
         padding: 16px;
     }
 
-    /*h1 {*/
-    /*    color: var(--color-primary-200)*/
-    /*}*/
-
     .presentations-grid {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 16px;
         justify-content: space-around;
-        /*align-items: start;*/
     }
 
     h1 {
@@ -158,17 +162,6 @@
         flex-direction: row;
         gap: 8px;
         justify-content: space-between;
-    }
-
-    @media (width < 48rem) {
-        .about {
-            flex-direction: column;
-        }
-
-        img {
-            width: 100%;
-            order: -1;
-        }
     }
 
     .course-title {
@@ -218,27 +211,48 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        gap: 8px;
+        gap: 16px;
     }
 
     .filters {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
+        align-items: stretch;
+        gap: 16px;
     }
 
     .toggles {
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: stretch;
+    }
+    @media (width < 48rem) {
+        .about {
+            flex-direction: column;
+        }
+
+        img {
+            display: none;
+            width: 100%;
+            order: -1;
+        }
+        .toggles {
+            order: -1;
+        }
+        .filters {
+            flex-direction: column;
+        }
     }
 </style>
 
 <main>
     <div class="about">
         <div class="text-block">
-            <h1 class="course-title">Курс: {data.title}</h1>
+            <h1 class="course-title">{data.title}</h1>
             <CourseProgressBar progress={getProgress($userStore)}/>
             <p>{data.description}</p>
             <p>
@@ -261,8 +275,8 @@
         <div class="filters">
             <TagsList tags={allTags} activeTags={requiredTags} onTagClick={onTagClick}/>
             <div class="toggles">
-                <Toggle bind:checked={showOnlyFavorites} class="p-4 text-primary-100">Только избранное</Toggle>
-                <Toggle bind:checked={showOnlyUnvisited} class="p-4 text-primary-100">Только непрочитанное</Toggle>
+                <Toggle bind:checked={showOnlyFavorites} class="dark text-primary-100 text-sm">Избранное</Toggle>
+                <Toggle bind:checked={showOnlyUnvisited} class="dark text-primary-100 text-sm">Непрочитанное</Toggle>
             </div>
         </div>
     </div>

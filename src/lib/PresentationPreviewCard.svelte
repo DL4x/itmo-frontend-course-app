@@ -11,7 +11,6 @@
     }
 
     let {
-        lectureNumber,
         name,
         authors,
         visited,
@@ -72,11 +71,9 @@
             {/if}
         {/if}
     </div>
-    <h5 class="mb-2 text-2xl font-bold tracking-tight">
-        Лекция №{lectureNumber.toString()}: {name}
-    </h5>
+    <h5 class="mb-2 text-2xl font-bold tracking-tight">{name}</h5>
 </div>
-{#if authors.length !== 0 || tags.length !== 0}
+{#if authors.length !== 0 || tags.size !== 0}
     <div class="details">
         {#if authors.length !== 0}
             <div class="flex flex-row flex-wrap gap-2">
@@ -85,7 +82,7 @@
                 {/each}
             </div>
         {/if}
-        {#if tags.length !== 0}
+        {#if tags.size !== 0}
             <TagsList tags={tags} onTagClick={tag => onTagClick(tag)}/>
         {/if}
     </div>

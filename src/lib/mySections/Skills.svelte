@@ -1,10 +1,14 @@
 <script lang="ts">
-    import { fade, fly } from 'svelte/transition';
-    import { quintOut } from 'svelte/easing';
+    import {fade, fly} from 'svelte/transition';
+    import {quintOut} from 'svelte/easing';
+    import {self} from "svelte/legacy";
+    import type {Skill} from '$lib';
 
-    import type { Skill } from '$lib';
+    interface Props {
+        skills: Skill[];
+    }
 
-    const skills: Skill[] = $props();
+    const {skills}: Props = $props();
 
     type SkillList = { name: string };
 
@@ -18,10 +22,10 @@
         'Git',
         'Docker',
         'Python'
-    ].map((name) => ({ name }));
+    ].map((name) => ({name}));
 
     const visibleSkills = skills.slice(0, 7);
-    let showAllSkills = false;
+    let showAllSkills = $state(false);
 
     const toggleSkillsModal = () => (showAllSkills = !showAllSkills);
 </script>
@@ -32,16 +36,16 @@
     {#if skills.length === 0}
         <div class="no-skills">
             <enhanced:img
-                src="/src/images/UFONotFound.png"
-                width="80px"
-                height="80px"
-                alt="No skills"
+                    src="/src/images/UFONotFound.png"
+                    width="80px"
+                    height="80px"
+                    alt="No skills"
             />
             <div>Skills not found</div>
         </div>
     {:else}
         <div class="skills-grid">
-            {#each visibleSkills as { name }}
+            {#each visibleSkills as {name}}
                 <div class="skill-tag">
                     <span>{name}</span>
                 </div>
@@ -51,11 +55,11 @@
 </div>
 
 {#if showAllSkills}
-    <div class="skills-modal-backdrop" transition:fade on:click|self={toggleSkillsModal}>
+    <div class="skills-modal-backdrop" transition:fade onclick={self(toggleSkillsModal)}>
         <div class="skills-modal-window" transition:fly={{ y: 100, easing: quintOut }}>
             <div class="skills-modal-title">All Skills</div>
             <div class="skills-modal-grid">
-                {#each skills as { name }}
+                {#each skills as {name}}
                     <div class="skill-tag">
                         <span>{name}</span>
                     </div>
@@ -168,9 +172,8 @@
 
     .skill-tag:hover {
         transform: translateY(-3px);
-        box-shadow:
-            0 4px 8px rgba(0, 0, 0, 0.15),
-            0 8px 24px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15),
+        0 8px 24px rgba(0, 0, 0, 0.12);
     }
 
     .skill-tag span {
