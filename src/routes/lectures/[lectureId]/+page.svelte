@@ -158,7 +158,7 @@
                 {:then summary}
                     <button
                             class="inline-flex items-center px-4 py-2 ml-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                            on:click={() => (scrollingModal = true)}
+                            onclick={() => (scrollingModal = true)}
                     >
                         <svg
                                 class="w-5 h-5 mr-2"
@@ -183,7 +183,7 @@
             {:else}
                 <button
                         class="inline-flex items-center px-4 py-2 ml-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                        on:click={generateSummary}
+                        onclick={generateSummary}
                 >
                     <svg
                             class="w-5 h-5 mr-2"
@@ -215,7 +215,7 @@
                         placeholder="Расскажите, как вам лекция"
                         rows={2}
                 />
-                <Button class="w-full sm:w-auto bg-[#FE8A70]" on:click={handleComment}>
+                <Button class="w-full sm:w-auto bg-[#FE8A70]" onclick={handleComment}>
                     Опубликовать
                 </Button>
             </form>

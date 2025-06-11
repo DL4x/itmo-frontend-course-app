@@ -6,7 +6,8 @@
 
     interface Props extends PresentationCardData {
         favorite?: boolean;
-        tags: string[];
+        onTagClick: (tag: string) => void;
+        onFavoriteClick: () => void;
     }
 
     let {
@@ -15,13 +16,14 @@
         authors,
         visited,
         favorite,
-        tags
+        tags,
+        onTagClick,
+        onFavoriteClick
     }: Props = $props();
 
     function onAddToFavorite(event: Event) {
         event.stopPropagation();
-        console.log(`M-O-C-K-!!! Imagine we toggled FAVORITE button on lecture with name = ${name}`);
-        favorite = !favorite;
+        onFavoriteClick();
     }
 </script>
 
@@ -62,10 +64,12 @@
         {#if visited}
             <p class="read-sign">Прочитано ✓</p>
         {/if}
-        {#if favorite}
-            <StarSolid size="lg" class="favorite-button text-yellow-500" onclick={onAddToFavorite}/>
-        {:else}
-            <StarOutline size="lg" class="favorite-button text-gray-400" onclick={onAddToFavorite}/>
+        {#if favorite !== undefined}
+            {#if favorite}
+                <StarSolid size="lg" class="favorite-button text-yellow-500" onclick={onAddToFavorite}/>
+            {:else}
+                <StarOutline size="lg" class="favorite-button text-gray-400" onclick={onAddToFavorite}/>
+            {/if}
         {/if}
     </div>
     <h5 class="mb-2 text-2xl font-bold tracking-tight">
@@ -82,7 +86,7 @@
             </div>
         {/if}
         {#if tags.length !== 0}
-            <TagsList tags={tags}/>
+            <TagsList tags={tags} onTagClick={tag => onTagClick(tag)}/>
         {/if}
     </div>
 {/if}

@@ -2,10 +2,12 @@
     import {GradientButton} from "flowbite-svelte";
 
     interface Props {
-        tags: string[];
+        tags: Iterable<string>;
+        activeTags?: Set<string>;
+        onTagClick?: (tag: string) => void;
     }
 
-    const {tags}: Props = $props();
+    const {tags, activeTags, onTagClick = it => {}}: Props = $props();
 
     /*function getTagClasses(tag: string): string {
         const styles = [
@@ -52,6 +54,11 @@
         }
         return hash;
     }
+
+    function onClick(tag: string, event?: MouseEvent) {
+        event?.stopPropagation();
+        onTagClick(tag);
+    }
 </script>
 
 <style>
@@ -72,9 +79,12 @@
 
 <div class="my-tags-list flex flex-wrap gap-2">
     {#each tags as tag (tag)}
-        <GradientButton outline size="xs" color={getTagColor(tag)} pill>
-            <span class="tag-text">{tag}</span>
-        </GradientButton>
-        <!--        <span class={`px-2 py-1 text-xs font-medium rounded ${getTagClasses(tag)}`}>{tag}</span>-->
+        <GradientButton
+                size="xs"
+                pill
+                outline={activeTags === undefined ? true : !activeTags.has(tag)}
+                color={getTagColor(tag)}
+                on:click={event => onClick(tag, event)}
+        ><span class="tag-text">{tag}</span></GradientButton>
     {/each}
 </div>
