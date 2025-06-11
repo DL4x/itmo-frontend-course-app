@@ -15,6 +15,7 @@
     --color-primary-700: #fe8a70; /**/
     --color-primary-800: #e6570a; /*#cc4522*/
     --color-primary-900: #a5371b;
+    --color-gray-700: var(--color-my-card-border);
     --color-my-gray: #474b66;
     --color-my-gray-hovered: #5c5c80;
     --color-my-background: #22223b;

@@ -37,7 +37,7 @@
             />
         </div>
         <div class="block skills-block">
-            <Skills {...skills} />
+            <Skills skills={skills} />
         </div>
     </div>
 
