@@ -1,9 +1,10 @@
 <script lang="ts">
-    // import type { PageProps } from './$types';
+    import type { PageProps } from './$types';
     import '/src/app.css';
     import Grid from '$lib/sections/Grid.svelte';
 
-    // const { data }: PageProps = $props();
+    const { data }: PageProps = $props();
+    let cur_author = data.author;
 </script>
 
 <svelte:head>
@@ -11,7 +12,7 @@
 </svelte:head>
 
 <div class="Content text-black">
-    <Grid/>
+    <Grid {...cur_author} />
 </div>
 
 <style>
@@ -27,5 +28,4 @@
         margin: auto;
         margin-top: 30px;
     }
-
 </style>

@@ -6,7 +6,7 @@
 
     const lections: Lection[] = [
         'Введение в Svelte',
-        'Основы TypeScript', 
+        'Основы TypeScript',
         'CSS Grid Layout',
         'Анимации в Web',
         'Оптимизация производительности',
@@ -14,7 +14,7 @@
         'Тестирование компонентов',
         'State Management',
         'Web Components'
-    ].map(title => ({ title, url: '#' }));
+    ].map((title) => ({ title, url: '#' }));
 
     let scrollPos = 0;
     const scrollStep = 400;
@@ -24,7 +24,10 @@
         if (!container) return;
 
         const maxScroll = container.scrollWidth - container.clientWidth;
-        scrollPos = Math.max(0, Math.min(maxScroll, scrollPos + (direction === 'left' ? -scrollStep : scrollStep)));
+        scrollPos = Math.max(
+            0,
+            Math.min(maxScroll, scrollPos + (direction === 'left' ? -scrollStep : scrollStep))
+        );
         container.scrollTo({ left: scrollPos, behavior: 'smooth' });
     };
 </script>
@@ -34,14 +37,19 @@
 
     {#if lections.length === 0}
         <div class="empty-state">
-            <img src="https://via.placeholder.com/100" alt="No lections" />
+            <enhanced:img
+                src="/src/images/UFONotFound.png"
+                width="80px"
+                height="80px"
+                alt="No lections"
+            />
             <div>Lections not found</div>
         </div>
     {:else}
         <div class="container">
             <button class="nav-btn nav-btn--left" on:click={() => scroll('left')}>
                 <svg viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
                 </svg>
             </button>
 
@@ -58,7 +66,7 @@
             </div>
             <button class="nav-btn nav-btn--right" on:click={() => scroll('right')}>
                 <svg viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
                 </svg>
             </button>
         </div>
@@ -150,7 +158,9 @@
 
     .card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        box-shadow:
+            0 10px 15px -3px rgba(0, 0, 0, 0.1),
+            0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
 
     .thumb {
