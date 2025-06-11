@@ -10,7 +10,7 @@ import type {
     ProgressBar,
     Skill, Tag,
     TimeRange,
-    VotedPerson
+    VotedAuthor
 } from '$lib/index';
 // ABOBA THIS MESSAGE IS WRITTEN BY BALBEKOV A. D BY SPECIAL REQUEST OF GERASIMOV E. O.
 
@@ -102,10 +102,9 @@ export function assertValidTag(tag: Tag) {
     assertNotEmpty(tag.name, 'tag_name');
 }
 
-export function assertValidVotedPerson(votedPerson: VotedPerson) {
+export function assertValidVotedAuthor(votedPerson: VotedAuthor) {
     assertValidIDObject(votedPerson);
-    assertValidAuthor(votedPerson.author);
-    assertIsInt(votedPerson.personScore, 'person_score');
+    assertIsInt(votedPerson.authorScore, 'author_score');
 }
 
 export function assertValidCourse(course: Course) {

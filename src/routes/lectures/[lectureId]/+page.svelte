@@ -12,11 +12,11 @@
     let comments: AuthorComment[] = data.presentation.comments;
 
     function averageRating() {
-        const length = data.presentation.votedPersons.length;
+        const length = data.presentation.votedAuthors.length;
         if (length === 0) return 0;
         return (
-            data.presentation.votedPersons
-                .map((person) => person.personScore)
+            data.presentation.votedAuthors
+                .map((person) => person.authorScore)
                 .reduce((sum, value) => sum + value, 0) / length
         );
     }
@@ -76,7 +76,7 @@
             <p class="text-sm text-[#fcefe8] dark:text-gray-400">Average rating</p>
             <Rating id="lecture-rating" total={5} rating={averageRating()} class="justify-start md:justify-end"/>
             <p class="text-xs text-[#fcefe8] dark:text-gray-400 mt-1">
-                Based on {data.presentation.votedPersons.length} votes
+                Based on {data.presentation.votedAuthors.length} votes
             </p>
         </div>
     </div>
