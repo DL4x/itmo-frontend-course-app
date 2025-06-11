@@ -491,7 +491,7 @@ async function parseCoursePreview(json: unknown): Promise<Course> {
     );
 
     assertField(
-        'course_description' in json && typeof json.course_name === 'string',
+        'course_description' in json && typeof json.course_description === 'string',
         'course_description',
         'string'
     )

@@ -40,7 +40,7 @@
         window.location.reload();
     }
 
-    function getPresentationUrl(rawUrl) {
+    function getPresentationUrl(rawUrl: string): string {
         if (rawUrl.includes('vercel')) {
             return rawUrl;
         }

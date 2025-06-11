@@ -53,7 +53,6 @@
             <div class="right" in:fly={{ x: 100, duration: 800 }}>
                 <Lottie
                     path="/src/images/starting_page/cosmonaut.json"
-                    class="lottie-animation"
                     mirrored={true}
                 />
             </div>

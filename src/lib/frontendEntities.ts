@@ -53,10 +53,9 @@ export function mapToCoursePageData(course: Course): CoursePageData {
     const user = get(userStore);
     const visited = new Set<string>(
         (user !== null ? user.progressBars : [])
-            .filter((progressBar) => progressBar.courseDocumentId === course.documentId)
-            .flatMap((progressBar) => progressBar.presentationChecks)
-            .filter((status) => status.isVisited)
-            .map((status) => status.presentationDocumentId)
+            .filter(progressBar => progressBar.courseDocumentId === course.documentId)
+            .flatMap(progressBar => progressBar.presentations)
+            .map(status => status.presentationDocumentId)
     );
 
     return {
@@ -77,5 +76,5 @@ export const favoritePresentationsIDs = derived(userStore, (user) => {
     if (user === null) {
         return null;
     }
-    return new Set<string>(user.favourites.map((presentation) => presentation.documentId));
+    return new Set<string>(user.favourites.map(favorite => favorite.presentationDocumentId));
 });
