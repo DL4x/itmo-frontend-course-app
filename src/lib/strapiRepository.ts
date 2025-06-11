@@ -491,6 +491,12 @@ async function parseCoursePreview(json: unknown): Promise<Course> {
     );
 
     assertField(
+        'course_description' in json && typeof json.course_name === 'string',
+        'course_description',
+        'string'
+    )
+
+    assertField(
         'course_preview' in json && typeof json.course_preview === 'object',
         'course_preview',
         'object'
@@ -509,9 +515,9 @@ async function parseCoursePreview(json: unknown): Promise<Course> {
         id: json.id.toString(),
         documentId: json.documentId,
         courseName: json.course_name,
-        courseDescription: "",
+        courseDescription: json.course_description,
         coursePreviewUrl: getFullImagePath(json.course_preview.url),
-        presentationCount: 7,
+        presentationCount: NaN,
         presentations: []
     };
     assertValidCourse(result);
