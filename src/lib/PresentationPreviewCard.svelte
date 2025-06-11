@@ -3,6 +3,9 @@
     import AuthorSmallCard from '$lib/AuthorSmallCard.svelte';
     import type {PresentationCardData} from '$lib/frontendEntities';
     import TagsList from "$lib/TagsList.svelte";
+    import {deleteProgressPresentation} from "$lib/strapiRepository";
+    import type {Author} from "$lib/index";
+    import {userStore} from "$lib/store";
 
     interface Props extends PresentationCardData {
         favorite?: boolean;
@@ -11,7 +14,9 @@
     }
 
     let {
-        name,
+        id,
+        courseId,
+        title,
         authors,
         visited,
         favorite,
@@ -23,6 +28,12 @@
     function onAddToFavorite(event: Event) {
         event.stopPropagation();
         onFavoriteClick();
+    }
+
+    function onReadClick(event: MouseEvent, author: Author | null) {
+        event.stopPropagation();
+        if (author === null) return;
+        deleteProgressPresentation(author, courseId, id);
     }
 </script>
 
@@ -61,7 +72,7 @@
 <div class="title">
     <div class="favorites-block">
         {#if visited}
-            <p class="read-sign">Прочитано ✓</p>
+            <p class="read-sign" onclick={event => onReadClick(event, $userStore)}>Прочитано ✓</p>
         {/if}
         {#if favorite !== undefined}
             {#if favorite}
@@ -71,7 +82,7 @@
             {/if}
         {/if}
     </div>
-    <h5 class="mb-2 text-2xl font-bold tracking-tight">{name}</h5>
+    <h5 class="mb-2 text-2xl font-bold tracking-tight">{title}</h5>
 </div>
 {#if authors.length !== 0 || tags.size !== 0}
     <div class="details">
