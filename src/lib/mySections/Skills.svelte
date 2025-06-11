@@ -2,9 +2,13 @@
     import { fade, fly } from 'svelte/transition';
     import { quintOut } from 'svelte/easing';
 
-    type Skill = { name: string };
+    import type { Skill } from '$lib';
 
-    const skills: Skill[] = [
+    const skills: Skill[] = $props();
+
+    type SkillList = { name: string };
+
+    const skillsList: SkillList[] = [
         'JavaScript',
         'TypeScript',
         'Svelte',
@@ -27,7 +31,12 @@
 
     {#if skills.length === 0}
         <div class="no-skills">
-            <img src="https://via.placeholder.com/100" alt="No skills" />
+            <enhanced:img
+                src="/src/images/UFONotFound.png"
+                width="80px"
+                height="80px"
+                alt="No skills"
+            />
             <div>Skills not found</div>
         </div>
     {:else}
@@ -37,7 +46,6 @@
                     <span>{name}</span>
                 </div>
             {/each}
-            
         </div>
     {/if}
 </div>
@@ -53,7 +61,6 @@
                     </div>
                 {/each}
             </div>
-
         </div>
     </div>
 {/if}
@@ -62,7 +69,7 @@
     .skills-block {
         display: flex;
         flex-direction: column;
-
+        padding: 10px;
     }
 
     .skills-title,
@@ -156,6 +163,7 @@
         transition: all 0.3s ease;
         margin: 5px;
         justify-content: center;
+        align-items: center;
     }
 
     .skill-tag:hover {
@@ -169,6 +177,7 @@
         font-weight: 600;
         color: white;
         font-size: 0.95rem;
+        text-align: center;
     }
 
     .no-skills {

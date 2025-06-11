@@ -1,15 +1,31 @@
 <script lang="ts">
-    type Education = {
+    import type { Education } from '$lib';
+
+    const education: Education[] = $props();
+
+    type EducationList = {
         institution: string;
         degree: string;
         period: string;
     };
 
-    const education: Education[] = [
-        { institution: 'Samara Lyceum', degree: 'Certificate of secondary general education', period: '2018 - 2022' },
-        { institution: 'Stanford University', degree: 'Bachelor of Computer Science', period: '2022 - 2026' },
+    const educationList: EducationList[] = [
+        {
+            institution: 'Samara Lyceum',
+            degree: 'Certificate of secondary general education',
+            period: '2018 - 2022'
+        },
+        {
+            institution: 'Stanford University',
+            degree: 'Bachelor of Computer Science',
+            period: '2022 - 2026'
+        },
         { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
-        { institution: 'Samara Lyceum', degree: 'Certificate of secondary general education', period: '2018 - 2022' },
+        {
+            institution: 'Samara Lyceum',
+            degree: 'Certificate of secondary general education',
+            period: '2018 - 2022'
+        },
         { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
         { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
         { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' }
@@ -23,7 +39,10 @@
         if (!container) return;
 
         const maxScroll = container.scrollWidth - container.clientWidth;
-        scrollPos = Math.max(0, Math.min(maxScroll, scrollPos + (direction === 'left' ? -scrollStep : scrollStep)));
+        scrollPos = Math.max(
+            0,
+            Math.min(maxScroll, scrollPos + (direction === 'left' ? -scrollStep : scrollStep))
+        );
         container.scrollTo({ left: scrollPos, behavior: 'smooth' });
     };
 </script>
@@ -33,7 +52,12 @@
 
     {#if education.length === 0}
         <div class="empty-state">
-            <img src="https://via.placeholder.com/100" alt="No education" />
+            <enhanced:img
+                src="/src/images/UFONotFound.png"
+                width="80px"
+                height="80px"
+                alt="No education"
+            />
             <div>Education not found</div>
         </div>
     {:else}
@@ -41,18 +65,22 @@
             <div class="line"></div>
             <button aria-label="left button" class="nav-btn nav-btn--left" on:click={() => scroll('left')}>
                 <svg viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
                 </svg>
             </button>
 
             <div class="education-scroll-container">
-                {#each education as { institution, degree, period }, i}
-                    <div class="item" class:first-marker={i === 0} class:last-marker={i === education.length - 1}>
+                {#each education as { title, subtitle, timeRange }, i}
+                    <div
+                        class="item"
+                        class:first-marker={i === 0}
+                        class:last-marker={i === education.length - 1}
+                    >
                         <div class="marker"></div>
-                        <div class="period">{period}</div>
+                        <div class="period">{timeRange.start} - {timeRange.end}</div>
                         <div class="content">
-                            <div class="institution">{institution}</div>
-                            <p class="degree">{degree}</p>
+                            <div class="institution">{title}</div>
+                            <p class="degree">{subtitle}</p>
                         </div>
                     </div>
                 {/each}
@@ -60,7 +88,7 @@
 
             <button aria-label="right button" class="nav-btn nav-btn--right" on:click={() => scroll('right')}>
                 <svg viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
                 </svg>
             </button>
         </div>

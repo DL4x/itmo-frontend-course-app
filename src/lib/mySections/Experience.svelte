@@ -1,4 +1,8 @@
 <script lang="ts">
+    import type { Company } from '$lib';
+
+    const experience: Company[] = $props();
+
     type Experience = {
         company: string;
         position: string;
@@ -65,44 +69,49 @@
             0,
             Math.min(maxScroll, scrollPos + (direction === 'left' ? -cardWidth : cardWidth))
         );
-        container.scrollTo({left: scrollPos, behavior: 'smooth'});
+        container.scrollTo({ left: scrollPos, behavior: 'smooth' });
     };
 </script>
 
 <div class="experience-block">
     <h2 class="title">[ Experience ]</h2>
 
-    {#if experiences.length === 0}
+    {#if experience.length === 0}
         <div class="empty-state">
-            <img src="https://via.placeholder.com/100" alt="No experience"/>
+            <enhanced:img
+                src="/src/images/UFONotFound.png"
+                width="80px"
+                height="80px"
+                alt="No experience"
+            />
             <div>Experience not found</div>
         </div>
     {:else}
         <div class="container">
             <button aria-label="left button" class="nav-btn nav-btn--left" on:click={() => scroll('left')}>
                 <svg viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+                    <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
                 </svg>
             </button>
 
             <div class="experience-scroll-container">
-                {#each experiences as {company, position, period, description}}
+                {#each experience as { companyName, companyDescription, position, period }}
                     <article class="card">
                         <header>
                             <div>
-                                <div class="company">{company}</div>
+                                <div class="company">{companyName}</div>
                                 <div class="position">{position}</div>
                             </div>
                             <time class="period">{period}</time>
                         </header>
-                        <p class="desc">{description}</p>
+                        <p class="desc">{companyDescription}</p>
                     </article>
                 {/each}
             </div>
 
             <button aria-label="right button" class="nav-btn nav-btn--right" on:click={() => scroll('right')}>
                 <svg viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
                 </svg>
             </button>
         </div>
@@ -113,6 +122,7 @@
     .experience-block {
         display: flex;
         flex-direction: column;
+        padding: 10px;
     }
 
     .title {
