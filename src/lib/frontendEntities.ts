@@ -1,4 +1,4 @@
-import type { Author, Course, IDObject, Presentation, VotedPerson } from '$lib/index';
+import type { Author, Course, IDObject, Presentation, VotedAuthor } from '$lib/index';
 import { derived, get } from 'svelte/store';
 import { userStore } from '$lib/store';
 
@@ -13,11 +13,11 @@ export interface PresentationCardData extends IDObject {
     tags: Set<string>;
 }
 
-function averageScoreOf(votedPersons: VotedPerson[]): number | undefined {
+function averageScoreOf(votedPersons: VotedAuthor[]): number | undefined {
     if (votedPersons.length === 0) {
         return undefined;
     }
-    return votedPersons.reduce((acc, x) => acc + x.personScore, 0) / votedPersons.length;
+    return votedPersons.reduce((acc, x) => acc + x.authorScore, 0) / votedPersons.length;
 }
 
 export function mapToPresentationCardData(
@@ -32,7 +32,7 @@ export function mapToPresentationCardData(
         authors: presentation.presentationOwners,
         commentsCount: presentation.comments.length,
         id: presentation.documentId,
-        averageUserScore: averageScoreOf(presentation.votedPersons),
+        averageUserScore: averageScoreOf(presentation.votedAuthors),
         visited: visited.has(presentation.documentId),
         tags: new Set(presentation.tags.map((tag) => tag.name))
     };
