@@ -39,6 +39,13 @@
 
         window.location.reload();
     }
+
+    function getPresentationUrl(rawUrl) {
+        if (rawUrl.includes('vercel')) {
+            return rawUrl;
+        }
+        return `https://docs.google.com/presentation/d/${rawUrl}/embed?start=false&loop=false`;
+    }
 </script>
 
 <svelte:head>
@@ -71,7 +78,7 @@
             <iframe
                 title="Lecture presentation"
                 class="w-full h-full"
-                src='https://docs.google.com/presentation/d/{data.presentation.presentationUrl}/embed?start=false&loop=false'
+                src='{getPresentationUrl(data.presentation.presentationUrl)}'
                 allowfullscreen
             >
             </iframe>
