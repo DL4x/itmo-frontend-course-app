@@ -4,6 +4,7 @@
     import {Heading} from 'flowbite-svelte';
     import {addAuthor, getAuthorByEmail} from '$lib/strapiRepository';
     import {userStore} from './store';
+    import type {Author} from "$lib/index";
 
     let email = '';
     let password = '';
@@ -12,7 +13,7 @@
     let loading = false;
     let isSignUp = false;
 
-    async function fetchUser() {
+    async function fetchUser(): Promise<Author> {
         return await getAuthorByEmail(email);
     }
 

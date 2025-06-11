@@ -11,6 +11,7 @@ export interface PresentationCardData extends IDObject {
     commentsCount: number;
     averageUserScore?: number;
     visited: boolean;
+    tags: string[];
 }
 
 function averageScoreOf(votedPersons: VotedPerson[]): number | undefined {
@@ -35,13 +36,9 @@ export function mapToPresentationCardData(
         id: presentation.documentId,
         averageUserScore: averageScoreOf(presentation.votedPersons),
         visited: visited.has(presentation.documentId),
+        tags: presentation.tags.map(tag => tag.name)
     };
 }
-
-export interface ToggleableTag {
-
-}
-
 export interface CoursePageData extends IDObject {
     title: string;
     previewUrl: string;
@@ -53,9 +50,9 @@ export function mapToCoursePageData(course: Course): CoursePageData {
     const user = get(userStore);
     const visited = new Set<string>(
         (user !== null ? user.progressBars : [])
-            .filter(progressBar => progressBar.courseDocumentId === course.documentId)
-            .flatMap(progressBar => progressBar.presentations)
-            .map(status => status.presentationDocumentId)
+            .filter((progressBar) => progressBar.courseDocumentId === course.documentId)
+            .flatMap((progressBar) => progressBar.presentations)
+            .map((status) => status.presentationDocumentId)
     );
 
     return {
@@ -66,9 +63,9 @@ export function mapToCoursePageData(course: Course): CoursePageData {
             course.coursePreviewUrl.length !== 0
                 ? course.coursePreviewUrl
                 : 'https://i.pinimg.com/originals/b9/a3/ff/b9a3fffae9c48308b0c9d33c5859af4b.jpg',
-        presentations: course.presentations.map((presentation, i) => {
-            return mapToPresentationCardData(presentation, i, visited);
-        })
+        presentations: course.presentations.map((presentation, i) =>
+            mapToPresentationCardData(presentation, i, visited)
+        )
     };
 }
 
@@ -76,5 +73,5 @@ export const favoritePresentationsIDs = derived(userStore, (user) => {
     if (user === null) {
         return null;
     }
-    return new Set<string>(user.favourites.map(favorite => favorite.presentationDocumentId));
+    return new Set<string>(user.favourites.map((favorite) => favorite.presentationDocumentId));
 });

@@ -9,10 +9,21 @@
     import {Search, Toggle} from 'flowbite-svelte';
     import {flip} from 'svelte/animate';
     import {goto, preloadData} from '$app/navigation';
+    import TagsList from "$lib/TagsList.svelte";
+    import {SvelteSet} from "svelte/reactivity";
+    import {addFavouritePresentation, deleteFavouritePresentation} from "$lib/strapiRepository";
+    import {notifyUserDataChanged} from "$lib/supabase";
 
     const {data}: PageProps = $props();
 
-    const authorsCount = $derived(new Set(data.presentations.flatMap(card => card.authors)).size);
+    const authorsCount = $derived(new Set(
+        data.presentations
+            .flatMap(card => card.authors)
+            .map(author => author.name)
+    ).size);
+
+    const requiredTags = new SvelteSet<string>();
+    const allTags = $derived(new Set<string>(data.presentations.flatMap(cardData => cardData.tags)));
 
     function getProgress(author: Author | null): number | undefined {
         if (author === null) {
@@ -40,24 +51,56 @@
     let searchQuery = $state('');
     let showOnlyUnvisited = $state(false);
     let showOnlyFavorites = $state(false);
+
+    function hasTag(tags: SvelteSet<string>, cardData: PresentationCardData): boolean {
+        return tags.size === 0 ? true : cardData.tags.some(tag => tags.has(tag));
+    }
+
     const presentations = $derived.by(() => {
         if (showOnlyFavorites) {
             if ($favoritePresentationsIDs === null) return [];
             if ($favoritePresentationsIDs.size === 0) return [];
             if (showOnlyUnvisited) {
                 return data.presentations.filter(
-                    it => !it.visited && $favoritePresentationsIDs.has(it.id) && containsText(it, searchQuery)
+                    it => !it.visited && $favoritePresentationsIDs.has(it.id) && hasTag(requiredTags, it) && containsText(it, searchQuery)
                 );
             }
             return data.presentations.filter(
-                it => $favoritePresentationsIDs.has(it.id) && containsText(it, searchQuery)
+                it => $favoritePresentationsIDs.has(it.id) && hasTag(requiredTags, it) && containsText(it, searchQuery)
             );
         }
         if (showOnlyUnvisited) {
-            return data.presentations.filter(it => !it.visited && containsText(it, searchQuery));
+            return data.presentations.filter(it => !it.visited && hasTag(requiredTags, it) && containsText(it, searchQuery));
         }
-        return data.presentations.filter(it => containsText(it, searchQuery));
+        return data.presentations.filter(it => hasTag(requiredTags, it) && containsText(it, searchQuery));
     });
+
+    function onTagClick(tag: string) {
+        if (requiredTags.has(tag)) {
+            console.log(`deleting tag ${tag}`);
+            requiredTags.delete(tag);
+        } else {
+            console.log(`adding tag ${tag}`);
+            requiredTags.add(tag);
+        }
+    }
+
+    $inspect(requiredTags);
+
+    function onFavoriteClicked(author: Author | null, presentationDocumentId: string) {
+        if ($favoritePresentationsIDs === null || author === null) {
+            console.error(`Favorite clicked but user is not logged`);
+            return;
+        }
+        if ($favoritePresentationsIDs.has(presentationDocumentId)) {
+            console.log("Deleting presentation from favorites");
+            deleteFavouritePresentation(author, presentationDocumentId);
+        } else {
+            console.log("Adding presentation to favorites");
+            addFavouritePresentation(author, presentationDocumentId);
+        }
+        notifyUserDataChanged(author);
+    }
 </script>
 
 <svelte:head>
@@ -163,11 +206,32 @@
         box-shadow: 0 8px 25px rgba(254, 138, 112, 0.2);
         border-color: rgba(254, 138, 112, 0.3);
     }
+
     .empty-list-message {
         display: flex;
         flex-direction: column;
         gap: 16px;
         align-items: center;
+    }
+
+    .search-bar {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .filters {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .toggles {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
     }
 </style>
 
@@ -191,10 +255,17 @@
         </div>
         <img alt="course preview" height="354" src={data.previewUrl} width="500">
     </div>
-    <Search bind:value={searchQuery} class="bg-my-card-background border-my-card-border text-primary-100" size="md">
-        <Toggle bind:checked={showOnlyFavorites} class="p-4 text-primary-100">Только избранное</Toggle>
-        <Toggle bind:checked={showOnlyUnvisited} class="p-4 text-primary-100">Только непрочитанное</Toggle>
-    </Search>
+    <div class="search-bar">
+        <Search bind:value={searchQuery} class="bg-my-card-background border-my-card-border text-primary-100"
+                size="lg"/>
+        <div class="filters">
+            <TagsList tags={allTags} activeTags={requiredTags} onTagClick={onTagClick}/>
+            <div class="toggles">
+                <Toggle bind:checked={showOnlyFavorites} class="p-4 text-primary-100">Только избранное</Toggle>
+                <Toggle bind:checked={showOnlyUnvisited} class="p-4 text-primary-100">Только непрочитанное</Toggle>
+            </div>
+        </div>
+    </div>
     <div class="presentations-grid">
         {#each presentations as presentation (presentation.id)}
             <div animate:flip={{ duration: 200 }} class="card" onclick={() => goto(`/lectures/${presentation.id}`)}
@@ -202,8 +273,9 @@
                  onfocus={() => preloadData(`/lectures/${presentation.id}`)}>
                 <PresentationPreviewCard
                         {...presentation}
-                        tags={['Svelte', 'Фронтенд', 'JavaScript', 'Веб-разработка', 'SvelteKit']}
                         favorite={$favoritePresentationsIDs?.has(presentation.id) ?? undefined}
+                        onTagClick={tag => onTagClick(tag)}
+                        onFavoriteClick={() => onFavoriteClicked($userStore, presentation.id)}
                 />
             </div>
         {:else}
