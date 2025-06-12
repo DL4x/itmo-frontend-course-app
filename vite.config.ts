@@ -5,5 +5,5 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
     assetsInclude: ['**/*.json'],
-    plugins: [tailwindcss(), enhancedImages(), sveltekit()]
+    plugins: [enhancedImages(), tailwindcss(), sveltekit()]
 });

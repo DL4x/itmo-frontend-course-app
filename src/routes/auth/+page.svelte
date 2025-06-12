@@ -1,4 +1,5 @@
 <script lang="ts">
+    import '/src/app.css'
     import { supabase } from '$lib/supabase';
     import { goto } from '$app/navigation';
     import { addAuthor, getAuthorByEmail } from '$lib/strapiRepository';

@@ -28,15 +28,6 @@
         );
     }
 
-    const dynamicManifest = {
-        name: `${data.presentation.presentationName} | ITMO Frontend Courses`,
-        short_name: "ITMO Lecture",
-        description: data.presentation.presentationDescription,
-        start_url: `/lectures/${data.presentation.id}`,
-        theme_color: "#FE8A70",
-        background_color: "#ffffff"
-    };
-
     let scrollingModal = $state(false);
     let summaryPromise = $state<Promise<string> | null>(null);
 
@@ -65,7 +56,6 @@
 
 <svelte:head>
     <title>{data.presentation.presentationName} | Lectures</title>
-    <link rel="manifest" href="manifest.json" data-sveltekit-preload-data="true"/>
     <meta name="theme-color" content="#FE8A70"/>
 </svelte:head>
 

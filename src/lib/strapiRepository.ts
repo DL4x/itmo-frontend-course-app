@@ -955,7 +955,7 @@ function getAuthorJson(
         created_presentations: getPresentationsJson(presentations),
         comments: getCommentsJson(comments),
         favourites: getFavouritesJson(favourites),
-        progressBars: getProgressBarsJson(progressBars)
+        progress_bars: getProgressBarsJson(progressBars)
     };
 }
 

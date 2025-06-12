@@ -1,4 +1,6 @@
 <script lang="ts">
+    import '/src/app.css'
+
     let email = '';
     let message = '';
     let isSubmitted = false;
