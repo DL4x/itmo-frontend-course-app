@@ -1,0 +1,21 @@
+{
+  "name": "ITMO Frontend Courses",
+  "short_name": "ITMO Courses",
+  "description": "Educational portal from ITMO graduates",
+  "start_url": "/resumes",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#FE8A70",
+  "icons": [
+    {
+      "src": "/images/ufo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/ufo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

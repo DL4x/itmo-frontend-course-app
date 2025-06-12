@@ -2,10 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <link href="%sveltekit.assets%/favicon.png" rel="icon"/>
+    <link rel="manifest" href="/manifest.json" />
+    <title>APP</title>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     %sveltekit.head%
 </head>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js');
+        });
+    }
+</script>
 <body data-sveltekit-preload-data="hover">
 <div style="display: contents">%sveltekit.body%</div>
 </body>
