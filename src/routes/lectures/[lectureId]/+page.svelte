@@ -1,4 +1,5 @@
 <script lang="ts">
+    import '/src/app.css'
     import type {PageProps} from './$types';
     import {Modal, Heading, Rating, Card, Button, Textarea, P} from 'flowbite-svelte';
     import {addComment, addProgressPresentation} from '$lib/strapiRepository';

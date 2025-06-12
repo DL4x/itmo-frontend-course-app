@@ -1,8 +1,8 @@
-import { marked} from 'marked'
-import {getDocument, GlobalWorkerOptions} from 'pdfjs-dist';
+import {marked} from 'marked'
+import {getDocument, GlobalWorkerOptions} from 'pdfjs-dist/legacy/build/pdf.min.mjs';
 import type {TextItem} from 'pdfjs-dist/types/src/display/api';
 
-import pdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
+import pdfWorker from 'pdfjs-dist/legacy/build/pdf.worker.mjs?url';
 
 GlobalWorkerOptions.workerSrc = pdfWorker;
 
