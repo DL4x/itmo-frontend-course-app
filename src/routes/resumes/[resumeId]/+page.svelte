@@ -4,7 +4,8 @@
     import Grid from '$lib/sections/Grid.svelte';
 
     const { data }: PageProps = $props();
-    let cur_author = data.author;
+    let author = data.author;
+    let lections = data.lections;
 </script>
 
 <svelte:head>
@@ -12,7 +13,7 @@
 </svelte:head>
 
 <div class="Content text-black">
-    <Grid {...cur_author} />
+    <Grid {author} {lections} />
 </div>
 
 <style>

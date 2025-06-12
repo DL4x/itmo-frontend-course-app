@@ -267,4 +267,12 @@
             opacity: 1;
         }
     }
+    @media (max-width: 768px) {
+        .stellar-header h1 {
+            font-size: 2rem;
+        }
+        .stellar-header p {
+            font-size: 1rem;
+        }
+    }
 </style>

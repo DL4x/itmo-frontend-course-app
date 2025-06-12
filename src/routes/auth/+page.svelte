@@ -55,11 +55,18 @@
             }
         } catch (err) {
             if (err instanceof Error) {
-                error = err.message;
+                error = supabaseErrorMap[err.message]
             }
         } finally {
             loading = false;
         }
+    };
+    const supabaseErrorMap: Record<string, string> = {
+        'Invalid login credentials': 'Неверный email или пароль',
+        'User already registered': 'Пользователь уже зарегистрирован',
+        'Email is not valid': 'Некорректный email',
+        'Password should be at least 6 characters.': 'Пароль должен быть не короче 6 символов',
+        'Unable to validate email address: invalid format': 'Неверный формат почты'
     };
 </script>
 

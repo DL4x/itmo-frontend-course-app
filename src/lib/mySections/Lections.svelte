@@ -1,20 +1,11 @@
 <script lang="ts">
-    type Lection = {
-        title: string;
-        url: string;
-    };
+    import type { Presentation } from '$lib';
 
-    const lections: Lection[] = [
-        'Введение в Svelte',
-        'Основы TypeScript',
-        'CSS Grid Layout',
-        'Анимации в Web',
-        'Оптимизация производительности',
-        'Работа с API',
-        'Тестирование компонентов',
-        'State Management',
-        'Web Components'
-    ].map((title) => ({ title, url: '#' }));
+    const lections: Presentation[] = $props();
+
+    function truncateString(str: string, maxLength: number = 40): string {
+        return str.length > maxLength ? str.slice(0, maxLength) + "..." : str;
+    }
 
     let scrollPos = 0;
     const scrollStep = 400;
@@ -47,24 +38,32 @@
         </div>
     {:else}
         <div class="container">
-            <button aria-label="left-button" class="nav-btn nav-btn--left" on:click={() => scroll('left')}>
+            <button
+                aria-label="left-button"
+                class="nav-btn nav-btn--left"
+                onclick={() => scroll('left')}
+            >
                 <svg viewBox="0 0 24 24" width="24" height="24">
                     <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
                 </svg>
             </button>
 
             <div class="scroll-container">
-                {#each lections as { title, url }}
-                    <a href={url} class="card" target="_blank" rel="noopener">
+                {#each lections as { id, presentationName }}
+                    <a href="/lectures/{id}" class="card" rel="noopener">
                         <div class="thumb">
                             <span>📚</span>
                         </div>
-                        <span class="name">{title}</span>
+                        <span class="name">{truncateString(presentationName, 20)}</span>
                         <div class="hover-effect"></div>
                     </a>
                 {/each}
             </div>
-            <button aria-label="right button" class="nav-btn nav-btn--right" on:click={() => scroll('right')}>
+            <button
+                aria-label="right button"
+                class="nav-btn nav-btn--right"
+                onclick={() => scroll('right')}
+            >
                 <svg viewBox="0 0 24 24" width="24" height="24">
                     <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
                 </svg>
@@ -142,7 +141,7 @@
 
     .card {
         position: relative;
-        width: 160px;
+        width: 170px;
         height: 200px;
         display: flex;
         flex-direction: column;
@@ -207,11 +206,6 @@
         place-items: center;
         gap: 10px;
         color: #777;
-    }
-
-    .empty-state img {
-        width: 80px;
-        opacity: 0.5;
     }
 
     @media (max-width: 768px) {
