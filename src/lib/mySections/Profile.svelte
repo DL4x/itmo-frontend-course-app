@@ -35,7 +35,7 @@
         icon: string;
         url: string;
         label: string;
-    };
+    }
 
     const links: Link[] = [
         { icon: '/src/images/github.png', url: authorGithub, label: 'GitHub' },
@@ -69,7 +69,7 @@
     <div class="social">
         {#each links as { icon, url, label }}
             <a href={url} target="_blank" class="link" aria-label={label}>
-                <img src={icon} alt={label} class='icon' />
+                <img src={icon} alt={label} class="icon" />
             </a>
         {/each}
     </div>
@@ -134,6 +134,8 @@
         background: rgba(51, 69, 161, 0.2);
         border: 1px solid #3b3b8a;
         color: white;
+
+        overflow-wrap: break-word;
     }
 
     .social {
@@ -172,6 +174,26 @@
 
         h1 {
             font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .profile-block {
+            width: 100%;
+            padding: 0;
+        }
+
+        .bio {
+            width: 80%;
+            padding: 1rem;
+        }
+
+        .header {
+            width: 100%
+        }
+
+        .info {
+            width: 90%;
         }
     }
 </style>
