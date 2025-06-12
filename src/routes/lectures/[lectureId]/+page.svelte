@@ -1,13 +1,14 @@
 <script lang="ts">
     import '/src/app.css'
     import type {PageProps} from './$types';
-    import { Modal, Heading, Rating, Card, Button, Textarea, P, Avatar } from 'flowbite-svelte';
-    import {addComment, addProgressPresentation} from '$lib/strapiRepository';
+    import {Avatar, Button, Card, Heading, Modal, P, Rating, Textarea} from 'flowbite-svelte';
+    import {addComment, addProgressPresentation, addVotedAuthor, deleteVotedAuthor} from '$lib/strapiRepository';
     import {notifyUserDataChanged, userStore} from '$lib/store';
-    import type {AuthorComment} from '$lib';
+    import {type AuthorComment, ratingOf} from '$lib';
     import {getPresentationSummary} from "$lib/deepseekRepository";
     import {onMount} from "svelte";
-    import { ExclamationCircleSolid,  } from "flowbite-svelte-icons";
+    import {ExclamationCircleSolid,} from "flowbite-svelte-icons";
+    import RatingChooser from "$lib/RatingChooser.svelte";
 
     const {data}: PageProps = $props();
     onMount(() => {
@@ -21,15 +22,14 @@
     let comments: AuthorComment[] = data.presentation.comments;
     let showToast = $state(false);
 
-    function averageRating() {
-        const length = data.presentation.votedAuthors.length;
-        if (length === 0) return 0;
-        return (
-            data.presentation.votedAuthors
-                .map((person) => person.authorScore)
-                .reduce((sum, value) => sum + value, 0) / length
-        );
-    }
+    const rating = $derived.by(() => {
+        if ($userStore === null) return undefined;
+
+        const find = data.presentation.votedAuthors
+            .find(votedAuthor => votedAuthor.authorDocumentId === $userStore.id);
+        if (find === undefined) return undefined;
+        return find.authorScore;
+    });
 
     let scrollingModal = $state(false);
     let summaryPromise = $state<Promise<string> | null>(null);
@@ -65,6 +65,18 @@
         }
         return `https://docs.google.com/presentation/d/${rawUrl}/embed?start=false&loop=false`;
     }
+
+    async function giveRating(rating: number) {
+        if ($userStore === null) return;
+        await addVotedAuthor($userStore, data.presentation, rating);
+        window.location.reload();
+    }
+
+    async function deleteRating() {
+        if ($userStore === null) return;
+        await deleteVotedAuthor($userStore, data.presentation);
+        window.location.reload();
+    }
 </script>
 
 <svelte:head>
@@ -81,7 +93,7 @@
                 max-w-md w-full mx-4
                 animate-fadeIn">
             <div class="flex items-center gap-3">
-                <ExclamationCircleSolid class="h-6 w-6 text-red-400" />
+                <ExclamationCircleSolid class="h-6 w-6 text-red-400"/>
                 <div>
                     <h3 class="text-lg font-medium text-white">Ошибка</h3>
                     <p class="text-white/90 mt-1">Необходимо авторизоваться</p>
@@ -89,8 +101,8 @@
             </div>
 
             <button
-                onclick={() => showToast = false}
-                class="mt-4 w-full py-2 bg-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.2)]
+                    onclick={() => showToast = false}
+                    class="mt-4 w-full py-2 bg-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.2)]
                    text-white rounded-lg transition-colors duration-200">
                 Понятно
             </button>
@@ -109,10 +121,11 @@
             </p>
         </div>
         <div class="w-full md:w-auto md:text-right">
-            <p class="text-sm text-[#fcefe8] dark:text-gray-400">Average rating</p>
-            <Rating id="lecture-rating" total={5} rating={averageRating()} class="justify-start md:justify-end"/>
+            <p class="text-sm text-[#fcefe8] dark:text-gray-400">Средний рейтинг</p>
+            <Rating id="lecture-rating" total={5} rating={ratingOf(data.presentation)}
+                    class="justify-start md:justify-end"/>
             <p class="text-xs text-[#fcefe8] dark:text-gray-400 mt-1">
-                Based on {data.presentation.votedAuthors.length} votes
+                {data.presentation.votedAuthors.length} отзывов
             </p>
         </div>
     </div>
@@ -254,9 +267,15 @@
                 {#if commentError}
                     <p class="text-red-500 text-sm mb-2">{commentError}</p>
                 {/if}
-                <Button class="w-full sm:w-auto bg-[#FE8A70] hover:bg-[#FE7A60] text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200" on:click={handleComment}>
+                <Button class="w-full sm:w-auto bg-[#FE8A70] hover:bg-[#FE7A60] text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
+                        on:click={handleComment}>
                     Опубликовать
                 </Button>
+                {#if $userStore !== null}
+                    <div class="rating-block text-white dark:text-gray-100">
+                        <RatingChooser rating={rating} onRating={giveRating} onDeleteRating={deleteRating}/>
+                    </div>
+                {/if}
             </form>
         </Card>
     </div>
@@ -265,7 +284,9 @@
         <Heading tag="h3" class="mb-4 text-xl sm:text-2xl text-[#fcefe8] dark:text-white">Комментарии</Heading>
         <div class="space-y-4 w-full">
             {#if comments.length === 0}
-                <Heading tag="h4" class="text-base sm:text-lg text-gray-600 dark:text-gray-300">Комментариев пока нет...</Heading>
+                <Heading tag="h4" class="text-base sm:text-lg text-gray-600 dark:text-gray-300">Комментариев пока
+                    нет...
+                </Heading>
             {:else}
                 {#each comments as comment (comment.id)}
                     <Card class="w-full max-w-none bg-[rgba(20,30,80,0.5)] dark:bg-[rgba(10,15,40,0.6)] rounded-xl p-6 shadow-[0_0_30px_rgba(100,70,255,0.2)] backdrop-blur-md border border-[rgba(100,150,255,0.2)]">
@@ -276,8 +297,8 @@
                             <div class="ml-4 md:ml-6 flex-1">
                                 <div class="flex items-center justify-between">
                                     <Heading
-                                        tag="h2"
-                                        class="text-base mt-2 sm:text-lg font-semibold text-white dark:text-gray-100"
+                                            tag="h2"
+                                            class="text-base mt-2 sm:text-lg font-semibold text-white dark:text-gray-100"
                                     >
                                         {comment.author.name}
                                     </Heading>
@@ -316,6 +337,10 @@
         font-weight: bold;
         margin-bottom: 1rem;
         text-transform: uppercase;
+    }
+
+    .rating-block {
+        float: right;
     }
 
     @media (max-width: 768px) {

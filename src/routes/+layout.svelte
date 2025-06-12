@@ -11,7 +11,7 @@
         NavUl
     } from 'flowbite-svelte';
     import { page } from '$app/state';
-    import { userStore } from '$lib/store';
+    import {notifyUserDataChanged, userStore} from '$lib/store';
 
     function signOut() {
         userStore.set(null);
@@ -23,7 +23,7 @@
         <img width="250" src="/logo/main-logo.svg" alt="Main logo" />
     </NavBrand>
 
-    <div class="flex items-center md:order-2 ml-auto">
+    <div class="flex items-center gap-1 md:order-2 ml-auto">
         {#if $userStore}
             <P id="user-menu" class="font-bold tracking-widest uppercase text-primary-50">
                 {$userStore.name}

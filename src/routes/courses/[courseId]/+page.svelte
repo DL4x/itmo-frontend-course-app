@@ -12,6 +12,8 @@
     import TagsList from "$lib/TagsList.svelte";
     import {SvelteSet} from "svelte/reactivity";
     import {addFavouritePresentation, deleteFavouritePresentation} from "$lib/strapiRepository";
+    import {deleteProgressPresentation} from "$lib/strapiRepository.js";
+    import {fly} from "svelte/transition";
 
     const {data}: PageProps = $props();
 
@@ -30,13 +32,13 @@
         return result;
     }
 
-    function getProgress(author: Author | null): number | undefined {
+    function getProgress(author: Author | null, visitedPresIds: SvelteSet<string>): number | undefined {
         if (author === null) {
             return undefined;
         }
-        const progressBar = author.progressBars.find(x => x.courseDocumentId === data.id);
-        return progressBar === undefined ? 0 : Math.round(
-            (progressBar.presentations.length / data.presentations.length) * 100
+
+        return Math.round(
+            (visitedPresIds.size / data.presentations.length) * 100
         );
     }
 
@@ -46,6 +48,12 @@
     let showOnlyFavorites = $state(false);
 
     const allTags = $derived(unionOfSets(...data.presentations.map(cardData => cardData.tags)));
+    const visitedPresIDs: SvelteSet<string> = $derived.by(() => {
+        if ($userStore === null) return new SvelteSet();
+        const progressBar = $userStore.progressBars.find(progressBar => progressBar.courseDocumentId === data.id);
+        if (progressBar === undefined) return new SvelteSet<string>();
+        return new SvelteSet(progressBar.presentations.map(status => status.presentationDocumentId));
+    });
     const presentations = $derived.by(() => {
         function textFilter(presData: PresentationCardData): boolean {
             if (searchQuery.length === 0) return true;
@@ -73,15 +81,13 @@
             if ($favoritePresentationsIDs.size === 0) return [];
             if (showOnlyUnvisited) {
                 return data.presentations.filter(
-                    it => !it.visited && $favoritePresentationsIDs.has(it.id) && restFilters(it)
+                    it => !visitedPresIDs.has(it.id) && $favoritePresentationsIDs.has(it.id) && restFilters(it)
                 );
             }
-            return data.presentations.filter(
-                it => $favoritePresentationsIDs.has(it.id) && restFilters(it)
-            );
+            return data.presentations.filter(it => $favoritePresentationsIDs.has(it.id) && restFilters(it));
         }
         if (showOnlyUnvisited) {
-            return data.presentations.filter(it => !it.visited && restFilters(it));
+            return data.presentations.filter(it => !visitedPresIDs.has(it.id) && restFilters(it));
         }
         return data.presentations.filter(restFilters);
     });
@@ -110,6 +116,15 @@
         }
         await notifyUserDataChanged(author);
     }
+
+    async function deleteAllRead(author: Author | null, visited: SvelteSet<string>, courseId: string) {
+        if (author === null) return;
+        console.log("Clear all read labels");
+        await Promise.all(visited.keys().map(presId => deleteProgressPresentation(author, courseId, presId)));
+        await notifyUserDataChanged(author);
+    }
+
+    $inspect(visitedPresIDs);
 </script>
 
 <svelte:head>
@@ -230,6 +245,7 @@
         gap: 8px;
         align-items: stretch;
     }
+
     @media (width < 48rem) {
         .about {
             flex-direction: column;
@@ -240,9 +256,11 @@
             width: 100%;
             order: -1;
         }
+
         .toggles {
             order: -1;
         }
+
         .filters {
             flex-direction: column;
         }
@@ -253,7 +271,8 @@
     <div class="about">
         <div class="text-block">
             <h1 class="course-title">{data.title}</h1>
-            <CourseProgressBar progress={getProgress($userStore)}/>
+            <CourseProgressBar progress={getProgress($userStore, visitedPresIDs)}
+                               onResetClick={() => deleteAllRead($userStore, visitedPresIDs, data.id)}/>
             <p>{data.description}</p>
             <p>
                 {#if authorsCount !== 0 && data.presentations.length !== 0}
@@ -270,7 +289,7 @@
         <img alt="course preview" height="354" src={data.previewUrl} width="500">
     </div>
     <div class="search-bar">
-        <Search bind:value={searchQuery} class="bg-my-card-background border-my-card-border text-primary-100"
+        <Search placeholder="Поиск" bind:value={searchQuery} class="bg-my-card-background border-my-card-border text-primary-100"
                 size="lg"/>
         <div class="filters">
             <TagsList tags={allTags} activeTags={requiredTags} onTagClick={onTagClick}/>
@@ -282,14 +301,16 @@
     </div>
     <div class="presentations-grid">
         {#each presentations as presentation (presentation.id)}
-            <div animate:flip={{ duration: 200 }} class="card" onclick={() => goto(`/lectures/${presentation.id}`)}
+            <div animate:flip={{ duration: 300 }} class="card" onclick={() => goto(`/lectures/${presentation.id}`)}
                  onmouseover={() => preloadData(`/lectures/${presentation.id}`)}
                  onfocus={() => preloadData(`/lectures/${presentation.id}`)}>
                 <PresentationPreviewCard
                         {...presentation}
+                        activeTags={requiredTags}
                         favorite={$favoritePresentationsIDs?.has(presentation.id) ?? undefined}
                         onTagClick={tag => onTagClick(tag)}
                         onFavoriteClick={() => onFavoriteClicked($userStore, presentation.id)}
+                        visited={visitedPresIDs.has(presentation.id)}
                 />
             </div>
         {:else}
