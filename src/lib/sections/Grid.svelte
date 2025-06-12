@@ -6,21 +6,26 @@
     import Lections from '$lib/mySections/Lections.svelte';
 
     import type { Author } from '$lib';
+    import type { Presentation } from '$lib';
 
-    const {
-        name,
-        companies,
-        educations,
-        skills,
-        progressBars,
-        favourites,
-        address,
-        phone,
-        email,
-        authorBirthday,
-        authorCity,
-        authorDescription
-    }: Author = $props();
+    type Props = {
+        author: Author,
+        lections: Presentation[]
+    }
+
+    const {author, lections}: Props = $props();
+
+    const name = author.name;
+    const email = author.email;
+    const phone = author.phone;
+    const authorBirthday = author.authorBirthday;
+    const authorCity = author.authorCity;
+    const authorDescription = author.authorDescription;
+    const companies = author.companies;
+    const educations = author.educations;
+    const skills = author.skills;
+    const authorTelegram = author.authorTelegram;
+    const authorGithub = author.authorGithub;
 </script>
 
 <div class="page">
@@ -28,12 +33,13 @@
         <div class="block profile-block">
             <Profile
                 {name}
-                {address}
                 {phone}
                 {email}
                 {authorBirthday}
                 {authorCity}
                 {authorDescription}
+                {authorTelegram}
+                {authorGithub}
             />
         </div>
         <div class="block skills-block">
@@ -49,7 +55,7 @@
             <Experience {...companies} />
         </div>
         <div class="block">
-            <Lections />
+            <Lections {...lections}/>
         </div>
     </div>
 </div>

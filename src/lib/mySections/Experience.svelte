@@ -3,51 +3,6 @@
 
     const experience: Company[] = $props();
 
-    type Experience = {
-        company: string;
-        position: string;
-        period: string;
-        description: string;
-    };
-
-    const experiences: Experience[] = [
-        {
-            company: 'Google',
-            position: 'Frontend-разработчик',
-            period: '2020 - 2022',
-            description:
-                'Worked as a frontend developer on Google Search team. Developed new UI components and optimized performance. Participated in design system development and accessibility improvements.'
-        },
-        {
-            company: 'Microsoft',
-            position: 'Frontend-разработчик',
-            period: '2018 - 2020',
-            description:
-                'Junior full-stack developer on Azure team. Built internal tools and dashboards. Worked with React, TypeScript and .NET Core.'
-        },
-        {
-            company: 'Freelance',
-            position: 'Frontend-разработчик',
-            period: '2016 - 2018',
-            description:
-                'Developed websites and web applications for small businesses. Technologies used: HTML, CSS, JavaScript, WordPress.'
-        },
-        {
-            company: 'Microsoft',
-            period: '2018 - 2020',
-            description:
-                'Junior full-stack developer on Azure team. Built internal tools and dashboards. Worked with React, TypeScript and .NET Core.',
-            position: 'Frontend-разработчик'
-        },
-        {
-            company: 'Microsoft',
-            period: '2018 - 2020',
-            description:
-                'Junior full-stack developer on Azure team. Built internal tools and dashboards. Worked with React, TypeScript and .NET Core.',
-            position: 'Frontend-разработчик'
-        }
-    ];
-
     let scrollPos = 0;
     let cardWidth = 735;
 
@@ -221,10 +176,5 @@
         place-items: center;
         gap: 10px;
         color: #777;
-    }
-
-    .empty-state img {
-        width: 80px;
-        opacity: 0.5;
     }
 </style>
