@@ -2,7 +2,7 @@
   "name": "ITMO Frontend Courses",
   "short_name": "ITMO Courses",
   "description": "Educational portal from ITMO graduates",
-  "start_url": "/resumes",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#FE8A70",

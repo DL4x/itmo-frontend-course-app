@@ -19,4 +19,4 @@ self.addEventListener('activate', (evt) => {
             }));
         })
     );
-})
+});
