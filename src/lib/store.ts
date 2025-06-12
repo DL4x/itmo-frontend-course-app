@@ -1,22 +1,23 @@
 import { writable } from 'svelte/store';
-import Cookies from 'js-cookie';
 import type { Author } from '$lib';
-import {getAuthorByDocumentId} from "$lib/strapiRepository";
+import { getAuthorByDocumentId } from '$lib/strapiRepository';
 
-const initialUser = Cookies.get('user') ? JSON.parse(Cookies.get('user')!) : null;
+const initialUser = typeof window !== 'undefined' ?
+    JSON.parse(localStorage.getItem('user') || 'null') :
+    null;
 
 export const userStore = writable<Author | null>(initialUser);
 
 userStore.subscribe((user) => {
-    if (!user) {
-        Cookies.remove('user');
-        return;
-    }
+    if (typeof window === 'undefined') return;
 
-    Cookies.set('user', JSON.stringify(user), { expires: 7 });
+    if (!user) {
+        localStorage.removeItem('user');
+    } else {
+        localStorage.setItem('user', JSON.stringify(user));
+    }
 });
 
 export async function notifyUserDataChanged(author: Author) {
-    console.log("User data changed and refetches");
     userStore.set(await getAuthorByDocumentId(author.id));
 }
