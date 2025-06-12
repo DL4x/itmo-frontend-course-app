@@ -52,12 +52,7 @@
                 </div>
 
                 <div class="right" in:fly={{ x: 100, duration: 800 }}>
-                    <Lottie
-                        path="/cosmonaut/cosmonaut.json"
-                        width="40rem"
-                        height="40rem"
-                        mirrored={true}
-                    />
+                    <Lottie path="/cosmonaut/cosmonaut.json" mirrored={true} />
                 </div>
             {/if}
         </section>
