@@ -20,7 +20,7 @@
 
 <Navbar class="sticky bg-my-gray flex items-center">
     <NavBrand href="/">
-        <img width="180" src="/logo/main-logo.svg" alt="Main logo" />
+        <img width="250" src="/logo/main-logo.svg" alt="Main logo" />
     </NavBrand>
 
     <div class="flex items-center md:order-2 ml-auto">
