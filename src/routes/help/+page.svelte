@@ -68,7 +68,7 @@
     </main>
 
     <footer class="cosmic-footer">
-        <p>© {new Date().getFullYear()} Frontend Cosmos. Все права защищены.</p>
+        <p>© {new Date().getFullYear()}  UFO: Unindentified Frontend Object. Все права защищены.</p>
     </footer>
 </div>
 
