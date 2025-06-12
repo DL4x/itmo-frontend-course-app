@@ -1,5 +1,5 @@
 import {marked} from 'marked'
-import {getDocument, GlobalWorkerOptions} from 'pdfjs-dist/legacy/build/pdf.min.mjs';
+import {getDocument, GlobalWorkerOptions} from 'pdfjs-dist/legacy/build/pdf.mjs';
 import type {TextItem} from 'pdfjs-dist/types/src/display/api';
 
 import pdfWorker from 'pdfjs-dist/legacy/build/pdf.worker.mjs?url';
