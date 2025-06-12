@@ -16,7 +16,7 @@
     {#if skills.length === 0}
         <div class="no-skills">
             <enhanced:img
-                src="/src/images/UFONotFound.png"
+                src="/static/images/UFONotFound.png"
                 width="80px"
                 height="80px"
                 alt="No skills"

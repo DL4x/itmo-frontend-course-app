@@ -29,7 +29,7 @@
     {#if lections.length === 0}
         <div class="empty-state">
             <enhanced:img
-                src="/src/images/UFONotFound.png"
+                src="/static/images/UFONotFound.png"
                 width="80px"
                 height="80px"
                 alt="No lections"
