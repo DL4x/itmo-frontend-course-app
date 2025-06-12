@@ -142,5 +142,18 @@
         .author-name {
             font-size: 16px;
         }
+
+        .main-g {
+            font-size: 1.5rem;
+        }
+        .text-stars {
+            font-size: 1rem;
+        }
+        .author-card {
+
+            padding: 25px;
+            width: 20rem;
+            transition: all 0.3s ease;
+        }
     }
 </style>

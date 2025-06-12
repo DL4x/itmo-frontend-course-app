@@ -52,10 +52,8 @@
 
             <div class="right" in:fly={{ x: 100, duration: 800 }}>
                 <Lottie
-                        path="/cosmonaut/cosmonaut.json"
-                        width="40rem"
-                        height="40rem"
-                        mirrored={true}
+                    path="/cosmonaut/cosmonaut.json"
+                    mirrored={true}
                 />
             </div>
         {/if}
@@ -65,13 +63,15 @@
         <div class="courses-grid">
             {#each data.courses as course (course.id)}
                 <Card
-                    img={course.coursePreviewUrl ?? '/images/black.webp'}
                     class="my-card overflow-hidden"
                     href="/courses/{course.id}"
                 >
-                    <h5
-                            class="mb-2 text-2xl font-bold course-title tracking-tight"
-                    >
+                    <img
+                        src={course.coursePreviewUrl ?? '/images/blank.webp'}
+                        style="width: 400px; min-height: 200px; object-fit: cover; border-radius: 4px"
+                        alt="Course preview"
+                    />
+                    <h5 class="mb-2 mt-2 text-2xl font-bold course-title tracking-tight">
                         {course.courseName}
                     </h5>
                     <p class="mb-3 font-normal course-description leading-tight">

@@ -42,7 +42,7 @@
         "flowbite-svelte-icons": "^2.1.1",
         "lottie-web": "^5.12.2",
         "marked": "^15.0.12",
-        "pdfjs-dist": "^5.3.31",
+        "pdfjs-dist": "5.3.31",
         "strapi-sdk-js": "^3.0.0",
         "tailwindcss": "^4.1.4"
     }

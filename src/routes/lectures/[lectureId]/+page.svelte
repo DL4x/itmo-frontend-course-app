@@ -1,12 +1,13 @@
 <script lang="ts">
     import '/src/app.css'
     import type {PageProps} from './$types';
-    import {Modal, Heading, Rating, Card, Button, Textarea, P} from 'flowbite-svelte';
+    import { Modal, Heading, Rating, Card, Button, Textarea, P, Avatar } from 'flowbite-svelte';
     import {addComment, addProgressPresentation} from '$lib/strapiRepository';
     import {notifyUserDataChanged, userStore} from '$lib/store';
     import type {AuthorComment} from '$lib';
     import {getPresentationSummary} from "$lib/deepseekRepository";
     import {onMount} from "svelte";
+    import { ExclamationCircleSolid,  } from "flowbite-svelte-icons";
 
     const {data}: PageProps = $props();
     onMount(() => {
@@ -18,6 +19,7 @@
 
     let commentText: string = $state('');
     let comments: AuthorComment[] = data.presentation.comments;
+    let showToast = $state(false);
 
     function averageRating() {
         const length = data.presentation.votedAuthors.length;
@@ -36,8 +38,18 @@
         summaryPromise = getPresentationSummary(data.presentation.presentationUrl);
     }
 
+    let commentError: string = $state('');
+
     async function handleComment() {
+        commentError = '';
+
         if (!$userStore?.name) {
+            showToast = true;
+            return;
+        }
+
+        if (!commentText.trim()) {
+            commentError = 'Комментарий не может быть пустым';
             return;
         }
 
@@ -60,7 +72,33 @@
     <meta name="theme-color" content="#FE8A70"/>
 </svelte:head>
 
-<div class="w-[80%] mx-auto px-4 py-8">
+{#if showToast}
+    <div class="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-[rgba(20,30,80,0.9)] dark:bg-[rgba(10,15,40,0.95)]
+                border border-[rgba(100,150,255,0.3)]
+                rounded-xl p-6 shadow-[0_0_30px_rgba(100,70,255,0.3)]
+                backdrop-blur-md
+                max-w-md w-full mx-4
+                animate-fadeIn">
+            <div class="flex items-center gap-3">
+                <ExclamationCircleSolid class="h-6 w-6 text-red-400" />
+                <div>
+                    <h3 class="text-lg font-medium text-white">Ошибка</h3>
+                    <p class="text-white/90 mt-1">Необходимо авторизоваться</p>
+                </div>
+            </div>
+
+            <button
+                onclick={() => showToast = false}
+                class="mt-4 w-full py-2 bg-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.2)]
+                   text-white rounded-lg transition-colors duration-200">
+                Понятно
+            </button>
+        </div>
+    </div>
+{/if}
+
+<div class="w-[80%] mx-auto py-8">
     <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
         <div class="flex-1">
             <h1 class="lecture-name">
@@ -89,7 +127,7 @@
             </iframe>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4 flex md:flex-row not-md:flex-col gap-2">
             <a
                     class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                     download="presentation.pdf"
@@ -113,7 +151,7 @@
             </a>
 
             <a
-                    class="inline-flex items-center px-4 py-2 ml-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                    class="inline-flex items-center px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
                     download="presentation.pptx"
                     href={`https://docs.google.com/presentation/d/${data.presentation.presentationUrl}/export/pptx`}
             >
@@ -137,7 +175,7 @@
             {#if summaryPromise}
                 {#await summaryPromise}
                     <a
-                            class="inline-flex items-center px-4 py-2 ml-2 bg-blue-300 text-white rounded transition-colors"
+                            class="inline-flex items-center px-4 py-2 bg-blue-300 text-white rounded transition-colors"
                     >
                         <svg
                                 class="w-5 h-5 mr-2"
@@ -155,7 +193,7 @@
                     </a>
                 {:then summary}
                     <button
-                            class="inline-flex items-center px-4 py-2 ml-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                            class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                             onclick={() => (scrollingModal = true)}
                     >
                         <svg
@@ -180,7 +218,7 @@
                 {/await}
             {:else}
                 <button
-                        class="inline-flex items-center px-4 py-2 ml-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                        class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                         onclick={generateSummary}
                 >
                     <svg
@@ -202,18 +240,21 @@
     </div>
 
     <div class="w-full mb-8">
-        <Card class="w-full max-w-none bg-[#c7c1bc] dark:bg-gray-800">
-            <Heading class="mb-4 text-xl sm:text-2xl text-[#615151] dark:text-white" tag="h3">
+        <Card class="w-full max-w-none bg-[rgba(20,30,80,0.5)] dark:bg-[rgba(10,15,40,0.6)] rounded-2xl p-8 shadow-[0_0_30px_rgba(100,70,255,0.2)] backdrop-blur-md border border-[rgba(100,150,255,0.2)]">
+            <Heading class="mb-4 text-xl sm:text-2xl text-white dark:text-gray-100" tag="h3">
                 Написать комментарий
             </Heading>
             <form class="w-full">
                 <Textarea
                         bind:value={commentText}
-                        class="w-full mb-4 text-xs sm:text-sm"
+                        class="w-full mb-4 text-xs sm:text-sm bg-white/20 dark:bg-white/10 text-white placeholder-white/70 border-white/20"
                         placeholder="Расскажите, как вам лекция"
                         rows={2}
                 />
-                <Button class="w-full sm:w-auto bg-[#FE8A70]" onclick={handleComment}>
+                {#if commentError}
+                    <p class="text-red-500 text-sm mb-2">{commentError}</p>
+                {/if}
+                <Button class="w-full sm:w-auto bg-[#FE8A70] hover:bg-[#FE7A60] text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200" on:click={handleComment}>
                     Опубликовать
                 </Button>
             </form>
@@ -221,42 +262,50 @@
     </div>
 
     <div class="w-full">
-        <Heading class="mb-4 text-xl sm:text-2xl text-[#fcefe8] dark:text-white" tag="h3"
-        >Комментарии
-        </Heading
-        >
+        <Heading tag="h3" class="mb-4 text-xl sm:text-2xl text-[#fcefe8] dark:text-white">Комментарии</Heading>
         <div class="space-y-4 w-full">
             {#if comments.length === 0}
-                <Heading tag="h4" class="text-base sm:text-lg text-gray-600 dark:text-gray-300"
-                >Комментариев пока нет...
-                </Heading
-                >
+                <Heading tag="h4" class="text-base sm:text-lg text-gray-600 dark:text-gray-300">Комментариев пока нет...</Heading>
             {:else}
                 {#each comments as comment (comment.id)}
-                    <Card class="w-full max-w-none bg-[#c7c1bc] flex items-start gap-3">
-                        <div class="flex flex-col md:flex-row justify-between">
-                            <div
-                                    class="flex items-center justify-center w-15 h-11 rounded-full bg-[#615151] text-white font-semibold text-xl"
-                            >
+                    <Card class="w-full max-w-none bg-[rgba(20,30,80,0.5)] dark:bg-[rgba(10,15,40,0.6)] rounded-xl p-6 shadow-[0_0_30px_rgba(100,70,255,0.2)] backdrop-blur-md border border-[rgba(100,150,255,0.2)]">
+                        <div class="flex items-start">
+                            <Avatar class="size-l bg-[rgba(255,255,255,0.3)] text-white transition-colors flex-shrink-0">
                                 {comment.author.name.charAt(0).toUpperCase()}
+                            </Avatar>
+                            <div class="ml-4 md:ml-6 flex-1">
+                                <div class="flex items-center justify-between">
+                                    <Heading
+                                        tag="h2"
+                                        class="text-base mt-2 sm:text-lg font-semibold text-white dark:text-gray-100"
+                                    >
+                                        {comment.author.name}
+                                    </Heading>
+                                    <span class="text-sm text-white/70 dark:text-gray-300">
+                                        {new Date("2024-12-12").toLocaleDateString()}
+                                    </span>
+                                </div>
+
+                                <P class="text-base mt-3 sm:text-lg text-white/90 dark:text-gray-200">
+                                    {comment.commentDescription}
+                                </P>
+
+                                <div class="mt-4 flex items-center space-x-4 text-sm">
+                                    <button class="text-white/80 hover:text-white dark:text-gray-300 dark:hover:text-white transition-colors">
+                                        <i class="far fa-reply mr-1"></i> Ответить
+                                    </button>
+                                    <button class="text-white/80 hover:text-white dark:text-gray-300 dark:hover:text-white transition-colors">
+                                        <i class="far fa-thumbs-up mr-1"></i> Нравится
+                                    </button>
+                                </div>
                             </div>
-                            <Heading
-                                    tag="h2"
-                                    class="text-base sm:text-lg font-semibold text-[#615151] dark:text-gray-200 ml-4 md:ml-6 mt-2"
-                            >
-                                {comment.author.name}
-                            </Heading>
-                        </div>
-                        <div class="ml-16 md:ml-17">
-                            <P class="text-base sm:text-lg text-[#615151] dark:text-gray-300">
-                                {comment.commentDescription}
-                            </P>
                         </div>
                     </Card>
                 {/each}
             {/if}
         </div>
     </div>
+
 </div>
 
 
@@ -267,5 +316,12 @@
         font-weight: bold;
         margin-bottom: 1rem;
         text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+        .lecture-name {
+            font-size: 1.3rem;
+            margin-bottom: 1.25rem;
+        }
     }
 </style>
