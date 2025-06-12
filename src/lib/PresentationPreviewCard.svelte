@@ -5,12 +5,15 @@
     import TagsList from "$lib/TagsList.svelte";
     import {deleteProgressPresentation} from "$lib/strapiRepository";
     import type {Author} from "$lib/index";
-    import {userStore} from "$lib/store";
+    import {notifyUserDataChanged, userStore} from "$lib/store";
+    import {fly} from "svelte/transition";
 
     interface Props extends PresentationCardData {
         favorite?: boolean;
         onTagClick: (tag: string) => void;
         onFavoriteClick: () => void;
+        visited: boolean;
+        activeTags: Set<string>;
     }
 
     let {
@@ -21,6 +24,8 @@
         visited,
         favorite,
         tags,
+        activeTags,
+        rating,
         onTagClick,
         onFavoriteClick
     }: Props = $props();
@@ -30,10 +35,11 @@
         onFavoriteClick();
     }
 
-    function onReadClick(event: MouseEvent, author: Author | null) {
+    async function onReadClick(event: MouseEvent, author: Author | null) {
         event.stopPropagation();
         if (author === null) return;
-        deleteProgressPresentation(author, courseId, id);
+        await deleteProgressPresentation(author, courseId, id);
+        await notifyUserDataChanged(author);
     }
 </script>
 
@@ -72,7 +78,7 @@
 <div class="title">
     <div class="favorites-block">
         {#if visited}
-            <p class="read-sign" onclick={event => onReadClick(event, $userStore)}>Прочитано ✓</p>
+            <p transition:fly={{x: 16}} class="read-sign" onclick={event => onReadClick(event, $userStore)}>Прочитано ✓</p>
         {/if}
         {#if favorite !== undefined}
             {#if favorite}
@@ -94,7 +100,7 @@
             </div>
         {/if}
         {#if tags.size !== 0}
-            <TagsList tags={tags} onTagClick={tag => onTagClick(tag)}/>
+            <TagsList tags={tags} activeTags={activeTags} rating={rating} onTagClick={tag => onTagClick(tag)}/>
         {/if}
     </div>
 {/if}

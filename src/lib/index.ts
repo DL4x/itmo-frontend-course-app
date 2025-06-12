@@ -1,4 +1,5 @@
 import { assertNotEmpty } from '$lib/errors';
+
 // ABOBA THIS MESSAGE IS WRITTEN BY BALBEKOV A. D BY SPECIAL REQUEST OF GERASIMOV E. O.
 
 export interface TimeRange {
@@ -34,7 +35,7 @@ export function createEmailContact(email: string): Contact {
     assertNotEmpty(email, 'email');
     return {
         value: email,
-        href: `mailto:${email}`,
+        href: `mailto:${email}`
     };
 }
 
@@ -120,7 +121,7 @@ export interface Author extends IDObject {
     authorBirthday: string;
     authorCity: string;
     authorDescription: string;
-    companies: Company[]
+    companies: Company[];
     educations: Education[];
     skills: Skill[];
     progressBars: ProgressBar[];
@@ -151,7 +152,7 @@ export interface AuthorComment extends IDObject {
  * @property {VotedAuthor[]} votedAuthors objects which contains voted person and his score
  * @property {Course} course the course in which this presentation was presented
  */
-export interface Presentation extends IDObject{
+export interface Presentation extends IDObject {
     presentationName: string;
     presentationDescription: string;
     presentationUrl: string;
@@ -198,4 +199,14 @@ export interface Course extends IDObject {
     courseDescription: string;
     presentations: Presentation[];
     presentationCount: number;
+}
+
+export function ratingOf(presentation: Presentation): number {
+    const length = presentation.votedAuthors.length;
+    if (length === 0) return 0;
+    return (
+        presentation.votedAuthors
+            .map((person) => person.authorScore)
+            .reduce((sum, value) => sum + value, 0) / length
+    );
 }

@@ -1,14 +1,20 @@
 <script lang="ts">
     import '/src/app.css';
     import type { PageProps } from './$types';
-    import { Modal, Heading, Rating, Card, Button, Textarea, P, Avatar } from 'flowbite-svelte';
-    import { addComment, addProgressPresentation } from '$lib/strapiRepository';
+    import { Avatar, Button, Card, Heading, Modal, P, Rating, Textarea } from 'flowbite-svelte';
+    import {
+        addComment,
+        addProgressPresentation,
+        addVotedAuthor,
+        deleteVotedAuthor
+    } from '$lib/strapiRepository';
     import { notifyUserDataChanged, userStore } from '$lib/store';
-    import type { AuthorComment } from '$lib';
+    import { type AuthorComment, ratingOf } from '$lib';
     import { getPresentationSummary } from '$lib/deepseekRepository';
     import { onMount } from 'svelte';
-    import { ExclamationCircleSolid } from 'flowbite-svelte-icons';
     import { Tween } from 'svelte/motion';
+    import { ExclamationCircleSolid } from 'flowbite-svelte-icons';
+    import RatingChooser from '$lib/RatingChooser.svelte';
     import { cubicOut } from 'svelte/easing';
 
     const { data }: PageProps = $props();
@@ -28,31 +34,39 @@
     let comments: AuthorComment[] = data.presentation.comments;
     let showToast = $state(false);
 
-    function averageRating() {
-        const length = data.presentation.votedAuthors.length;
-        if (length === 0) return 0;
-        return (
-            data.presentation.votedAuthors
-                .map((person) => person.authorScore)
-                .reduce((sum, value) => sum + value, 0) / length
+    const rating = $derived.by(() => {
+        if ($userStore === null) return undefined;
+
+        const find = data.presentation.votedAuthors.find(
+            (votedAuthor) => votedAuthor.authorDocumentId === $userStore.id
         );
-    }
+        if (find === undefined) return undefined;
+        return find.authorScore;
+    });
 
     let scrollingModal = $state(false);
     let summaryPromise = $state<Promise<string> | null>(null);
-
-    function mockPromise(): Promise<string> {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve('Данные успешно загружены!');
-            }, 30000);
-        });
-    }
 
     async function generateSummary() {
         startProgress();
         summaryPromise = getPresentationSummary(data.presentation.presentationUrl);
     }
+
+    let progress = new Tween(0, {
+        easing: cubicOut
+    });
+
+    function startProgress() {
+        progress.set(20, { duration: 8000 }).then(() => {
+            progress.set(35, { duration: 6500 }).then(() => {
+                progress.set(60, { duration: 9500 }).then(() => {
+                    progress.set(96, { duration: 10500 });
+                });
+            });
+        });
+    }
+
+    const progressPercent = $derived(Math.round(progress.current));
 
     let commentError: string = $state('');
 
@@ -82,21 +96,17 @@
         return `https://docs.google.com/presentation/d/${rawUrl}/embed?start=false&loop=false`;
     }
 
-    let progress = new Tween(0, {
-        easing: cubicOut
-    });
-
-    function startProgress() {
-        progress.set(20, { duration: 8000 }).then(() => {
-            progress.set(35, { duration: 6500 }).then(() => {
-                progress.set(60, { duration: 9500 }).then(() => {
-                    progress.set(96, { duration: 10500 });
-                });
-            });
-        });
+    async function giveRating(rating: number) {
+        if ($userStore === null) return;
+        await addVotedAuthor($userStore, data.presentation, rating);
+        window.location.reload();
     }
 
-    const progressPercent = $derived(Math.round(progress.current));
+    async function deleteRating() {
+        if ($userStore === null) return;
+        await deleteVotedAuthor($userStore, data.presentation);
+        window.location.reload();
+    }
 </script>
 
 <svelte:head>
@@ -144,15 +154,15 @@
             </p>
         </div>
         <div class="w-full md:w-auto md:text-right">
-            <p class="text-sm text-[#fcefe8] dark:text-gray-400">Average rating</p>
+            <p class="text-sm text-[#fcefe8] dark:text-gray-400">Средний рейтинг</p>
             <Rating
                 id="lecture-rating"
                 total={5}
-                rating={averageRating()}
+                rating={ratingOf(data.presentation)}
                 class="justify-start md:justify-end"
             />
             <p class="text-xs text-[#fcefe8] dark:text-gray-400 mt-1">
-                Based on {data.presentation.votedAuthors.length} votes
+                {data.presentation.votedAuthors.length} отзывов
             </p>
         </div>
     </div>
@@ -214,7 +224,7 @@
 
             {#if summaryPromise}
                 {#await summaryPromise}
-                    <a
+                    <button
                         class="inline-flex items-center px-4 py-2 bg-blue-300 text-white rounded transition-colors"
                     >
                         <svg
@@ -237,7 +247,7 @@
                                 {progressPercent}%
                             </div>
                         </div>
-                    </a>
+                    </button>
                 {:then summary}
                     <button
                         class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
@@ -316,6 +326,15 @@
                 >
                     Опубликовать
                 </Button>
+                {#if $userStore !== null}
+                    <div class="rating-block text-white dark:text-gray-100">
+                        <RatingChooser
+                            {rating}
+                            onRating={giveRating}
+                            onDeleteRating={deleteRating}
+                        />
+                    </div>
+                {/if}
             </form>
         </Card>
     </div>
@@ -327,8 +346,8 @@
         <div class="space-y-4 w-full">
             {#if comments.length === 0}
                 <Heading tag="h4" class="text-base sm:text-lg text-gray-600 dark:text-gray-300"
-                    >Комментариев пока нет...</Heading
-                >
+                    >Комментариев пока нет...
+                </Heading>
             {:else}
                 {#each comments as comment (comment.id)}
                     <Card
@@ -387,6 +406,10 @@
         font-weight: bold;
         margin-bottom: 1rem;
         text-transform: uppercase;
+    }
+
+    .rating-block {
+        float: right;
     }
 
     @media (max-width: 768px) {

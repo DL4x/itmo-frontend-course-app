@@ -1,11 +1,18 @@
 <script lang="ts">
     import {Button, Progressbar} from 'flowbite-svelte';
+    import {UndoOutline} from "flowbite-svelte-icons";
 
     interface Props {
         progress?: number;
+        onResetClick: () => void;
     }
 
-    const {progress}: Props = $props();
+    const {progress, onResetClick}: Props = $props();
+
+    function onClick(event: MouseEvent) {
+        event.stopPropagation();
+        onResetClick();
+    }
 </script>
 
 <style>
@@ -27,6 +34,14 @@
         flex-direction: row;
         justify-content: space-between;
     }
+
+    .progress-bar-value {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+    }
 </style>
 
 {#if progress === undefined }
@@ -37,12 +52,13 @@
     <div class="progress">
         <div class="text-label">
             <span class="progress-bar-text">Ваш прогресс:</span>
-            <span class="progress-bar-value">{progress}%</span>
+            <span class="progress-bar-value">
+                {#if progress !== undefined && progress !== 0}
+                    <UndoOutline class="text-primary-500" onclick={onClick}/>
+                {/if}
+                {progress}%
+            </span>
         </div>
         <Progressbar classLabelOutside="text-primary-100" progress={progress}/>
     </div>
-    <!--	<div class="progress-bar">-->
-    <!--		Ваш прогресс:-->
-    <!--		-->
-    <!--	</div>-->
 {/if}

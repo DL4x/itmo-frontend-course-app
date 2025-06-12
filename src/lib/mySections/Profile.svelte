@@ -38,13 +38,21 @@
     }
 
     const links: Link[] = [
-        { icon: '/static/images/github.png', url: authorGithub, label: 'GitHub' },
         {
-            icon: '/static/images/telegram.png',
+            icon: '/images/github.png',
+            url: authorGithub,
+            label: 'GitHub'
+        },
+        {
+            icon: '/images/telegram.png',
             url: `https://t.me/${authorTelegram.substring(1)}`,
             label: 'Telegram'
         },
-        { icon: '/static/images/email.png', url: email.href, label: 'Email' }
+        {
+            icon: '/images/email.png',
+            url: email.href,
+            label: 'Email'
+        }
     ];
 </script>
 

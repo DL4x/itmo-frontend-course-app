@@ -19,7 +19,7 @@
     </header>
 
     <section class="authors-grid">
-        {#each data.authors as author (author.id)}
+        {#each data.authors.slice(0, 6) as author (author.id)}
             <a href="/resumes/{author.id}" class="author-card">
                 <div class="author-avatar">
                     <span class="avatar-initial">{author.name[0]}</span>

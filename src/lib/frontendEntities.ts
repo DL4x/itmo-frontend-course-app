@@ -10,8 +10,8 @@ export interface PresentationCardData extends IDObject {
     authors: Author[];
     commentsCount: number;
     averageUserScore?: number;
-    visited: boolean;
     tags: Set<string>;
+    rating?: number
 }
 
 function averageScoreOf(votedPersons: VotedAuthor[]): number | undefined {
@@ -23,8 +23,7 @@ function averageScoreOf(votedPersons: VotedAuthor[]): number | undefined {
 
 export function mapToPresentationCardData(
     presentation: Presentation,
-    index: number,
-    visited: Set<string>
+    index: number
 ): PresentationCardData {
     return {
         courseId: presentation.courseDocumentId,
@@ -35,8 +34,8 @@ export function mapToPresentationCardData(
         commentsCount: presentation.comments.length,
         id: presentation.id,
         averageUserScore: averageScoreOf(presentation.votedAuthors),
-        visited: visited.has(presentation.id),
-        tags: new Set(presentation.tags.map((tag) => tag.name))
+        tags: new Set(presentation.tags.map((tag) => tag.name)),
+        rating: averageScoreOf(presentation.votedAuthors)
     };
 }
 
@@ -48,14 +47,6 @@ export interface CoursePageData extends IDObject {
 }
 
 export function mapToCoursePageData(course: Course): CoursePageData {
-    const user = get(userStore);
-    const visited = new Set<string>(
-        (user !== null ? user.progressBars : [])
-            .filter((progressBar) => progressBar.courseDocumentId === course.id)
-            .flatMap((progressBar) => progressBar.presentations)
-            .map((status) => status.presentationDocumentId)
-    );
-
     return {
         id: course.id,
         title: course.courseName,
@@ -65,7 +56,7 @@ export function mapToCoursePageData(course: Course): CoursePageData {
                 ? course.coursePreviewUrl
                 : 'https://i.pinimg.com/originals/b9/a3/ff/b9a3fffae9c48308b0c9d33c5859af4b.jpg',
         presentations: course.presentations.map((presentation, i) =>
-            mapToPresentationCardData(presentation, i, visited)
+            mapToPresentationCardData(presentation, i)
         )
     };
 }

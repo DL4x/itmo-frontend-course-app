@@ -1,13 +1,14 @@
 <script lang="ts">
-    import {GradientButton} from "flowbite-svelte";
+    import {GradientButton, Rating} from "flowbite-svelte";
 
     interface Props {
         tags: Iterable<string>;
         activeTags?: Set<string>;
         onTagClick?: (tag: string) => void;
+        rating?: number;
     }
 
-    const {tags, activeTags, onTagClick = it => {}}: Props = $props();
+    const {tags, activeTags, onTagClick = it => {}, rating}: Props = $props();
 
     /*function getTagClasses(tag: string): string {
         const styles = [
@@ -39,22 +40,10 @@
         | "tealToLime"
         | "redToYellow"
 
-    function getTagColor(tag: string): ButtonColor {
-        const styles: ButtonColor[] = ["green", "red", "blue", "purple", "pink", "teal", "cyan", "lime", "purpleToBlue", "cyanToBlue", "greenToBlue", "purpleToPink", "pinkToOrange", "tealToLime", "redToYellow"];
-        return styles[hashCode(tag) % styles.length];
+    function getTagColor(i: number): ButtonColor {
+        const styles: ButtonColor[] = ["purpleToBlue", "cyanToBlue", "greenToBlue", "purpleToPink", "pinkToOrange", "tealToLime", "redToYellow", "green", "red", "blue", "purple", "pink", "teal", "cyan", "lime"];
+        return styles[i % styles.length];
     }
-
-    function hashCode(str: string): number {
-        if (str.length === 0) return 0;
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            let chr = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + chr;
-            hash |= 0; // Convert to 32bit integer
-        }
-        return hash;
-    }
-
     function onClick(tag: string, event?: MouseEvent) {
         event?.stopPropagation();
         onTagClick(tag);
@@ -78,13 +67,16 @@
 </style>
 
 <div class="my-tags-list flex flex-wrap gap-2">
-    {#each tags as tag (tag)}
+    {#each tags as tag, i (tag)}
         <GradientButton
                 size="xs"
                 pill
                 outline={activeTags === undefined ? true : !activeTags.has(tag)}
-                color={getTagColor(tag)}
+                color={getTagColor(i)}
                 on:click={event => onClick(tag, event)}
         ><span class="tag-text">{tag}</span></GradientButton>
     {/each}
+    {#if rating !== undefined}
+        <Rating class="ml-auto" total={5} rating={rating}/>
+    {/if}
 </div>
