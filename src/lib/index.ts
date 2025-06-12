@@ -126,6 +126,8 @@ export interface Author extends IDObject {
     progressBars: ProgressBar[];
     createdPresentationDocumentIds: string[];
     favourites: Favourite[];
+    authorTelegram: string;
+    authorGithub: string;
 }
 
 /**

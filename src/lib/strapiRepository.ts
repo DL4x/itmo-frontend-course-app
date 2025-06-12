@@ -171,7 +171,7 @@ async function parseProgressBar(json: object): Promise<ProgressBar> {
         id: json.documentId,
         presentations: await Promise.all(json.presentation_statuses.map(parsePresentationStatus)),
         courseDocumentId: json.course_document_id,
-        personDocumentId: json.person_document_id,
+        personDocumentId: json.person_document_id
     };
     assertValidProgressBar(result);
     return result;
@@ -231,6 +231,20 @@ async function parseAuthor(json: unknown): Promise<Author> {
         'string'
     );
     assertField(
+        'person_github' in json &&
+        (typeof json.person_github === 'string' ||
+            typeof json.person_github === 'object'),
+        'person_github',
+        'string'
+    );
+    assertField(
+        'person_telegram' in json &&
+        (typeof json.person_telegram === 'string' ||
+            typeof json.person_telegram === 'object'),
+        'person_telegram',
+        'string'
+    );
+    assertField(
         'person_phone' in json && typeof json.person_phone === 'string',
         'person_phone',
         'string'
@@ -281,7 +295,9 @@ async function parseAuthor(json: unknown): Promise<Author> {
                 'string'
             );
             return value.documentId;
-        })
+        }),
+        authorTelegram: typeof json.person_telegram === 'object' ? '' : json.person_telegram,
+        authorGithub: typeof json.person_github === 'object' ? '' : json.person_github,
     };
     assertValidAuthor(result);
     return result;
@@ -572,7 +588,7 @@ async function parseCoursePreview(json: unknown): Promise<Course> {
         'course_description' in json && typeof json.course_description === 'string',
         'course_description',
         'string'
-    )
+    );
 
     assertField(
         'course_preview' in json && typeof json.course_preview === 'object',
@@ -586,7 +602,6 @@ async function parseCoursePreview(json: unknown): Promise<Course> {
         'url',
         'string'
     );
-
 
     const result = {
         id: json.documentId,
@@ -953,15 +968,7 @@ function getAuthorJson(
 function getProgressBarsJson(progressBars: ProgressBar[]) {
     const result = [];
     for (const progressBar of progressBars) {
-        result.push({
-            course_document_id: progressBar.courseDocumentId,
-            presentation_check: progressBar.presentations.map((value) => {
-                return {
-                    presentation_document_id: value.presentationDocumentId,
-                    progress_bar_document_id: value.progressBarDocumentId
-                };
-            })
-        });
+        result.push(progressBar.id);
     }
     return result;
 }
@@ -1256,38 +1263,72 @@ export async function addProgressPresentation(
     courseDocumentId: string,
     presentationDocumentId: string
 ): Promise<void> {
-    const progressBar = author.progressBars.find(
+    let progressBar = author.progressBars.find(
         (value) => value.courseDocumentId === courseDocumentId
     );
-    assert(
-        !(progressBar === null || progressBar === undefined),
-        'No valid progress bar document id found.'
-    );
-    const presentationStatus = {
-        progress_bar: progressBar.id,
-        progress_bar_document_id: progressBar.id,
-        presentation_document_id: presentationDocumentId
-    };
-    const presentationStatusResponse = await strapi.create(
+    if (progressBar === null || progressBar === undefined) {
+        progressBar = await addProgressBar(author, courseDocumentId);
+    }
+    await strapi.create(
         'presentation-statuses',
-        presentationStatus
+        {
+            progress_bar: progressBar.id,
+            progress_bar_document_id: progressBar.id,
+            presentation_document_id: presentationDocumentId
+        }
     );
-    const presentationStatusDocumentId = await strapi
+    const presentationStatus = await strapi
         .find('presentation-statuses', {
             filters: {
                 progress_bar_document_id: progressBar.id,
                 presentation_document_id: presentationDocumentId
             }
-        })
-        .then((value) => value.data.documentId);
+        });
+    assert(typeof presentationStatus.data[0] === 'object' && presentationStatus.data[0] !== null, "Error during create presentation status");
+    assertField('documentId' in presentationStatus.data[0] && typeof presentationStatus.data[0].documentId === 'string', 'documentId', 'string');
     await strapi
         .update('progress-bars', progressBar.id, {
             presentation_statuses: getPresentationStatusesJson(progressBar.presentations).push(
-                presentationStatusDocumentId
+                presentationStatus.data[0].documentId
             )
         })
-        .catch(() => {});
-    console.log(presentationStatusResponse);
+        .catch(() => {
+        });
+}
+
+/**
+ * This feature creates a new progress bar for the user. It should be called every time a new user who does not have a progress bar for this course enters the course or registers on the course page.
+ *
+ * @param author who needs to add a new progress bar
+ * @param courseDocumentId tracked by this progress bar
+ */
+export async function addProgressBar(
+    author: Author,
+    courseDocumentId: string,
+): Promise<ProgressBar> {
+    await strapi.create('progress-bars', {
+        person_document_id: author.id,
+        course_document_id: courseDocumentId,
+        person: author.id,
+        presentation_statuses: []
+    });
+    const createdProgressBar = await strapi
+        .find('progress-bars', {
+            filters: {
+                person_document_id: author.id,
+                course_document_id: courseDocumentId,
+            },
+            populate: "*"
+        });
+    assert(typeof createdProgressBar.data[0] === 'object' && createdProgressBar.data[0] !== null, "Strapi error (Error during create progress bar)");
+    const progressBar = await parseProgressBar(createdProgressBar.data[0]);
+    await strapi
+        .update('authors', author.id, {
+            progress_bars: getProgressBarsJson(author.progressBars).push(progressBar.id)
+        })
+        .catch(() => {
+        });
+    return progressBar;
 }
 
 /**
