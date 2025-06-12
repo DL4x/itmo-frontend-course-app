@@ -11,7 +11,7 @@
         NavUl
     } from 'flowbite-svelte';
     import { page } from '$app/state';
-    import {notifyUserDataChanged, userStore} from '$lib/store';
+    import { notifyUserDataChanged, userStore } from '$lib/store';
 
     function signOut() {
         userStore.set(null);
@@ -20,7 +20,7 @@
 
 <Navbar class="sticky bg-my-gray flex items-center">
     <NavBrand href="/">
-        <img width="250" src="/logo/main-logo.svg" alt="Main logo" />
+        <img class="media-width" src="/logo/main-logo.svg" alt="Main logo" />
     </NavBrand>
 
     <div class="flex items-center gap-1 md:order-2 ml-auto">
@@ -59,3 +59,27 @@
 </Navbar>
 
 <slot />
+
+<style>
+    .media-width {
+        width: 250px;
+    }
+
+    @media (max-width: 1024px) {
+        .media-width {
+            width: 180px;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .media-width {
+            width: 190px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .media-width {
+            width: 180px;
+        }
+    }
+</style>
