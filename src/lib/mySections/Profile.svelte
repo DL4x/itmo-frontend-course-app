@@ -3,16 +3,25 @@
 
     interface Props {
         name: string;
-        address?: Contact;
         phone?: Contact;
         email: Contact;
         authorBirthday: string;
         authorCity: string;
         authorDescription: string;
+        authorTelegram: string;
+        authorGithub: string;
     }
 
-    const { name, address, phone, email, authorBirthday, authorCity, authorDescription }: Props =
-        $props();
+    const {
+        name,
+        phone,
+        email,
+        authorBirthday,
+        authorCity,
+        authorDescription,
+        authorTelegram,
+        authorGithub
+    }: Props = $props();
 
     function calculateAge(birthDateString: string) {
         const today = new Date();
@@ -22,30 +31,26 @@
         return today.setFullYear(1970) < birthDate.setFullYear(1970) ? age - 1 : age;
     }
 
-    const profile = {
-        photo: '/src/images/profileImages/1.png',
-        name: 'Иванов Иван Иванович',
-        birthDate: '15.03.1990',
-        age: 34,
-        phone: '+7 (123) 456-78-90',
-        city: 'Москва',
-        bio: 'Frontend-разработчик с 5-летним опытом работы. Специализируюсь на Svelte, React и TypeScript. Увлечен созданием интуитивно понятных и производительных пользовательских интерфейсов.',
-        links: [
-            { icon: '/src/images/github.png', url: 'https://github.com/username', label: 'GitHub' },
-            { icon: '/src/images/telegram.png', url: 'https://t.me/username', label: 'Telegram' },
-            { icon: '/src/images/email.png', url: email.href, label: 'Email' }
-        ]
+    interface Link {
+        icon: string;
+        url: string;
+        label: string;
     };
+
+    const links: Link[] = [
+        { icon: '/src/images/github.png', url: authorGithub, label: 'GitHub' },
+        {
+            icon: '/src/images/telegram.png',
+            url: `https://t.me/${authorTelegram.substring(1)}`,
+            label: 'Telegram'
+        },
+        { icon: '/src/images/email.png', url: email.href, label: 'Email' }
+    ];
 </script>
 
 <div class="profile-block">
     <header class="header">
-        <enhanced:img
-            alt="Profile Photo"
-            class="photo"
-            src="/static/profile/1.png"
-            width="300px"
-        />
+        <enhanced:img alt="Profile Photo" class="photo" src="/static/profile/1.png" width="300px" />
         <div class="info">
             <h1>{name}</h1>
             <div class="details">
@@ -62,9 +67,9 @@
     </section>
 
     <div class="social">
-        {#each profile.links as { icon, url, label }}
+        {#each links as { icon, url, label }}
             <a href={url} target="_blank" class="link" aria-label={label}>
-                <img src={icon} alt={label} class={'icon ' + label} />
+                <img src={icon} alt={label} class='icon' />
             </a>
         {/each}
     </div>
@@ -156,10 +161,6 @@
     .icon {
         width: 24px;
         height: 24px;
-    }
-
-    .Telegram {
-        color: red;
     }
 
     @media (max-width: 768px) {

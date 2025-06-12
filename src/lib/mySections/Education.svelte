@@ -3,34 +3,6 @@
 
     const education: Education[] = $props();
 
-    type EducationList = {
-        institution: string;
-        degree: string;
-        period: string;
-    };
-
-    const educationList: EducationList[] = [
-        {
-            institution: 'Samara Lyceum',
-            degree: 'Certificate of secondary general education',
-            period: '2018 - 2022'
-        },
-        {
-            institution: 'Stanford University',
-            degree: 'Bachelor of Computer Science',
-            period: '2022 - 2026'
-        },
-        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
-        {
-            institution: 'Samara Lyceum',
-            degree: 'Certificate of secondary general education',
-            period: '2018 - 2022'
-        },
-        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
-        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' },
-        { institution: 'MIT', degree: 'Master of Artificial Intelligence', period: '2026 - 2028' }
-    ];
-
     let scrollPos = 0;
     const scrollStep = 510;
 
@@ -220,11 +192,6 @@
         place-items: center;
         gap: 10px;
         color: #777;
-    }
-
-    .empty-state img {
-        width: 80px;
-        opacity: 0.5;
     }
 
     @media (max-width: 768px) {
