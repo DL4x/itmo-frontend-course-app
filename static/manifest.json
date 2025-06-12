@@ -1,6 +1,6 @@
 {
-  "name": "ITMO Frontend Courses",
-  "short_name": "ITMO Courses",
+  "name": "Undefined Frontend Object",
+  "short_name": "UFO",
   "description": "Educational portal from ITMO graduates",
   "start_url": "/",
   "display": "standalone",
@@ -8,14 +8,14 @@
   "theme_color": "#FE8A70",
   "icons": [
     {
-      "src": "/logo/phone-logo.svg",
+      "src": "/logo/phone-logo.png",
       "sizes": "192x192",
-      "type": "image/svg+xml"
+      "type": "image/png"
     },
     {
-      "src": "/logo/desktop-logo.svg",
+      "src": "/logo/desktop-logo.png",
       "sizes": "512x512",
-      "type": "image/svg+xml"
+      "type": "image/png"
     }
   ]
 }
