@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type {PageProps} from './$types';
-    import {Card} from 'flowbite-svelte';
-    import {fly} from 'svelte/transition';
+    import type { PageProps } from './$types';
+    import { Card } from 'flowbite-svelte';
+    import { fly } from 'svelte/transition';
     import '/src/app.css';
     import Lottie from '$lib/Lottie.svelte';
-    import {quintOut} from 'svelte/easing';
-    import {onMount} from 'svelte';
+    import { quintOut } from 'svelte/easing';
+    import { onMount } from 'svelte';
 
     let ready = $state(false);
     onMount(() => (ready = true));
@@ -17,76 +17,86 @@
         showCourses = !showCourses;
     }
 
-    const {data}: PageProps = $props();
+    const { data }: PageProps = $props();
 </script>
 
 <svelte:head>
     <title>ITMO Frontend Course</title>
 </svelte:head>
 
-{#if !showCourses}
-    <section
-        class="greeting-page-container"
-        transition:fly={{ x: -1000, duration: 800, easing: quintOut }}
-    >
-        {#if ready}
-            <div class="left" in:fly={{ x: -100, duration: 800 }}>
-                <h1>Добро пожаловать в мир фронтенд-разработки!</h1>
-                <p>
-                    Вы на образовательном портале от выпускников ИТМО - здесь мы делимся знаниями,
-                    которые реально работают в индустрии. Готовы начать путь от основ до продвинутых
-                    техник?
-                </p>
-                <button
-                    class="courses-btn"
-                    onclick={toggleView}
-                    onmouseenter={() => (isHovered = true)}
-                    onmouseleave={() => (isHovered = false)}
-                >
-                    <span class="courses-btn-text">
-                        {isHovered ? 'Погнали' : 'Список курсов'}
-                    </span>
-                    <span class="hover-effect"></span>
-                </button>
-            </div>
+<section class="main-container">
+    {#if !showCourses}
+        <section
+            class="greeting-page-container"
+            transition:fly={{ x: -1000, duration: 800, easing: quintOut }}
+        >
+            {#if ready}
+                <div class="left" in:fly={{ x: -100, duration: 800 }}>
+                    <h1>Добро пожаловать в мир фронтенд-разработки!</h1>
+                    <p>
+                        Вы на образовательном портале от выпускников ИТМО - здесь мы делимся
+                        знаниями, которые реально работают в индустрии. Готовы начать путь от основ
+                        до продвинутых техник?
+                    </p>
+                    <button
+                        class="courses-btn"
+                        onclick={toggleView}
+                        onmouseenter={() => (isHovered = true)}
+                        onmouseleave={() => (isHovered = false)}
+                    >
+                        <span class="courses-btn-text">
+                            {isHovered ? 'Погнали' : 'Список курсов'}
+                        </span>
+                        <span class="hover-effect"></span>
+                    </button>
+                </div>
 
-            <div class="right" in:fly={{ x: 100, duration: 800 }}>
-                <Lottie
+                <div class="right" in:fly={{ x: 100, duration: 800 }}>
+                    <Lottie
                         path="/cosmonaut/cosmonaut.json"
                         width="40rem"
                         height="40rem"
                         mirrored={true}
-                />
-            </div>
-        {/if}
-    </section>
-{:else}
-    <section class="course-list-container" in:fly={{ x: 1000, duration: 800, easing: quintOut }}>
-        <div class="courses-grid">
-            {#each data.courses as course (course.id)}
-                <Card
-                    img={course.coursePreviewUrl ?? '/images/black.webp'}
-                    class="my-card overflow-hidden"
-                    href="/courses/{course.id}"
-                >
-                    <h5
-                            class="mb-2 text-2xl font-bold course-title tracking-tight"
+                    />
+                </div>
+            {/if}
+        </section>
+    {:else}
+        <section
+            class="course-list-container"
+            in:fly={{ x: 1000, duration: 800, easing: quintOut }}
+        >
+            <div class="courses-grid">
+                {#each data.courses as course (course.id)}
+                    <Card
+                        img={course.coursePreviewUrl ?? '/images/black.webp'}
+                        class="my-card overflow-hidden"
+                        href="/courses/{course.id}"
                     >
-                        {course.courseName}
-                    </h5>
-                    <p class="mb-3 font-normal course-description leading-tight">
-                        {course.courseDescription}
-                    </p>
-                </Card>
-            {/each}
-        </div>
-    </section>
-
-{/if}
+                        <h5 class="mb-2 text-2xl font-bold course-title tracking-tight">
+                            {course.courseName}
+                        </h5>
+                        <p class="mb-3 font-normal course-description leading-tight">
+                            {course.courseDescription}
+                        </p>
+                    </Card>
+                {/each}
+            </div>
+        </section>
+    {/if}
+</section>
 
 <style>
     :global(html) {
         font-size: 16px;
+    }
+
+    .main-container {
+        background-image: url('/static/images/mainpagebg.svg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
     }
 
     .course-title {
@@ -202,7 +212,9 @@
     .courses-btn-text::after {
         content: '→';
         opacity: 0;
-        transition: opacity 0.3s ease, transform 0.3s ease;
+        transition:
+            opacity 0.3s ease,
+            transform 0.3s ease;
         transform: translateX(-10px);
     }
 

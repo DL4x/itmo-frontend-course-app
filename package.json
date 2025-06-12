@@ -39,6 +39,7 @@
         "@lottiefiles/dotlottie-web": "^0.44.0",
         "@supabase/supabase-js": "^2.49.4",
         "@tailwindcss/vite": "^4.1.4",
+        "@types/pdfjs-dist": "^2.10.377",
         "flowbite-svelte-icons": "^2.1.1",
         "lottie-web": "^5.12.2",
         "marked": "^15.0.12",
