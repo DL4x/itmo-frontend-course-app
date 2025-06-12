@@ -49,8 +49,8 @@
             </button>
 
             <div class="scroll-container">
-                {#each lections as { presentationName, presentationUrl }}
-                    <a href={presentationUrl} class="card" target="_blank" rel="noopener">
+                {#each lections as { id, presentationName }}
+                    <a href="/lectures/{id}" class="card" rel="noopener">
                         <div class="thumb">
                             <span>📚</span>
                         </div>
