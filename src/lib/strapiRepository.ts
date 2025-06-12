@@ -232,15 +232,13 @@ async function parseAuthor(json: unknown): Promise<Author> {
     );
     assertField(
         'person_github' in json &&
-        (typeof json.person_github === 'string' ||
-            typeof json.person_github === 'object'),
+            (typeof json.person_github === 'string' || typeof json.person_github === 'object'),
         'person_github',
         'string'
     );
     assertField(
         'person_telegram' in json &&
-        (typeof json.person_telegram === 'string' ||
-            typeof json.person_telegram === 'object'),
+            (typeof json.person_telegram === 'string' || typeof json.person_telegram === 'object'),
         'person_telegram',
         'string'
     );
@@ -297,7 +295,7 @@ async function parseAuthor(json: unknown): Promise<Author> {
             return value.documentId;
         }),
         authorTelegram: typeof json.person_telegram === 'object' ? '' : json.person_telegram,
-        authorGithub: typeof json.person_github === 'object' ? '' : json.person_github,
+        authorGithub: typeof json.person_github === 'object' ? '' : json.person_github
     };
     assertValidAuthor(result);
     return result;
@@ -1239,15 +1237,18 @@ export async function deleteProgressPresentation(
     const progressBar = author.progressBars.find(
         (value) => value.courseDocumentId === courseDocumentId
     );
-    const presentationStatus = progressBar?.presentations?.find(
+    if (progressBar === undefined) {
+        console.log(`Can't find progress bar of course ${courseDocumentId}`);
+        return;
+    }
+    const presentationStatus = progressBar.presentations.find(
         (value) => value.presentationDocumentId === presentationDocumentId
     );
-    const documentId = presentationStatus?.id;
-    assert(
-        !(documentId === null || documentId === undefined),
-        'No valid presentation document id found.'
-    );
-    const response = await strapi.delete('presentation-statuses', documentId);
+    if (presentationStatus === undefined) {
+        console.log(`Can't find progress bar of presentation ${presentationDocumentId}`);
+        return;
+    }
+    const response = await strapi.delete('presentation-statuses', presentationStatus.id);
     console.log(response);
 }
 
@@ -1269,31 +1270,40 @@ export async function addProgressPresentation(
     if (progressBar === null || progressBar === undefined) {
         progressBar = await addProgressBar(author, courseDocumentId);
     }
-    await strapi.create(
-        'presentation-statuses',
-        {
-            progress_bar: progressBar.id,
+    const status = progressBar.presentations.find(
+        (value) => value.presentationDocumentId === presentationDocumentId
+    );
+    if (!(status === null || status === undefined)) {
+        return;
+    }
+    await strapi.create('presentation-statuses', {
+        progress_bar: progressBar.id,
+        progress_bar_document_id: progressBar.id,
+        presentation_document_id: presentationDocumentId
+    });
+    const presentationStatus = await strapi.find('presentation-statuses', {
+        filters: {
             progress_bar_document_id: progressBar.id,
             presentation_document_id: presentationDocumentId
         }
+    });
+    assert(
+        typeof presentationStatus.data[0] === 'object' && presentationStatus.data[0] !== null,
+        'Error during create presentation status'
     );
-    const presentationStatus = await strapi
-        .find('presentation-statuses', {
-            filters: {
-                progress_bar_document_id: progressBar.id,
-                presentation_document_id: presentationDocumentId
-            }
-        });
-    assert(typeof presentationStatus.data[0] === 'object' && presentationStatus.data[0] !== null, "Error during create presentation status");
-    assertField('documentId' in presentationStatus.data[0] && typeof presentationStatus.data[0].documentId === 'string', 'documentId', 'string');
+    assertField(
+        'documentId' in presentationStatus.data[0] &&
+            typeof presentationStatus.data[0].documentId === 'string',
+        'documentId',
+        'string'
+    );
     await strapi
         .update('progress-bars', progressBar.id, {
             presentation_statuses: getPresentationStatusesJson(progressBar.presentations).push(
                 presentationStatus.data[0].documentId
             )
         })
-        .catch(() => {
-        });
+        .catch(() => {});
 }
 
 /**
@@ -1304,7 +1314,7 @@ export async function addProgressPresentation(
  */
 export async function addProgressBar(
     author: Author,
-    courseDocumentId: string,
+    courseDocumentId: string
 ): Promise<ProgressBar> {
     await strapi.create('progress-bars', {
         person_document_id: author.id,
@@ -1312,22 +1322,23 @@ export async function addProgressBar(
         person: author.id,
         presentation_statuses: []
     });
-    const createdProgressBar = await strapi
-        .find('progress-bars', {
-            filters: {
-                person_document_id: author.id,
-                course_document_id: courseDocumentId,
-            },
-            populate: "*"
-        });
-    assert(typeof createdProgressBar.data[0] === 'object' && createdProgressBar.data[0] !== null, "Strapi error (Error during create progress bar)");
+    const createdProgressBar = await strapi.find('progress-bars', {
+        filters: {
+            person_document_id: author.id,
+            course_document_id: courseDocumentId
+        },
+        populate: '*'
+    });
+    assert(
+        typeof createdProgressBar.data[0] === 'object' && createdProgressBar.data[0] !== null,
+        'Strapi error (Error during create progress bar)'
+    );
     const progressBar = await parseProgressBar(createdProgressBar.data[0]);
     await strapi
         .update('authors', author.id, {
             progress_bars: getProgressBarsJson(author.progressBars).push(progressBar.id)
         })
-        .catch(() => {
-        });
+        .catch(() => {});
     return progressBar;
 }
 
@@ -1362,6 +1373,12 @@ export async function addVotedAuthor(
     authorScore: number
 ): Promise<void> {
     assert(authorScore < 11, 'Author score must be in range [0, 11]');
+    const currentVotedAuthor = presentation.votedAuthors.find(
+        (value) => value.authorDocumentId === author.id
+    );
+    if (!(currentVotedAuthor === null || currentVotedAuthor === undefined)) {
+        return;
+    }
     const data = {
         presentation_document_id: presentation.id,
         person_document_id: author.id,

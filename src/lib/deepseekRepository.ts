@@ -1,6 +1,6 @@
 import {marked} from 'marked'
 import {getDocument, GlobalWorkerOptions} from 'pdfjs-dist/legacy/build/pdf.mjs';
-import type {TextItem} from 'pdfjs-dist/types/src/display/api';
+import type {TextItem, TextMarkedContent} from 'pdfjs-dist/types/src/display/api';
 
 import pdfWorker from 'pdfjs-dist/legacy/build/pdf.worker.mjs?url';
 
@@ -21,7 +21,7 @@ export function getPresentationSummary(url: string): Promise<string> {
                 const page = await pdfDocument.getPage(i);
                 const content = await page.getTextContent();
                 const pageText = content.items
-                    .filter((item): item is TextItem => 'str' in item)
+                    .filter((item: TextItem | TextMarkedContent): item is TextItem => 'str' in item)
                     .map(item => item.str)
                     .join('\n');
 
